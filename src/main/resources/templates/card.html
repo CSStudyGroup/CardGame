@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index Page</title>
+</head>
+<body>
+    <h1>CS Cards</h1>
+    <div class="table-container" id="container-card">
+        <table border="1">
+            <th>ID</th>
+            <th>Category</th>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Tags</th>
+            <tr th:each="cardDto: ${cardDtoList}">
+                <td th:text="${cardDto.id}"></td>
+                <td th:text="${cardDto.category}"></td>
+                <td th:text="${cardDto.question}"></td>
+                <td th:text="${cardDto.answer}"></td>
+                <td th:text="${cardDto.tags}"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="btn-container" id="btn-card">
+        <button onclick="location.href=location.href + '/insert'">추가</button>
+        <button onclick="location.href=location.href + '/update'">수정</button>
+        <button onclick="location.href=location.href + '/delete'">삭제</button>
+        <button onclick="location.href=location.href + '/search'">검색</button>
+    </div>
+</body>
+</html>
