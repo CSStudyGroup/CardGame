@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <!--Navigator Fragment-->
+    <nav class="navbar" th:fragment="navigator">
+        <a class="navbar-brand" href="#">CS Study</a>
+        <div class="v-line"></div>
+        <div class="navbarMenu">
+            <a class="nav-link" href="#">인터뷰</a>
+            <a class="nav-link" href="#">카테고리 관리</a>
+            <a class="nav-link" href="#">카드 추가</a>
+            <form id="searchForm" method="get" action="">
+                <select class="search_criteria">
+                    <option value="category">
+                        카테고리
+                    </option>
+                    <option value="tag">
+                        태그
+                    </option>
+                </select>
+                <input type="text" class="search_keyword" />
+                <input type="submit" class="search_form_submit" value="검색">
+            </form>
+        </div>
+    </nav>
+</html>

@@ -2,10 +2,11 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
     <title>Index Page</title>
 </head>
 <body>
-    <h1>CS Cards</h1>
+    <th:block th:replace="fragment/navigator::navigator"></th:block>
     <div class="table-container" id="container-card">
         <table border="1">
             <th>ID</th>
