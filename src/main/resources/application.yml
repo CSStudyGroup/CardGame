@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mariadb://211.187.10.40:3307/sample
+    url: jdbc:mariadb://127.0.0.1:3307/sample
     username: root
-    password: root2357
+    password: primarypoint0=
     pool-size: 30
 
   jpa:
