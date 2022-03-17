@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Category</title>
-    <link rel="stylesheet" th:href="@{/css/category.css}">
-    <script defer th:src="@{/js/category.js}"></script>
+    <th:block th:replace="fragment/head::headFragment"></th:block>
+    <link rel="stylesheet" th:href="@{/css/category.css?ver=12}">
+    <script defer th:src="@{/js/category.js?ver=1}"></script>
 </head>
 <body>
-    <!-- header <div th:insert="header.html" id="header"></div> -->
+    <th:block th:replace="fragment/navigator::navigator"></th:block>
     <div class="info">
         <p id="directory">최상위 디렉토리 > 현재 디렉토리</p>
     </div>

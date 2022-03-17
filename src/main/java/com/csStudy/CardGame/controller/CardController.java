@@ -34,6 +34,16 @@ public class CardController {
         return "list";
     }
 
+    @GetMapping("/card/interview")
+    public String interview() {
+        return "interview";
+    }
+
+    @GetMapping("/card/category")
+    public String category() {
+        return "category";
+    }
+
     @GetMapping("/card")
     public String card(Model model) {
         List<CardDto> cardDtoList = cardService.findAllCards().stream()

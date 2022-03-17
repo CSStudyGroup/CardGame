@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>List</title>
-    <link rel="stylesheet" th:href="@{/css/list.css}">
+    <th:block th:replace="fragment/head::headFragment"></th:block>
+    <link rel="stylesheet" th:href="@{/css/list.css?ver=1}">
     <script defer th:src="@{/js/list.js?ver=1}"></script>
 </head>
 <body>
-<!-- header <div th:insert="header.html" id="header"></div> -->
+    <th:block th:replace="fragment/navigator::navigator"></th:block>
     <div class="info">
         <p id="list">List</p>
         <div class="container">
@@ -24,21 +25,19 @@
                     <td class="category"
                         th:text="${cardDto.category}"></td>
                     <td class="question"
-                        th:index="${cardDtoStat.index}"
-                        th:onclick="text(this.getAttribute('index'))"
+                        th:attr="onclick=|text('${cardDtoStat.index}')|"
                         th:text="${cardDto.question}"></td>
                     <td class="tags"
                         th:text="${cardDto.tags}"></td>
                     <td class="update">
                         <img height="30px" width="auto"
-                             th:index="${cardDtoStat.index}"
-                             th:onclick="update(this.getAttribute('index'))"
+                             th:attr="onclick=|update('${cardDtoStat.index}')|"
                              th:src="@{/img/edit_image.png}">
                     </td>
                     <td class="delete">
                         <img height="30px" width="auto"
                              th:index="${cardDtoStat.index}"
-                             th:onclick="del(this.getAttribute('index'))"
+                             th:attr="onclick=|del('${cardDtoStat.index}')|"
                              th:src="@{/img/delete_image.png}">
                     </td>
                 </tr>
