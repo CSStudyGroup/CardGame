@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Interview</title>
+    <link rel="stylesheet" th:href="@{/css/interview.css}">
+    <script defer th:src="@{/js/interview.js}"></script>
+</head>
+<body>
+    <!-- header <div th:insert="header.html" id="header"></div> -->
+    <div class="container">
+        <p class="text" id="text">CS에 관련된 질문</p>
+        <p style="display: none" id="question">CS에 관련된 질문</p>
+        <p style="display: none" id="answer">질문에 관련된 답변</p>
+    </div>
+    <div class="next">
+        <button type="button" id="next">다음 문제</button>
+    </div>
+</body>
+</html>

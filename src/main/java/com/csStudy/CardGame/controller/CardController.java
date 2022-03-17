@@ -25,6 +25,15 @@ public class CardController {
         this.cardMapper = cardMapper;
     }
 
+    @GetMapping("/card/list")
+    public String list(Model model) {
+        List<CardDto> cardDtoList = cardService.findAllCards().stream()
+                .map(cardMapper::toDto)
+                .collect(Collectors.toList());
+        model.addAttribute("cardDtoList", cardDtoList);
+        return "list";
+    }
+
     @GetMapping("/card")
     public String card(Model model) {
         List<CardDto> cardDtoList = cardService.findAllCards().stream()

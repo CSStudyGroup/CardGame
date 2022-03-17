@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+    <script defer th:src="@{/js/list.js?ver=1}"></script>
+</head>
+<body>
+<!-- header <div th:insert="header.html" id="header"></div> -->
+    <div class="info">
+        <p id="list">List</p>
+        <div class="container">
+            <table class="table">
+                <tr class="head">
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Question</th>
+                    <th>Tags</th>
+                </tr>
+                <tr th:each="cardDto: ${cardDtoList}">
+                    <td class="id"
+                        th:text="${cardDto.id}"></td>
+                    <td class="category"
+                        th:text="${cardDto.category}"></td>
+                    <td class="question"
+                        th:index="${cardDtoStat.index}"
+                        th:onclick="text(this.getAttribute('index'))"
+                        th:text="${cardDto.question}"></td>
+                    <td class="tags"
+                        th:text="${cardDto.tags}"></td>
+                    <td class="update">
+                        <img height="30px" width="auto"
+                             th:index="${cardDtoStat.index}"
+                             th:onclick="update(this.getAttribute('index'))"
+                             th:src="@{/img/edit_image.png}">
+                    </td>
+                    <td class="delete">
+                        <img height="30px" width="auto"
+                             th:index="${cardDtoStat.index}"
+                             th:onclick="del(this.getAttribute('index'))"
+                             th:src="@{/img/delete_image.png}">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="viewmodal">
+        <h3 style="display: inline">번호 : </h3><h3 id="id" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">장르 : </h3><h3 id="category" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">태그 : </h3><h3 id="tags" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">질문 : </h3><h3 id="question" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">답변 : </h3><h3 id="answer" style="display: inline"></h3><br><br>
+        <button type="button" onclick="modalclose()">닫기</button>
+    </div>
+    <script th:inline="javascript">
+        var dto = [[${cardDtoList}]];
+    </script>
+</body>
+</html>
