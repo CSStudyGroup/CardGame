@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Category</title>
+    <link rel="stylesheet" th:href="@{/css/category.css}">
+    <script defer th:src="@{/js/category.js}"></script>
+</head>
+<body>
+    <!-- header <div th:insert="header.html" id="header"></div> -->
+    <div class="info">
+        <p id="directory">최상위 디렉토리 > 현재 디렉토리</p>
+    </div>
+    <div class="container">
+        <p class="text" id="text">CS에 관련된 질문</p>
+        <p style="display: none" id="question">CS에 관련된 질문</p>
+        <p style="display: none" id="answer">질문에 관련된 답변</p>
+    </div>
+    <div class="prev">
+        <button type="button" id="prev"><<</button>
+    </div>
+    <div class="next">
+        <button type="button" id="next">>></button>
+    </div>
+    <div class="indicator">
+        <text id="now">1</text>/<text id="total">4</text>
+    </div>
+</body>
+</html>

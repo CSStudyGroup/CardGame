@@ -1,0 +1,87 @@
+html {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#list {
+    position: absolute;
+    left: 3%;
+    font-size: 40px;
+    border-bottom: 2px solid black;
+}
+
+.container {
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    width: 90%;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;;
+}
+
+table, th, td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+th {
+    border-top: 3px solid lightgray;
+    border-bottom: 2px solid lightgray;
+}
+
+tr:hover {
+    background-color: lightgray;
+}
+.head:hover{
+    background-color: white;
+}
+
+.id, .category, .question, .tags {
+    border-bottom: 1px solid lightgray;
+}
+
+.id {
+    width: 5%;
+}
+
+.category {
+    width: 10%;
+}
+
+.question {
+    width: 52%;
+}
+
+.tags {
+    width: 25%;
+}
+
+.update {
+    width: 6%;
+    padding: 0px;
+}
+
+.delete {
+    width: 2%;
+    padding: 0px;
+}
+
+.viewmodal {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    display: none;
+    border-radius: 40px;
+    border: 1px solid black;
+    background-color: white;
+    padding-top: 30px;
+    padding-left: 10px;
+}

@@ -1,0 +1,108 @@
+html {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#directory {
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    font-size: 20px;
+    border-bottom: 2px solid black;
+}
+
+.container {
+    display: flex;
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    width: 70%;
+    height: 70%;
+    border-radius: 40px;
+    border: 2px solid black;
+    background-color: aqua;
+    justify-content: center;
+    align-items: center;
+}
+
+.rotate {
+    animation-name: rotate;
+    animation-duration: 1s;
+}
+
+@keyframes rotate {
+    50% {
+        transform: rotateY(90deg);
+    }
+}
+
+.left2right {
+    animation-name: left2right;
+    animation-duration: 2s;
+}
+
+@keyframes left2right {
+    49% {
+        opacity: 0;
+        margin-left: 60%;
+    }
+    50% {
+        opacity: 0;
+        margin-left: -60%;
+    }
+}
+
+.right2left {
+    animation-name: right2left;
+    animation-duration: 2s;
+}
+
+@keyframes right2left {
+    49% {
+        opacity: 0;
+        margin-left: -60%;
+    }
+    50% {
+        opacity: 0;
+        margin-left: 60%;
+    }
+}
+
+.text {
+    font-size: 50px;
+}
+
+.prev {
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    transform: translate(-50%, -50%);
+}
+
+.next {
+    position: absolute;
+    top: 50%;
+    left: 92%;
+    transform: translate(-50%, -50%);
+}
+
+#prev, #next {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    border: 0px solid black;
+}
+
+#prev:hover, #next:hover {
+    background-color: aqua;
+}
+
+.indicator {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
