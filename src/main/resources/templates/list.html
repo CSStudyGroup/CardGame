@@ -2,7 +2,6 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>List</title>
     <th:block th:replace="fragment/head::headFragment"></th:block>
     <link rel="stylesheet" th:href="@{/css/list.css?ver=1}">
     <script defer th:src="@{/js/list.js?ver=1}"></script>
@@ -19,7 +18,7 @@
                     <th>Question</th>
                     <th>Tags</th>
                 </tr>
-                <tr th:each="cardDto: ${cardDtoList}">
+                <tr th:each="cardDto : ${cardDtoList}">
                     <td class="id"
                         th:text="${cardDto.id}"></td>
                     <td class="category"
