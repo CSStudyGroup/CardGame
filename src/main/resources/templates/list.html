@@ -50,6 +50,11 @@
         <h3 style="display: inline">질문 : </h3><h3 id="question" style="display: inline"></h3><br><br>
         <h3 style="display: inline">답변 : </h3><h3 id="answer" style="display: inline"></h3><br><br>
         <button type="button" onclick="modalclose()">닫기</button>
+        <form>
+            <select id="categoryList">
+                <option value="none">===선택===</option>
+            </select>
+        </form>
     </div>
     <script th:inline="javascript">
         var dto = [[${cardDtoList}]];
