@@ -33,6 +33,8 @@ public class MariaDBCardRepositoryTests {
 
     @Test
     public void filterByTag() {
+        List<Card> expected = repository.filterByTag("dijkstra");
+
         Card card = new Card();
         card.setCategory("graph");
         card.setQuestion("about dynamic Programming");
@@ -55,7 +57,6 @@ public class MariaDBCardRepositoryTests {
         repository.insert(card3);
 
         List<Card> result = repository.filterByTag("dijkstra");
-        ArrayList<Card> expected = new ArrayList<>();
         expected.add(card);
         expected.add(card2);
 
@@ -64,6 +65,8 @@ public class MariaDBCardRepositoryTests {
 
     @Test
     public void findAll() {
+        List<Card> expected = repository.findAll();
+
         Card card = new Card();
         card.setCategory("graph");
         card.setQuestion("about dynamic Programming");
@@ -86,7 +89,6 @@ public class MariaDBCardRepositoryTests {
         repository.insert(card3);
 
         List<Card> result = repository.findAll();
-        ArrayList<Card> expected = new ArrayList<>();
         expected.add(card);
         expected.add(card2);
         expected.add(card3);
@@ -96,6 +98,8 @@ public class MariaDBCardRepositoryTests {
 
     @Test
     public void filterByCategory() {
+        List<Card> expected = repository.filterByCategory("dynamic_programming");
+
         Card card = new Card();
         card.setCategory("graph");
         card.setQuestion("about dynamic Programming");
@@ -118,7 +122,6 @@ public class MariaDBCardRepositoryTests {
         repository.insert(card3);
 
         List<Card> result = repository.filterByCategory("dynamic_programming");
-        ArrayList<Card> expected = new ArrayList<>();
         expected.add(card3);
 
         Assertions.assertThat(result).isEqualTo(expected);
@@ -141,11 +144,8 @@ public class MariaDBCardRepositoryTests {
         card2.setTags("test");
 
         repository.updateById(card2);
-        List<Card> result = repository.filterByTag("test");
-        ArrayList<Card> expected = new ArrayList<>();
-        expected.add(card);
 
-        Assertions.assertThat(result).isEqualTo(expected);
+        Assertions.assertThat(repository.findById(card.getId()).get().getTags()).isEqualTo("test");
     }
 
     @Test
@@ -157,9 +157,49 @@ public class MariaDBCardRepositoryTests {
         card.setTags("graph, dijkstra");
         repository.insert(card);
 
+        Long targetId = card.getId();
+
         repository.deleteById(card.getId());
-        List<Card> result = repository.findAll();
-        ArrayList<Card> expected = new ArrayList<>();
+
+        Assertions.assertThat(repository.findById(targetId).orElse(null)).isEqualTo(null);
+    }
+
+    @Test
+    public void filterByCategories() {
+        ArrayList<String> keywords = new ArrayList<>();
+        keywords.add("graph");
+        keywords.add("c1");
+
+        List<Card> expected = repository.filterByCategories(keywords);
+
+        Card card = new Card();
+        card.setCategory("graph");
+        card.setQuestion("about dynamic Programming");
+        card.setAnswer("great Answer");
+        card.setTags("graph, dijkstra");
+        repository.insert(card);
+
+        List<Card> result = repository.filterByCategories(keywords);
+        expected.add(card);
+
+        Assertions.assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    public void filterByQuestionContaining() {
+        String keyword = "est1";
+
+        List<Card> expected = repository.filterByQuestionContaining(keyword);
+
+        Card card = new Card();
+        card.setCategory("graph");
+        card.setQuestion("about best1 dynamic Programming");
+        card.setAnswer("great Answer");
+        card.setTags("graph, dijkstra");
+        repository.insert(card);
+
+        List<Card> result = repository.filterByQuestionContaining(keyword);
+        expected.add(card);
 
         Assertions.assertThat(result).isEqualTo(expected);
     }
