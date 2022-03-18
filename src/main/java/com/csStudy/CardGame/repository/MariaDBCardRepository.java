@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@Repository("mariadb")
+@Repository("mariadb_card")
 public class MariaDBCardRepository implements CardRepository {
 
     private final EntityManager em;
@@ -51,20 +52,34 @@ public class MariaDBCardRepository implements CardRepository {
 
     @Override
     public int updateById(Card card) {
-        findById(card.getId())
-                .ifPresent(target -> {
-                    target.setCategory(card.getCategory());
-                    target.setQuestion(card.getQuestion());
-                    target.setAnswer(card.getAnswer());
-                    target.setTags(card.getTags());
-                });
-        return 1;
+        try {
+            findById(card.getId())
+                    .ifPresentOrElse(target -> {
+                        target.setCategory(card.getCategory());
+                        target.setQuestion(card.getQuestion());
+                        target.setAnswer(card.getAnswer());
+                        target.setTags(card.getTags());
+                    }, () -> {
+                        throw new NoSuchElementException();
+                    });
+            return 1;
+        }
+        catch (NoSuchElementException e) {
+            return 0;
+        }
     }
 
     @Override
     public int deleteById(Long id) {
-        findById(id)
-                .ifPresent(em::remove);
-        return 1;
+        try {
+            findById(id)
+                    .ifPresentOrElse(em::remove, () -> {
+                        throw new NoSuchElementException();
+                    });
+            return 1;
+        }
+        catch (NoSuchElementException e) {
+            return 0;
+        }
     }
 }

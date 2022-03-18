@@ -1,7 +1,9 @@
 package com.csStudy.CardGame.service;
 
 import com.csStudy.CardGame.domain.Card;
+import com.csStudy.CardGame.domain.Category;
 import com.csStudy.CardGame.repository.CardRepository;
+import com.csStudy.CardGame.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,12 @@ import java.util.Optional;
 @Transactional
 public class CardService {
     private final CardRepository cardRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public CardService(@Qualifier("mariadb") CardRepository cardRepository) {
+    public CardService(@Qualifier("mariadb_card") CardRepository cardRepository, @Qualifier("mariadb_category")CategoryRepository categoryRepository) {
         this.cardRepository = cardRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     // 카드 추가
