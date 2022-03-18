@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 public class MariaDBCardRepositoryTests {
 
-    @Autowired @Qualifier("mariadb") CardRepository repository;
+    @Autowired @Qualifier("mariadb_card") CardRepository repository;
 
     @Test
     public void insert() {
@@ -27,7 +27,7 @@ public class MariaDBCardRepositoryTests {
         card.setTags("graph, dijkstra");
         repository.insert(card);
 
-        com.csStudy.CardGame.domain.Card result = repository.findById(card.getId()).get();
+        Card result = repository.findById(card.getId()).get();
         Assertions.assertThat(result).isEqualTo(card);
     }
 
@@ -134,12 +134,13 @@ public class MariaDBCardRepositoryTests {
         repository.insert(card);
 
         Card card2 = new Card();
+        card2.setId(card.getId());
         card2.setCategory("graph");
         card2.setQuestion("about dynamic Programming2");
         card2.setAnswer("great Answer");
         card2.setTags("test");
 
-        repository.updateById(card);
+        repository.updateById(card2);
         List<Card> result = repository.filterByTag("test");
         ArrayList<Card> expected = new ArrayList<>();
         expected.add(card);
