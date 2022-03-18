@@ -19,6 +19,12 @@ public interface CardRepository {
     // 특정 category 에 해당하는 카드 리스트 검색
     List<Card> filterByCategory(String category);
 
+    // 특정 category 리스트중 하나에 해당하는 카드 리스트 검색
+    List<Card> filterByCategories(List<String> categories);
+
+    // 질문이 특정 keyword 를 포함하는 카드 리스트 검색
+    List<Card> filterByQuestionContaining(String keyword);
+
     // 특정 tag 를 포함하는 카드 리스트 검색
     List<Card> filterByTag(String tag);
 

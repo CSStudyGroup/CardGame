@@ -3,7 +3,7 @@ import com.csStudy.CardGame.dto.CardDto;
 import com.csStudy.CardGame.dto.CategoryDto;
 import com.csStudy.CardGame.mapper.CardMapper;
 import com.csStudy.CardGame.mapper.CategoryMapper;
-import com.csStudy.CardGame.service.CardService;
+import com.csStudy.CardGame.service.CardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 @Controller
 public class CardController {
 
-    private final CardService cardService;
+    private final CardGameService cardService;
     private final CardMapper cardMapper;
     private final CategoryMapper categoryMapper;
 
     @Autowired
-    public CardController(CardService cardService, CardMapper cardMapper, CategoryMapper categoryMapper) {
+    public CardController(CardGameService cardService, CardMapper cardMapper, CategoryMapper categoryMapper) {
         this.cardService = cardService;
         this.cardMapper = cardMapper;
         this.categoryMapper = categoryMapper;

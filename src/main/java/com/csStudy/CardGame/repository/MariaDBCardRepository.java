@@ -44,6 +44,20 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
+    public List<Card> filterByCategories(List<String> categories) {
+        return em.createQuery("select c from Card c where c.category in (:categories)", Card.class)
+                .setParameter("categories", categories)
+                .getResultList();
+    }
+
+    @Override
+    public List<Card> filterByQuestionContaining(String keyword) {
+        return em.createQuery("select c from Card c where c.question like :keyword", Card.class)
+                .setParameter("keyword", String.format("%%%s%%", keyword))
+                .getResultList();
+    }
+
+    @Override
     public List<Card> filterByTag(String tag) {
         return em.createQuery("select c from Card c where c.tags like :tag", Card.class)
                 .setParameter("tag", String.format("%%%s%%", tag))
