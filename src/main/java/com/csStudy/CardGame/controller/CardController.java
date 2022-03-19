@@ -7,10 +7,7 @@ import com.csStudy.CardGame.service.CardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Id;
 import javax.servlet.http.HttpServletResponse;
@@ -36,12 +33,10 @@ public class CardController {
     @GetMapping("/card")
     public String card(Model model) {
         // 카테고리 리스트를 받아오는 부분
-        /*
         List<CategoryDto> categoryDtoList = cardService.findAllCategories().stream()
                 .map(categoryMapper::toDto)
                 .collect(Collectors.toList());
         model.addAttribute("categoryDtoList", categoryDtoList);
-         */
         return "card";
     }
 
@@ -59,30 +54,22 @@ public class CardController {
     // navi bar interview checkbox submit
     @GetMapping("/card/interview")
     public String interview(@RequestParam("keyword") List<String> keywords, Model model) {
-        List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
-
-        // 체크박스로 선택된 category마다 요청하여 추가
-        for (String keyword : keywords){
-            List<CardDto> tempList = cardService.filterCardsByCategory(keyword).stream()
-                    .map(cardMapper::toDto)
-                    .collect(Collectors.toList());
-            cardDtoList.addAll(tempList);
-        }
+        List<CardDto> cardDtoList = cardService.filterCardsByCategories(keywords).stream()
+                .map(cardMapper::toDto)
+                .collect(Collectors.toList());
 
         // 결과 최종 반환
         model.addAttribute("cardDtoList", cardDtoList);
         return "interview";
     }
 
-    @GetMapping("/card/categoryManage")
-    public String categoryManage(Model model) {
+    @GetMapping("/card/management")
+    public String categoryManagement(Model model) {
         // 카테고리 리스트를 받아오는 부분
-        /*
         List<CategoryDto> categoryDtoList = cardService.findAllCategories().stream()
                 .map(categoryMapper::toDto)
                 .collect(Collectors.toList());
         model.addAttribute("categoryDtoList", categoryDtoList);
-         */
         return "categoryManage";
     }
 
@@ -99,11 +86,9 @@ public class CardController {
                     .collect(Collectors.toList());
         }
         else if (question != "") {
-            /*
             cardDtoList = cardService.filterCardsByQuestion(question).stream()
                     .map(cardMapper::toDto)
                     .collect(Collectors.toList());
-             */
         }
         else if (category != "") {
             cardDtoList = cardService.filterCardsByCategory(category).stream()
@@ -120,45 +105,57 @@ public class CardController {
 
     // 이하 AJAX용 함수들
 
+    // 카테고리 목록 전체 호출
+    @ResponseBody
+    @PostMapping("card/categoryList")
+    public List<CategoryDto> categoryList() {
+        List<CategoryDto> categoryDtoList = cardService.findAllCategories().stream()
+                .map(categoryMapper::toDto)
+                .collect(Collectors.toList());
+        return categoryDtoList;
+    }
+
     // 카드 추가
+    @ResponseBody
     @PostMapping("card/cardInsert")
-    public void cardInsert(HttpServletResponse response, CardDto cardDto) {
+    public int cardInsert(CardDto cardDto) {
         cardService.addCard(cardMapper.toEntity(cardDto));
+        return 1;
     }
 
     // 카드 수정
+    @ResponseBody
     @PostMapping("card/cardUpdate")
-    public void cardUpdate(HttpServletResponse response, CardDto cardDto) {
-        // 변화시킬 엔티티 전달
-        //cardService.updateCard(cardMapper.toEntity(cardDto));
+    public int cardUpdate(CardDto cardDto) {
+       return cardService.updateCard(cardMapper.toEntity(cardDto));
     }
 
     // 카드 삭제
-    // 보안상에 문제가 있다면 DTO 전체를 해야할 가능성 유
-    @PostMapping("card/cardDelete/{no}")
-    public void cardDelete(HttpServletResponse response, @PathVariable("no") Long no) {
-        // 삭제할 카드 id 전달
-        //cardService.deleteCard(no);
+    @ResponseBody
+    @PostMapping("card/cardDelete")
+    public int cardDelete(CardDto cardDto) {
+        return cardService.deleteCard(cardDto.getId());
     }
 
     // 카테고리 추가
+    @ResponseBody
     @PostMapping("card/categoryInsert")
-    public void categoryInsert(HttpServletResponse response, CategoryDto categoryDto) {
-        //cardService.addCategory(categoryMapper.toEntity(categoryDto));
+    public int categoryInsert(CategoryDto categoryDto) {
+        cardService.addCategory(categoryMapper.toEntity(categoryDto));
+        return 1;
     }
 
     // 카테고리 수정
+    @ResponseBody
     @PostMapping("card/categoryUpdate")
-    public void categoryUpdate(HttpServletResponse response, CategoryDto categoryDto) {
-        // 변화시킬 엔티티 전달
-        //cardService.updateCategory(categoryMapper.toEntity(categoryDto));
+    public int categoryUpdate(CategoryDto categoryDto) {
+        return cardService.updateCategory(categoryMapper.toEntity(categoryDto));
     }
 
     // 카테고리 삭제
-    // 보안상에 문제가 있다면 DTO 전체를 해야할 가능성 유
-    @PostMapping("card/categoryDelete/{no}")
-    public void categoryDelete(HttpServletResponse response, @PathVariable("no") Long no) {
-        // 삭제할 카테고리 id 전달
-        //cardService.deleteCategory(no);
+    @ResponseBody
+    @PostMapping("card/categoryDelete")
+    public int categoryDelete(CategoryDto categoryDto) {
+        return cardService.deleteCategory(categoryDto.getCid());
     }
 }
