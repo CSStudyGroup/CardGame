@@ -54,15 +54,9 @@ public class CardController {
     // navi bar interview checkbox submit
     @GetMapping("/card/interview")
     public String interview(@RequestParam("keyword") List<String> keywords, Model model) {
-        List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
-
-        // 체크박스로 선택된 category마다 요청하여 추가
-        for (String keyword : keywords){
-            List<CardDto> tempList = cardService.filterCardsByCategory(keyword).stream()
-                    .map(cardMapper::toDto)
-                    .collect(Collectors.toList());
-            cardDtoList.addAll(tempList);
-        }
+        List<CardDto> cardDtoList = cardService.filterCardsByCategories(keywords).stream()
+                .map(cardMapper::toDto)
+                .collect(Collectors.toList());
 
         // 결과 최종 반환
         model.addAttribute("cardDtoList", cardDtoList);
