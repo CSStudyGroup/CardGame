@@ -51,3 +51,19 @@ html {
 #next:hover {
     background-color: aqua;
 }
+
+@keyframes nextshow {
+    49% {
+        opacity: 0;
+        margin-left: -60%;
+    }
+    50% {
+        opacity: 0;
+        margin-left: 60%;
+    }
+}
+
+.nextshow {
+    animation-name: nextshow;
+    animation-duration: 2s;
+}

@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <th:block th:replace="fragment/head::headFragment"></th:block>
-    <link rel="stylesheet" th:href="@{/css/interview.css?ver=1}">
-    <script defer th:src="@{/js/interview.js?ver=1}"></script>
+    <link rel="stylesheet" th:href="@{/css/interview.css(ver=${#calendars.createNow()})}">
+    <script defer th:src="@{/js/interview.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
     <th:block th:replace="fragment/navigator::navigator"></th:block>
     <div class="container">
-        <p class="text" id="text">CS에 관련된 질문</p>
-        <p style="display: none" id="question">CS에 관련된 질문</p>
-        <p style="display: none" id="answer">질문에 관련된 답변</p>
+        <p class="text" id="text"></p>
+        <p style="display: none" id="question"></p>
+        <p style="display: none" id="answer"></p>
     </div>
     <div class="next">
         <button type="button" id="next">다음 문제</button>
     </div>
+    <script th:inline="javascript">
+        var dto = [[${cardDtoList}]];
+    </script>
 </body>
 </html>
