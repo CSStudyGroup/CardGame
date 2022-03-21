@@ -13,9 +13,17 @@
         <p style="display: none" id="question"></p>
         <p style="display: none" id="answer"></p>
     </div>
+    <div class="finish">
+        <button type="button" id="finish">끝내기</button>
+    </div>
     <div class="next">
         <button type="button" id="next">다음 문제</button>
     </div>
+    <dialog class="dialog">
+        <h2 class="caution">정말로 끝내시겠습니까?</h2><br><br>
+        <button class="end" type="reset">끝내기</button>
+        <button class="cancel" type="reset">취소</button>
+    </dialog>
     <script th:inline="javascript">
         var dto = [[${cardDtoList}]];
     </script>

@@ -98,8 +98,8 @@ public class CardGameService {
     }
 
     // 카테고리 추가
-    public void addCategory(CategoryDto categoryDto) {
-        categoryRepository.insert(categoryMapper.toEntity(categoryDto));
+    public int addCategory(CategoryDto categoryDto) {
+        return categoryRepository.insert(categoryMapper.toEntity(categoryDto));
     }
 
     // 카테고리 수정

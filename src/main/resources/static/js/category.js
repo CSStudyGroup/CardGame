@@ -1,4 +1,8 @@
 window.onload = function(){
+    // 카테고리 표시
+    const categoryname = document.getElementById("directory");
+    categoryname.innerText = "카테고리 > " + dto[0].category;
+
     // 각 종 elements
     const card = document.querySelector(".container");
     const text = document.getElementById("text");
@@ -32,7 +36,6 @@ window.onload = function(){
     document.getElementById("total").innerText = String(dto.length);
     const total = dto.length;
 
-
     // 처음 로딩
     text.innerText = dto[now -1].question;
     question.innerText = dto[now - 1].question;
@@ -41,11 +44,11 @@ window.onload = function(){
     // 이전 문제 진행 요청
     const prev = document.getElementById("prev");
     prev.addEventListener("click", function () {
-        if (now == 1) {
-            alert("첫 카드입니다.")
-        }
-        else {
-            if (check == null) {
+        if (check == null) {
+            if (now == 1) {
+                alert("첫 카드입니다.")
+            }
+            else {
                 now -= 1;
                 nowele.innerText = now;
                 card.classList.add("left2right");
@@ -66,11 +69,11 @@ window.onload = function(){
     // 다음 문제 진행 요청
     const next = document.getElementById("next");
     next.addEventListener("click", function () {
-        if (now == total) {
-            alert("마지막 카드입니다.")
-        }
-        else {
-            if (check == null) {
+        if (check == null) {
+            if (now == total) {
+                alert("마지막 카드입니다.")
+            }
+            else {
                 now += 1;
                 nowele.innerText = now;
                 card.classList.add("right2left");

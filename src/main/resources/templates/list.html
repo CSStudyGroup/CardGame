@@ -43,19 +43,33 @@
             </table>
         </div>
     </div>
-    <div class="viewmodal">
-        <h3 style="display: inline">번호 : </h3><h3 id="id" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">장르 : </h3><h3 id="category" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">태그 : </h3><h3 id="tags" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">질문 : </h3><h3 id="question" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">답변 : </h3><h3 id="answer" style="display: inline"></h3><br><br>
-        <button type="button" onclick="modalclose()">닫기</button>
-        <form>
-            <select id="categoryList">
+    <div class="modal" id="viewModal">
+        <h3 style="display: inline">번호 : </h3><h3 id="viewId" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">장르 : </h3><h3 id="viewCategory" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">태그 : </h3><h3 id="viewTags" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">질문 : </h3><h3 id="viewQuestion" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">답변 : </h3><h3 id="viewAnswer" style="display: inline"></h3><br><br>
+        <button type="button" onclick="viewModalClose()">닫기</button>
+    </div>
+    <div class="modal" id="updateModal">
+        <h3 style="display: inline">번호 : </h3><h3 id="updateId" style="display: inline"></h3><br><br>
+        <h3 style="display: inline">장르 : </h3>
+        <form style="display: inline">
+            <select id="updateCategory">
                 <option value="none" selected disabled hidden>===선택===</option>
             </select>
-        </form>
+        </form><br><br>
+        <h3 style="display: inline">태그 : </h3><input type="text" id="updateTags" style="display: inline"><br><br>
+        <h3 style="display: inline">질문 : </h3><input type="text" id="updateQuestion" style="display: inline"><br><br>
+        <h3 style="display: inline">답변 : </h3><input type="text" id="updateAnswer" style="display: inline"><br><br>
+        <button type="button" onclick="updateModalSubmit()">수정</button>
+        <button type="button" onclick="updateModalClose()">닫기</button>
     </div>
+    <dialog class="dialog">
+        <h2 class="caution"></h2><br><br>
+        <button class="remove" type="reset">삭제</button>
+        <button class="cancel" type="reset">취소</button>
+    </dialog>
     <script th:inline="javascript">
         var dto = [[${cardDtoList}]];
     </script>
