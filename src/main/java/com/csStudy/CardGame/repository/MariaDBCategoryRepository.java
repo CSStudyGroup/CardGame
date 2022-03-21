@@ -39,9 +39,14 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public Category insert(Category category) {
-        em.persist(category);
-        return category;
+    public int insert(Category category) {
+        try {
+            em.persist(category);
+            return 1;
+        }
+        catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override

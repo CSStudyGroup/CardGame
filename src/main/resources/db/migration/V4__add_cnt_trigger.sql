@@ -7,7 +7,6 @@ CREATE TRIGGER insert_card
             UPDATE category SET cnt = cnt + 1 WHERE cname = NEW.category;
         END; //
 
-
 CREATE TRIGGER delete_card
     BEFORE DELETE ON card
     FOR EACH ROW
