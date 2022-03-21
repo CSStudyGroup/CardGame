@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -60,7 +59,7 @@ public class MariaDBCategoryRepositoryTests {
         category2.setCid(category.getCid());
         category2.setCname("network");
 
-        repository.updateById(category2);
+        repository.update(category2);
 
 
         Assertions.assertThat(repository.findById(category.getCid()).get().getCname()).isEqualTo("network");
@@ -75,7 +74,7 @@ public class MariaDBCategoryRepositoryTests {
         repository.insert(category);
 
         int targetCid = category.getCid();
-        repository.deleteById(targetCid);
+        repository.delete(category);
         Assertions.assertThat(repository.findById(targetCid).orElse(null)).isEqualTo(null);
     }
 }

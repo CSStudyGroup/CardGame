@@ -9,6 +9,9 @@ public interface CategoryRepository {
     // id로 카테고리 검색
     Optional<Category> findById(int id);
 
+    // 이름으로 카테고리 검색
+    Optional<Category> findByName(String name);
+
     // 모든 카테고리
     List<Category> findAll();
 
@@ -16,9 +19,9 @@ public interface CategoryRepository {
     Category insert(Category category);
 
     // 카테고리 삭제
-    int deleteById(int id);
+    int delete(Category category);
 
     // 카테고리 수정
-    int updateById(Category category);
+    int update(Category category);
 
 }

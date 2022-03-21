@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -25,6 +26,13 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     }
 
     @Override
+    public Optional<Category> findByName(String name) {
+        return Optional.ofNullable(em.createQuery("select c from Category c where c.name = :name", Category.class)
+                .setParameter("name", name)
+                .getSingleResult());
+    }
+
+    @Override
     public List<Category> findAll() {
         return em.createQuery("select c from Category c", Category.class)
                 .getResultList();
@@ -37,12 +45,9 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public int deleteById(int id) {
+    public int delete(Category category) {
         try {
-            findById(id)
-                    .ifPresentOrElse(em::remove, () -> {
-                        throw new NoSuchElementException();
-                    });
+            em.remove(category);
             return 1;
         }
         catch (NoSuchElementException e) {
@@ -51,7 +56,7 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public int updateById(Category category) {
+    public int update(Category category) {
         try {
             findById(category.getCid())
                     .ifPresentOrElse(target -> target.setCname(category.getCname()), () -> {
@@ -63,7 +68,5 @@ public class MariaDBCategoryRepository implements CategoryRepository {
             return 0;
         }
     }
-
-
 
 }
