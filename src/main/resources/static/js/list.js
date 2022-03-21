@@ -62,7 +62,7 @@ const caution = document.querySelector(".caution");
 var target = -1;
 function del(index){
     if (!check) {
-        caution.textContent = dto[index].id + "번을 " + caution.textContent;
+        caution.textContent = dto[index].id + "번을 정말로 삭제하시겠습니까?";
         target = index;
         if (typeof dialog.showModal === 'function') {
             dialog.showModal();
