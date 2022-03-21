@@ -13,6 +13,7 @@ public class CategoryMapperImpl implements CategoryMapper{
         else {
             Category category = new Category();
             category.setCname(categoryDto.getCname());
+            category.setCnt(categoryDto.getCnt());
             return category;
         }
     }
@@ -26,6 +27,7 @@ public class CategoryMapperImpl implements CategoryMapper{
             CategoryDto categoryDto = new CategoryDto();
             categoryDto.setCid(category.getCid());
             categoryDto.setCname(category.getCname());
+            categoryDto.setCnt(category.getCnt());
             return categoryDto;
         }
     }

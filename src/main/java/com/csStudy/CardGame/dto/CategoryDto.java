@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,4 +15,5 @@ public class CategoryDto {
 
     private String cname;
 
+    private int cnt;
 }

@@ -19,4 +19,7 @@ public class Category {
     @Column(name = "cname")
     private String cname;
 
+    @Column(name = "cnt")
+    private int cnt;
+
 }

@@ -20,6 +20,8 @@ public class MariaDBCategoryRepositoryTests {
     // insert, findById, findAll 테스트
     @Test
     public void insert() {
+        List<Category> expected = repository.findAll();
+
         // insert
         Category category = new Category();
         category.setCname("database");
@@ -39,7 +41,6 @@ public class MariaDBCategoryRepositoryTests {
         Assertions.assertThat(repository.findById(category3.getCid()).get()).isEqualTo(category3);
 
         // findAll
-        ArrayList<Category> expected = new ArrayList<>();
         expected.add(category);
         expected.add(category2);
         expected.add(category3);
@@ -73,8 +74,8 @@ public class MariaDBCategoryRepositoryTests {
         category.setCname("database");
         repository.insert(category);
 
-        repository.deleteById(category.getCid());
-        ArrayList<Category> expected = new ArrayList<>();
-        Assertions.assertThat(repository.findAll()).isEqualTo(expected);
+        int targetCid = category.getCid();
+        repository.deleteById(targetCid);
+        Assertions.assertThat(repository.findById(targetCid).orElse(null)).isEqualTo(null);
     }
 }
