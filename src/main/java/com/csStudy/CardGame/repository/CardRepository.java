@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CardRepository {
     // 카드 추가
-    Card insert(Card card);
+    int insert(Card card);
 
     // id로 카드 검색
     Optional<Card> findById(Long id);
@@ -29,8 +29,8 @@ public interface CardRepository {
     List<Card> filterByTag(String tag);
 
     // 카드 수정
-    int updateById(Card card);
+    int update(Card card);
 
     // 카드 삭제
-    int deleteById(Long id);
+    int delete(Card card);
 }

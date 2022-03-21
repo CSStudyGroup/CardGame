@@ -143,7 +143,7 @@ public class MariaDBCardRepositoryTests {
         card2.setAnswer("great Answer");
         card2.setTags("test");
 
-        repository.updateById(card2);
+        repository.update(card2);
 
         Assertions.assertThat(repository.findById(card.getId()).get().getTags()).isEqualTo("test");
     }
@@ -159,7 +159,7 @@ public class MariaDBCardRepositoryTests {
 
         Long targetId = card.getId();
 
-        repository.deleteById(card.getId());
+        repository.delete(card);
 
         Assertions.assertThat(repository.findById(targetId).orElse(null)).isEqualTo(null);
     }

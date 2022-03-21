@@ -20,9 +20,14 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public Card insert(Card card) {
-        em.persist(card);
-        return card;
+    public int insert(Card card) {
+        try {
+            em.persist(card);
+            return 1;
+        }
+        catch(Exception e) {
+            return 0;
+        }
     }
 
     @Override
@@ -65,7 +70,7 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public int updateById(Card card) {
+    public int update(Card card) {
         try {
             findById(card.getId())
                     .ifPresentOrElse(target -> {
@@ -84,12 +89,9 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public int deleteById(Long id) {
+    public int delete(Card card) {
         try {
-            findById(id)
-                    .ifPresentOrElse(em::remove, () -> {
-                        throw new NoSuchElementException();
-                    });
+            em.remove(card);
             return 1;
         }
         catch (NoSuchElementException e) {

@@ -16,7 +16,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cid;
 
-    @Column(name = "cname")
+    @Column(name = "cname", unique = true)
     private String cname;
+
+    @Column(name = "cnt")
+    private int cnt;
 
 }
