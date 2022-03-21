@@ -94,8 +94,7 @@ public class CardController {
     @ResponseBody
     @PostMapping("card/cardInsert")
     public int cardInsert(CardDto cardDto) {
-        cardService.addCard(cardDto);
-        return 1;
+        return cardService.addCard(cardDto);
     }
 
     // 카드 수정
@@ -116,8 +115,7 @@ public class CardController {
     @ResponseBody
     @PostMapping("card/categoryInsert")
     public int categoryInsert(CategoryDto categoryDto) {
-        cardService.addCategory(categoryDto);
-        return 1;
+        return cardService.addCategory(categoryDto);
     }
 
     // 카테고리 수정

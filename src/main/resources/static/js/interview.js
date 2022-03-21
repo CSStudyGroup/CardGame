@@ -52,4 +52,25 @@ window.onload = function(){
     text.innerText = dto[rand].question;
     question.innerText = dto[rand].question;
     answer.innerText = dto[rand].answer;
+
+    // 끝내기 다이얼로그
+    const dialog = document.querySelector('.dialog');
+    const finish = document.getElementById("finish");
+    finish.addEventListener('click', () => {
+        if (typeof dialog.showModal === 'function') {
+            dialog.showModal();
+        } else {
+            alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
+        }
+    });
+
+    const cancel = document.querySelector('.cancel');
+    cancel.addEventListener('click', () => {
+        dialog.close();
+    });
+
+    const end = document.querySelector('.end');
+    end.addEventListener('click', () => {
+        window.location = "/card";
+    });
 }
