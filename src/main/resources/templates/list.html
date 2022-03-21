@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <th:block th:replace="fragment/head::headFragment"></th:block>
-    <link rel="stylesheet" th:href="@{/css/list.css?ver=1}">
-    <script defer th:src="@{/js/list.js?ver=1}"></script>
+    <link rel="stylesheet" th:href="@{/css/list.css(ver=${#calendars.createNow()})}">
+    <script defer th:src="@{/js/list.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
     <th:block th:replace="fragment/navigator::navigator"></th:block>
@@ -52,7 +52,7 @@
         <button type="button" onclick="modalclose()">닫기</button>
         <form>
             <select id="categoryList">
-                <option value="none">===선택===</option>
+                <option value="none" selected disabled hidden>===선택===</option>
             </select>
         </form>
     </div>

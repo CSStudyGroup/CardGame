@@ -29,7 +29,14 @@ window.onload = function(){
     // 현재 문제 및 전체문제 수 체크
     const nowele = document.getElementById("now");
     var now = 1;
-    const total = parseInt(document.getElementById("total").innerText);
+    document.getElementById("total").innerText = String(dto.length);
+    const total = dto.length;
+
+
+    // 처음 로딩
+    text.innerText = dto[now -1].question;
+    question.innerText = dto[now - 1].question;
+    answer.innerText = dto[now - 1].answer;
 
     // 이전 문제 진행 요청
     const prev = document.getElementById("prev");
@@ -44,6 +51,9 @@ window.onload = function(){
                 card.classList.add("left2right");
                 setTimeout(function () {
                     //텍스트 변환
+                    text.innerText = dto[now -1].question;
+                    question.innerText = dto[now - 1].question;
+                    answer.innerText = dto[now - 1].answer;
                 }, 1000);
                 check = setTimeout(function () {
                     card.classList.remove("left2right")
@@ -56,7 +66,6 @@ window.onload = function(){
     // 다음 문제 진행 요청
     const next = document.getElementById("next");
     next.addEventListener("click", function () {
-        console.log(total);
         if (now == total) {
             alert("마지막 카드입니다.")
         }
@@ -67,6 +76,9 @@ window.onload = function(){
                 card.classList.add("right2left");
                 setTimeout(function () {
                     //텍스트 변환
+                    text.innerText = dto[now -1].question;
+                    question.innerText = dto[now - 1].question;
+                    answer.innerText = dto[now - 1].answer;
                 }, 1000);
                 check = setTimeout(function () {
                     card.classList.remove("right2left")
