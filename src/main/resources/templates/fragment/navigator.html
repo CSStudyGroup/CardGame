@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <!--Navigator Fragment-->
-    <nav class="navbar" th:fragment="navigator">
-        <div class="navbar-brand">
-            <a href="/card">CS Study</a>
+    <th:block th:fragment="navigator">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <a href="/card">CS Study</a>
+            </div>
+            <div class="navbar-menu">
+                <a class="nav-link" href="#" onclick="interview()">인터뷰</a>
+                <a class="nav-link" href="/card/management">카테고리 관리</a>
+                <a class="nav-link" href="#">카드 추가</a>
+            </div>
+            <div class="navbar-search">
+                <form id="search-form" method="get" action="">
+                    <select class="search_criteria">
+                        <option value="category">
+                            카테고리
+                        </option>
+                        <option value="tag">
+                            태그
+                        </option>
+                    </select>
+                    <input type="text" class="search_keyword" />
+                    <input type="submit" class="search_form_submit" value="검색">
+                </form>
+            </div>
+            <script src="/js/navigator.js"></script>
+        </nav>
+        <div class="modal" id="interview-modal" hidden>
+            <div class="modal-content">
+            </div>
+            <div class="modal-layer"></div>
         </div>
-        <div class="navbar-menu">
-            <a class="nav-link" href="#" onclick="interview()">인터뷰</a>
-            <a class="nav-link" href="/card/management">카테고리 관리</a>
-            <a class="nav-link" href="#">카드 추가</a>
-        </div>
-        <div class="navbar-search">
-            <form id="search-form" method="get" action="">
-                <select class="search_criteria">
-                    <option value="category">
-                        카테고리
-                    </option>
-                    <option value="tag">
-                        태그
-                    </option>
-                </select>
-                <input type="text" class="search_keyword" />
-                <input type="submit" class="search_form_submit" value="검색">
-            </form>
-        </div>
-        <script src="/js/navigator.js"></script>
-    </nav>
+    </th:block>
 </html>
