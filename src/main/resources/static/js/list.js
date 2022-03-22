@@ -1,3 +1,6 @@
+// AJAX용 request
+var httpRequest;
+
 // 본문 보기
 const viewModal = document.getElementById("viewModal");
 const viewId = document.getElementById("viewId");
@@ -46,8 +49,35 @@ function update(index){
 
 function updateModalSubmit(){
     updateModal.style.display = "none";
+
     // AJAX 수정 요청
-    alert("submit!")
+    httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = postUpdateCard;
+
+    function postUpdateCard(){
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+                if (httpRequest.response == 1) {
+                    alert("수정 성공");
+                    // 해당 줄 내용 수정
+                }
+                else {
+                    alert("수정 실패");
+                }
+            } else {
+                alert('Request Error!');
+            }
+        }
+    }
+    httpRequest.open('POST',
+        '/card/cardUpdate'
+        + "?id=" + updateId.innerText
+        + "&category=" + updateCategory.value
+        + "&question=" + updateQuestion.value
+        + "&answer=" + updateAnswer.value
+        + "&tags=" + updateTags.value );
+    httpRequest.send();
+
     check = false;
 }
 
@@ -69,28 +99,62 @@ function del(index){
         } else {
             alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
         }
+        check = true
     }
 }
 
 const cancel = document.querySelector('.cancel');
 cancel.addEventListener('click', () => {
     dialog.close();
+    check = false;
 });
 
 const remove = document.querySelector('.remove');
 remove.addEventListener('click', () => {
     // AJAX 삭제 요청
     if (target != -1) {
-        alert("delete" + target);
+        httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = postUpdateCard;
+
+        function postUpdateCard(){
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                if (httpRequest.status === 200) {
+                    if (httpRequest.response == 1) {
+                        alert("삭제 성공");
+                        // 리스트에서 해당 줄 제거
+                    }
+                    else {
+                        alert("삭제 실패");
+                    }
+                } else {
+                    alert('Request Error!');
+                }
+            }
+        }
+        httpRequest.open('POST',
+            '/card/cardDelete'
+            + "?id=" + dto[target].id
+            + "&category=" + dto[target].category
+            + "&question=" + dto[target].question
+            + "&answer=" + dto[target].answer
+            + "&tags=" + dto[target].tags);
+        console.log('/card/cardDelete'
+            + "?id=" + dto[target].id
+            + "&category=" + dto[target].category
+            + "&question=" + dto[target].question
+            + "&answer=" + dto[target].answer
+            + "&tags=" + dto[target].tags);
+        httpRequest.send();
         target = -1;
     }
     dialog.close();
+    check = false;
 });
 
 window.onload = function(){
     const category = document.getElementById("updateCategory");
 
-    var httpRequest = new XMLHttpRequest();
+    httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = getCategoryList;
 
     function getCategoryList(){

@@ -101,7 +101,7 @@ public class CardController {
     @ResponseBody
     @PostMapping("card/cardUpdate")
     public int cardUpdate(CardDto cardDto) {
-       return cardService.updateCard(cardDto);
+        return cardService.updateCard(cardDto);
     }
 
     // 카드 삭제
