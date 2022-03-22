@@ -9,7 +9,7 @@
             <div class="navbar-menu">
                 <a class="nav-link" href="#" onclick="interview()">인터뷰</a>
                 <a class="nav-link" href="/card/management">카테고리 관리</a>
-                <a class="nav-link" href="#">카드 추가</a>
+                <a class="nav-link" onclick="insert()">카드 추가</a>
             </div>
             <div class="navbar-search">
                 <form id="search-form" method="get" action="">
@@ -27,10 +27,18 @@
             </div>
             <script src="/js/navigator.js"></script>
         </nav>
-        <div class="modal" id="interview-modal" hidden>
-            <div class="modal-content">
-            </div>
-            <div class="modal-layer"></div>
+        <div class="modal-insert" id="insertModal">
+            <h3 style="display: inline">장르 : </h3>
+            <form style="display: inline">
+                <select id="insertCategory">
+                    <option value="none" selected disabled hidden>===선택===</option>
+                </select>
+            </form><br><br>
+            <h3 style="display: inline">태그 : </h3><input type="text" id="insertTags" style="display: inline"><br><br>
+            <h3 style="display: inline">질문 : </h3><input type="text" id="insertQuestion" style="display: inline"><br><br>
+            <h3 style="display: inline">답변 : </h3><input type="text" id="insertAnswer" style="display: inline"><br><br>
+            <button type="button" onclick="insertModalSubmit()">추가</button>
+            <button type="button" onclick="insertModalClose()">닫기</button>
         </div>
     </th:block>
 </html>
