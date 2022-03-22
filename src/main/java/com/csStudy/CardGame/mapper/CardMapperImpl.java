@@ -12,6 +12,7 @@ public class CardMapperImpl implements CardMapper{
         }
         else {
             Card card = new Card();
+            card.setId(cardDto.getId());
             card.setCategory(cardDto.getCategory());
             card.setQuestion(cardDto.getQuestion());
             card.setAnswer(cardDto.getAnswer());
