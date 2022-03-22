@@ -57,4 +57,5 @@ body {
     background-color: white;
     padding-top: 30px;
     padding-left: 10px;
+    z-index: 10;
 }

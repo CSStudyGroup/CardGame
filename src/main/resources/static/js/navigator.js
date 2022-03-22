@@ -43,7 +43,7 @@ function insertModalClose(){
     check = false;
 }
 
-window.onload = function(){
+window.addEventListener('load', function() {
     const category = document.getElementById("insertCategory");
     const insertModal = document.getElementById("insertModal");
     const insertCategory = document.getElementById("insertCategory");
@@ -73,4 +73,4 @@ window.onload = function(){
     httpRequest.open('POST', '/card/categoryList');
     httpRequest.responseType = "json";
     httpRequest.send();
-}
+});

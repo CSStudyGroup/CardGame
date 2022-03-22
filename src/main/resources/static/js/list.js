@@ -1,7 +1,8 @@
 // AJAX용 request
-var httpRequest;
+var listHttpRequest;
 
 // 본문 보기
+var target = -1;
 const viewModal = document.getElementById("viewModal");
 const viewId = document.getElementById("viewId");
 const viewCategory = document.getElementById("viewCategory");
@@ -37,6 +38,7 @@ const updateAnswer = document.getElementById("updateAnswer");
 
 function update(index){
     if (!check) {
+        target = index
         updateId.innerText = dto[index].id;
         updateCategory.value = dto[index].category;
         updateTags.value = dto[index].tags;
@@ -51,15 +53,30 @@ function updateModalSubmit(){
     updateModal.style.display = "none";
 
     // AJAX 수정 요청
-    httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = postUpdateCard;
+    listHttpRequest = new XMLHttpRequest();
+    listHttpRequest.onreadystatechange = postUpdateCard;
 
     function postUpdateCard(){
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                if (httpRequest.response == 1) {
+        if (listHttpRequest.readyState === XMLHttpRequest.DONE) {
+            if (listHttpRequest.status === 200) {
+                if (listHttpRequest.response == 1) {
                     alert("수정 성공");
                     // 해당 줄 내용 수정
+                    if (dto[target].category == updateCategory.value) {
+                        dto[target].tags = updateTags.value;
+                        dto[target].question = updateQuestion.value;
+                        dto[target].answer = updateAnswer.value;
+                    }
+                    // 카테고리 변경시 순회하며 체킹
+                    else {
+                        const temp = document.querySelectorAll(".tableBody");
+                        for (let i = 0; i < temp.length; i++) {
+                            if (temp[i].children[0].innerHTML == dto[target].id) {
+                                temp[i].remove();
+                                break;
+                            }
+                        }
+                    }
                 }
                 else {
                     alert("수정 실패");
@@ -67,18 +84,18 @@ function updateModalSubmit(){
             } else {
                 alert('Request Error!');
             }
+            check = false;
+            target = -1;
         }
     }
-    httpRequest.open('POST',
+    listHttpRequest.open('POST',
         '/card/cardUpdate'
         + "?id=" + updateId.innerText
         + "&category=" + updateCategory.value
         + "&question=" + updateQuestion.value
         + "&answer=" + updateAnswer.value
         + "&tags=" + updateTags.value );
-    httpRequest.send();
-
-    check = false;
+    listHttpRequest.send();
 }
 
 function updateModalClose(){
@@ -89,7 +106,6 @@ function updateModalClose(){
 // 삭제
 const dialog = document.querySelector('.dialog');
 const caution = document.querySelector(".caution");
-var target = -1;
 function del(index){
     if (!check) {
         caution.textContent = dto[index].id + "번을 정말로 삭제하시겠습니까?";
@@ -113,15 +129,23 @@ const remove = document.querySelector('.remove');
 remove.addEventListener('click', () => {
     // AJAX 삭제 요청
     if (target != -1) {
-        httpRequest = new XMLHttpRequest();
-        httpRequest.onreadystatechange = postUpdateCard;
+        listHttpRequest = new XMLHttpRequest();
+        listHttpRequest.onreadystatechange = postUpdateCard;
 
         function postUpdateCard(){
-            if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                if (httpRequest.status === 200) {
-                    if (httpRequest.response == 1) {
+            if (listHttpRequest.readyState === XMLHttpRequest.DONE) {
+                if (listHttpRequest.status === 200) {
+                    if (listHttpRequest.response == 1) {
                         alert("삭제 성공");
                         // 리스트에서 해당 줄 제거
+                        const temp = document.querySelectorAll(".tableBody");
+                        for (let i = 0; i < temp.length; i++) {
+                            console.log(temp[i].children[0].innerHTML);
+                            if (temp[i].children[0].innerHTML == dto[target].id) {
+                                temp[i].remove();
+                                break;
+                            }
+                        }
                     }
                     else {
                         alert("삭제 실패");
@@ -129,43 +153,37 @@ remove.addEventListener('click', () => {
                 } else {
                     alert('Request Error!');
                 }
+                dialog.close();
+                check = false;
+                target = -1;
             }
         }
-        httpRequest.open('POST',
+        listHttpRequest.open('POST',
             '/card/cardDelete'
             + "?id=" + dto[target].id
             + "&category=" + dto[target].category
             + "&question=" + dto[target].question
             + "&answer=" + dto[target].answer
             + "&tags=" + dto[target].tags);
-        console.log('/card/cardDelete'
-            + "?id=" + dto[target].id
-            + "&category=" + dto[target].category
-            + "&question=" + dto[target].question
-            + "&answer=" + dto[target].answer
-            + "&tags=" + dto[target].tags);
-        httpRequest.send();
-        target = -1;
+        listHttpRequest.send()
     }
-    dialog.close();
-    check = false;
 });
 
 window.onload = function(){
-    const category = document.getElementById("updateCategory");
+    const updateCategory = document.getElementById("updateCategory");
 
-    httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = getCategoryList;
+    listHttpRequest = new XMLHttpRequest();
+    listHttpRequest.onreadystatechange = getCategory;
 
-    function getCategoryList(){
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                var results = httpRequest.response;
+    function getCategory(){
+        if (listHttpRequest.readyState === XMLHttpRequest.DONE) {
+            if (listHttpRequest.status === 200) {
+                var results = listHttpRequest.response;
                 for (const result of results) {
                     var op = new Option();
                     op.value = result.cname;
                     op.text = result.cname;
-                    category.appendChild(op);
+                    updateCategory.appendChild(op);
                 }
             } else {
                 alert('Request Error!');
@@ -173,7 +191,7 @@ window.onload = function(){
         }
     }
 
-    httpRequest.open('POST', '/card/categoryList');
-    httpRequest.responseType = "json";
-    httpRequest.send();
+    listHttpRequest.open('POST', '/card/categoryList');
+    listHttpRequest.responseType = "json";
+    listHttpRequest.send();
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="fragment/head::headFragment"></th:block>
+    <link rel="stylesheet" th:href="@{/css/categorymanage.css(ver=${#calendars.createNow()})}">
+    <script defer th:src="@{/js/categorymanage.js(ver=${#calendars.createNow()})}"></script>
+</head>
+<body>
+    <th:block th:replace="fragment/navigator::navigator"></th:block>
+    <div class="main">
+        <p id="title">Category</p>
+        <div class="container-item">
+            <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
+                <div style="display: inline-block" class="category" th:text="${categoryDto.cname}"></div>
+                <td>
+                    <img class="update" height="50px" width="auto"
+                         th:attr="onclick=|categoryUpdate('${categoryDtoStat.index}')|"
+                         th:src="@{/img/edit_image.png}">
+                </td>
+                <td>
+                    <img class="delete" height="50px" width="auto"
+                         th:attr="onclick=|categoryDel('${categoryDtoStat.index}')|"
+                         th:src="@{/img/delete_image.png}">
+                </td>
+            </div>
+            <div class="containerBody">
+                <div style="display: inline-block" class="category" onclick="test()">+</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

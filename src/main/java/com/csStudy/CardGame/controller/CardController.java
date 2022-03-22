@@ -53,7 +53,7 @@ public class CardController {
         // 카테고리 리스트를 받아오는 부분
         List<CategoryDto> categoryDtoList = cardService.findAllCategories();
         model.addAttribute("categoryDtoList", categoryDtoList);
-        return "categoryManage";
+        return "categorymanage";
     }
 
     @GetMapping("/card/list")
