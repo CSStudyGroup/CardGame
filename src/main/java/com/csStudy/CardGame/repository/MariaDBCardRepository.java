@@ -91,7 +91,10 @@ public class MariaDBCardRepository implements CardRepository {
     @Override
     public int delete(Card card) {
         try {
-            em.remove(card);
+            findById(card.getId())
+                    .ifPresentOrElse(em::remove, () -> {
+                        throw new NoSuchElementException();
+                    });
             return 1;
         }
         catch (NoSuchElementException e) {

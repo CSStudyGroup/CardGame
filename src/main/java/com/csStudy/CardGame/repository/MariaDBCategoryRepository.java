@@ -52,7 +52,10 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     @Override
     public int delete(Category category) {
         try {
-            em.remove(category);
+            findById(category.getCid())
+                    .ifPresentOrElse(em::remove, () -> {
+                        throw new NoSuchElementException();
+                    });
             return 1;
         }
         catch (NoSuchElementException e) {
