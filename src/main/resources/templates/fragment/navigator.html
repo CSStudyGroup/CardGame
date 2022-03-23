@@ -20,25 +20,41 @@
                         <option value="tag">
                             태그
                         </option>
+                        <option value="question">
+                            질문
+                        </option>
                     </select>
                     <input type="text" class="search_keyword" />
-                    <input type="submit" class="search_form_submit" value="검색">
+                    <button id="btn-search">검색</button>
                 </form>
             </div>
-            <script src="/js/navigator.js"></script>
         </nav>
-        <div class="modal-insert" id="insertModal">
-            <h3 style="display: inline">장르 : </h3>
-            <form style="display: inline">
-                <select id="insertCategory">
-                    <option value="none" selected disabled hidden>===선택===</option>
-                </select>
-            </form><br><br>
-            <h3 style="display: inline">태그 : </h3><input type="text" id="insertTags" style="display: inline"><br><br>
-            <h3 style="display: inline">질문 : </h3><input type="text" id="insertQuestion" style="display: inline"><br><br>
-            <h3 style="display: inline">답변 : </h3><input type="text" id="insertAnswer" style="display: inline"><br><br>
-            <button type="button" onclick="insertModalSubmit()">추가</button>
-            <button type="button" onclick="insertModalClose()">닫기</button>
+        <dialog id="dialog-interview">
+            <h2 class="caution">카테고리 선택</h2>
+            <form th:method="get" th:action="@{/card/interview}">
+                <th:block th:each="categoryDto: ${ categoryDtoList }">
+                    <label><input th:type="checkbox" th:name="keyword" th:value="${ categoryDto.cname }" th:text="${ categoryDto.cname }"></label>
+                </th:block>
+                <input th:type="submit" th:value="시작">
+            </form>
+        </dialog>
+        <div class="modal-overlay" id="insertModalOverlay">
+            <div class="modal-insert" id="insertModal">
+                <h3 style="display: inline">장르 : </h3>
+                <form style="display: inline">
+                    <select id="insertCategory">
+                        <option value="none" selected disabled hidden>===선택===</option>
+                        <th:block th:each="categoryDto: ${ categoryDtoList }">
+                            <option th:value="${ categoryDto.cname }" th:text="${ categoryDto.cname }"></option>
+                        </th:block>
+                    </select>
+                </form><br><br>
+                <h3 style="display: inline">태그 : </h3><input type="text" id="insertTags" style="display: inline"><br><br>
+                <h3 style="display: inline">질문 : </h3><input type="text" id="insertQuestion" style="display: inline"><br><br>
+                <h3 style="display: inline">답변 : </h3><input type="text" id="insertAnswer" style="display: inline"><br><br>
+                <button type="button" onclick="insertModalSubmit()">추가</button>
+                <button type="button" onclick="insertModalClose()">닫기</button>
+            </div>
         </div>
     </th:block>
 </html>

@@ -1,14 +1,25 @@
-function interview() {
-    console.log("interview button clicked");
-}
+// 카드 추가를 위한 element
+const category = document.getElementById("insertCategory");
+const insertModal = document.getElementById("insertModal");
+const insertModalOverlay = document.getElementById("insertModalOverlay");
+const insertCategory = document.getElementById("insertCategory");
+const insertTags = document.getElementById("insertTags");
+const insertQuestion = document.getElementById("insertQuestion");
+const insertAnswer = document.getElementById("insertAnswer");
 
-function insert(){
+function insert() {
+    insertCategory.value = "none";
+    insertQuestion.value = "";
+    insertAnswer.value = "";
+    insertTags.value = "";
     insertModal.style.display = "block";
+    insertModalOverlay.style.display = "flex";
 }
 
 function insertModalSubmit(){
     console.log(insertModal);
     insertModal.style.display = "none";
+    insertModalOverlay.style.display = "none";
 
     // AJAX 수정 요청
     httpRequest = new XMLHttpRequest();
@@ -19,7 +30,6 @@ function insertModalSubmit(){
             if (httpRequest.status === 200) {
                 if (httpRequest.response == 1) {
                     alert("삽입 성공");
-                    // 해당 줄 내용 수정
                 }
                 else {
                     alert("삽입 실패");
@@ -40,37 +50,17 @@ function insertModalSubmit(){
 
 function insertModalClose(){
     insertModal.style.display = "none";
-    check = false;
+    insertModalOverlay.style.display = "none";
 }
 
-window.addEventListener('load', function() {
-    const category = document.getElementById("insertCategory");
-    const insertModal = document.getElementById("insertModal");
-    const insertCategory = document.getElementById("insertCategory");
-    const insertTags = document.getElementById("insertTags");
-    const insertQuestion = document.getElementById("insertQuestion");
-    const insertAnswer = document.getElementById("insertAnswer");
 
-    httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = getCategoryList;
+// 인터뷰 링크
+const interviewDialog = document.getElementById("dialog-interview");
 
-    function getCategoryList(){
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                var results = httpRequest.response;
-                for (const result of results) {
-                    var op = new Option();
-                    op.value = result.cname;
-                    op.text = result.cname;
-                    category.appendChild(op);
-                }
-            } else {
-                alert('Request Error!');
-            }
-        }
+function interview() {
+    if (typeof interviewDialog.showModal === 'function') {
+        interviewDialog.showModal();
+    } else {
+        alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
     }
-
-    httpRequest.open('POST', '/card/categoryList');
-    httpRequest.responseType = "json";
-    httpRequest.send();
-});
+}
