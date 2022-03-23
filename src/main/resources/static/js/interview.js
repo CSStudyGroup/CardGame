@@ -1,4 +1,14 @@
 window.onload = function(){
+    // 카드가 0개 일 경우 예외 처리
+    if (dto.length == 0) {
+        alert("선택 된 카테고리의 카드가 없습니다.\n메인으로 돌아갑니다.");
+        window.location = "/card";
+    }
+
+    // 문항 수 표시
+    const headTitle = document.querySelector(".headTitle");
+    headTitle.innerText = "Interview (총 문항 수 : " + dto.length + ")";
+
     // 카드 클릭 애니메이션
     const card = document.querySelector(".container");
     const text = document.getElementById("text");

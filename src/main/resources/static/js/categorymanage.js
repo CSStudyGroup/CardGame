@@ -100,7 +100,7 @@ function createCategory() {
     function postInsertCategory(){
         if (cManageHttpRequest.readyState === XMLHttpRequest.DONE) {
             if (cManageHttpRequest.status === 200) {
-                if (cManageHttpRequest.response == 1) {
+                if (cManageHttpRequest.response != null) {
                     alert("추가 성공");
                     // 새로운 컨테이너 바디
                     let new_container = document.createElement("div");
@@ -168,5 +168,4 @@ function createCategory() {
 }
 
 window.onload = function(){
-    console.log(dto);
 }
