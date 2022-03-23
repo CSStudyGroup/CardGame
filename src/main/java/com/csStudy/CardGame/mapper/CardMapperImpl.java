@@ -13,7 +13,7 @@ public class CardMapperImpl implements CardMapper{
         else {
             Card card = new Card();
             card.setId(cardDto.getId());
-            card.setCategory(cardDto.getCategory());
+            card.setCid(cardDto.getCid());
             card.setQuestion(cardDto.getQuestion());
             card.setAnswer(cardDto.getAnswer());
             card.setTags(cardDto.getTags());
@@ -29,7 +29,7 @@ public class CardMapperImpl implements CardMapper{
         else {
             CardDto cardDto = new CardDto();
             cardDto.setId(card.getId());
-            cardDto.setCategory(card.getCategory());
+            cardDto.setCid(card.getCid());
             cardDto.setQuestion(card.getQuestion());
             cardDto.setAnswer(card.getAnswer());
             cardDto.setTags(card.getTags());

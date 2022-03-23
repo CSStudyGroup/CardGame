@@ -20,13 +20,13 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public int insert(Card card) {
+    public Card insert(Card card) {
         try {
             em.persist(card);
-            return 1;
+            return card;
         }
         catch(Exception e) {
-            return 0;
+            return null;
         }
     }
 
@@ -42,16 +42,16 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public List<Card> filterByCategory(String category) {
-        return em.createQuery("select c from Card c where c.category = :category", Card.class)
-                .setParameter("category", category)
+    public List<Card> filterByCategory(int cid) {
+        return em.createQuery("select c from Card c where c.cid = :cid", Card.class)
+                .setParameter("cid", cid)
                 .getResultList();
     }
 
     @Override
-    public List<Card> filterByCategories(List<String> categories) {
-        return em.createQuery("select c from Card c where c.category in (:categories)", Card.class)
-                .setParameter("categories", categories)
+    public List<Card> filterByCategories(List<Integer> cidList) {
+        return em.createQuery("select c from Card c where c.cid in (:cidList)", Card.class)
+                .setParameter("cidList", cidList)
                 .getResultList();
     }
 
@@ -74,7 +74,7 @@ public class MariaDBCardRepository implements CardRepository {
         try {
             findById(card.getId())
                     .ifPresentOrElse(target -> {
-                        target.setCategory(card.getCategory());
+                        target.setCid(card.getCid());
                         target.setQuestion(card.getQuestion());
                         target.setAnswer(card.getAnswer());
                         target.setTags(card.getTags());

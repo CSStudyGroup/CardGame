@@ -41,7 +41,7 @@ function insertModalSubmit(){
     }
     httpRequest.open('POST',
         '/card/cardInsert'
-        + "?category=" + insertCategory.value
+        + "?cid=" + insertCategory.value
         + "&question=" + insertQuestion.value
         + "&answer=" + insertAnswer.value
         + "&tags=" + insertTags.value );

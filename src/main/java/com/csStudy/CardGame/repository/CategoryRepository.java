@@ -16,7 +16,7 @@ public interface CategoryRepository {
     List<Category> findAll();
 
     // 카테고리 추가
-    int insert(Category category);
+    Category insert(Category category);
 
     // 카테고리 삭제
     int delete(Category category);

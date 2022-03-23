@@ -27,7 +27,7 @@ public class MariaDBCategoryRepository implements CategoryRepository {
 
     @Override
     public Optional<Category> findByName(String name) {
-        return Optional.ofNullable(em.createQuery("select c from Category c where c.name = :name", Category.class)
+        return Optional.ofNullable(em.createQuery("select c from Category c where c.cname = :name", Category.class)
                 .setParameter("name", name)
                 .getSingleResult());
     }
@@ -39,13 +39,13 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public int insert(Category category) {
+    public Category insert(Category category) {
         try {
             em.persist(category);
-            return 1;
+            return category;
         }
         catch (Exception e) {
-            return 0;
+            return null;
         }
     }
 

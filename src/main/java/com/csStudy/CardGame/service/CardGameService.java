@@ -35,8 +35,8 @@ public class CardGameService {
     }
 
     // 카드 추가
-    public int addCard(CardDto cardDto) {
-        return cardRepository.insert(cardMapper.toEntity(cardDto));
+    public CardDto addCard(CardDto cardDto) {
+        return cardMapper.toDto(cardRepository.insert(cardMapper.toEntity(cardDto)));
     }
 
     // id로 카드 찾기
@@ -53,15 +53,15 @@ public class CardGameService {
     }
 
     // 카테고리로 카드 필터링
-    public List<CardDto> filterCardsByCategory(String category) {
-        return cardRepository.filterByCategory(category).stream()
+    public List<CardDto> filterCardsByCategory(int cid) {
+        return cardRepository.filterByCategory(cid).stream()
                 .map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     // 여러개의 카테고리로 카드 필터링
-    public List<CardDto> filterCardsByCategories(List<String> categories) {
-        return cardRepository.filterByCategories(categories).stream()
+    public List<CardDto> filterCardsByCategories(List<Integer> cidList) {
+        return cardRepository.filterByCategories(cidList).stream()
                 .map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -98,8 +98,8 @@ public class CardGameService {
     }
 
     // 카테고리 추가
-    public int addCategory(CategoryDto categoryDto) {
-        return categoryRepository.insert(categoryMapper.toEntity(categoryDto));
+    public CategoryDto addCategory(CategoryDto categoryDto) {
+        return categoryMapper.toDto(categoryRepository.insert(categoryMapper.toEntity(categoryDto)));
     }
 
     // 카테고리 수정

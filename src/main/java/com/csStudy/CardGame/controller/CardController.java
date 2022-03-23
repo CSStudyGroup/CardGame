@@ -31,7 +31,7 @@ public class CardController {
 
     // 선택된 카테고리에 맞게 표시
     @GetMapping("/card/category")
-    public String category(@RequestParam(value="keyword") String keyword, Model model) {
+    public String category(@RequestParam(value="keyword") int keyword, Model model) {
         // 해당되는 키워드의 카드리스트를 받아와 반환
         List<CardDto> cardDtoList = cardService.filterCardsByCategory(keyword);
         model.addAttribute("cardDtoList", cardDtoList);
@@ -44,7 +44,7 @@ public class CardController {
 
     // navi bar interview checkbox submit
     @GetMapping("/card/interview")
-    public String interview(@RequestParam("keyword") List<String> keywords, Model model) {
+    public String interview(@RequestParam("keyword") List<Integer> keywords, Model model) {
         List<CardDto> cardDtoList = cardService.filterCardsByCategories(keywords);
         model.addAttribute("cardDtoList", cardDtoList);
 
@@ -65,7 +65,7 @@ public class CardController {
     @GetMapping("/card/list")
     public String list(@RequestParam("tag") String tag,
                        @RequestParam("question") String question,
-                       @RequestParam("category") String category, Model model) {
+                       @RequestParam("cid") Integer cid, Model model) {
         // 빈 배열 선언
         List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
 
@@ -75,8 +75,8 @@ public class CardController {
         else if (question != "") {
             cardDtoList = cardService.filterCardsByQuestion(question);
         }
-        else if (category != "") {
-            cardDtoList = cardService.filterCardsByCategory(category);
+        else if (cid != null) {
+            cardDtoList = cardService.filterCardsByCategory(cid);
         }
 
         // 모델 추가
@@ -103,7 +103,7 @@ public class CardController {
     // 카드 추가
     @ResponseBody
     @PostMapping("card/cardInsert")
-    public int cardInsert(CardDto cardDto) {
+    public CardDto cardInsert(CardDto cardDto) {
         return cardService.addCard(cardDto);
     }
 
@@ -124,7 +124,7 @@ public class CardController {
     // 카테고리 추가
     @ResponseBody
     @PostMapping("card/categoryInsert")
-    public int categoryInsert(CategoryDto categoryDto) {
+    public CategoryDto categoryInsert(CategoryDto categoryDto) {
         return cardService.addCategory(categoryDto);
     }
 
