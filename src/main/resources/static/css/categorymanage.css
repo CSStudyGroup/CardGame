@@ -18,7 +18,7 @@ html {
     margin-left: 5%;
 }
 
-.containerBody {
+.containerBody, .containerLast {
     display: flex;
     align-items: center;
 }
@@ -41,4 +41,8 @@ html {
 
 .update, .delete {
     margin-left: 10px;
+}
+
+#newCategoryName, .newCategoryName {
+    font-size: 40px;
 }

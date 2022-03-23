@@ -35,6 +35,10 @@ public class CardController {
         // 해당되는 키워드의 카드리스트를 받아와 반환
         List<CardDto> cardDtoList = cardService.filterCardsByCategory(keyword);
         model.addAttribute("cardDtoList", cardDtoList);
+
+        // 카테고리 리스트를 받아오는 부분
+        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        model.addAttribute("categoryDtoList", categoryDtoList);
         return "category";
     }
 
@@ -42,9 +46,11 @@ public class CardController {
     @GetMapping("/card/interview")
     public String interview(@RequestParam("keyword") List<String> keywords, Model model) {
         List<CardDto> cardDtoList = cardService.filterCardsByCategories(keywords);
-
-        // 결과 최종 반환
         model.addAttribute("cardDtoList", cardDtoList);
+
+        // 카테고리 리스트를 받아오는 부분
+        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        model.addAttribute("categoryDtoList", categoryDtoList);
         return "interview";
     }
 
@@ -75,6 +81,10 @@ public class CardController {
 
         // 모델 추가
         model.addAttribute("cardDtoList", cardDtoList);
+
+        // 카테고리 리스트를 받아오는 부분
+        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        model.addAttribute("categoryDtoList", categoryDtoList);
 
         return "list";
     }
