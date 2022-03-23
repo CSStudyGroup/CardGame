@@ -20,13 +20,13 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public int insert(Card card) {
+    public Card insert(Card card) {
         try {
             em.persist(card);
-            return 1;
+            return card;
         }
         catch(Exception e) {
-            return 0;
+            return null;
         }
     }
 

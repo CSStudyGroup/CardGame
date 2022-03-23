@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CardRepository {
     // 카드 추가
-    int insert(Card card);
+    Card insert(Card card);
 
     // id로 카드 검색
     Optional<Card> findById(Long id);
