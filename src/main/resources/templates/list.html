@@ -18,7 +18,7 @@
                     <th>Question</th>
                     <th>Tags</th>
                 </tr>
-                <tr th:each="cardDto : ${cardDtoList}">
+                <tr class="tableBody" th:each="cardDto : ${cardDtoList}">
                     <td class="id"
                         th:text="${cardDto.id}"></td>
                     <td class="category"
@@ -35,7 +35,6 @@
                     </td>
                     <td class="delete">
                         <img height="30px" width="auto"
-                             th:index="${cardDtoStat.index}"
                              th:attr="onclick=|del('${cardDtoStat.index}')|"
                              th:src="@{/img/delete_image.png}">
                     </td>
