@@ -1,6 +1,9 @@
 // AJAX용 request
 var listHttpRequest;
 
+// 해싱용 맵
+let categoryMap;
+
 // 본문 보기
 var target = -1;
 const viewModal = document.getElementById("viewModal");
@@ -14,7 +17,7 @@ var check = false;
 function text(index) {
     if (!check) {
         viewId.innerText = dto[index].id;
-        viewCategory.innerText = dto[index].category;
+        viewCategory.innerText = categoryMap.get(dto[index].cid);
         viewTags.innerText = dto[index].tags;
         viewQuestion.innerText = dto[index].question;
         viewAnswer.innerText = dto[index].answer;
@@ -40,7 +43,7 @@ function update(index){
     if (!check) {
         target = index
         updateId.innerText = dto[index].id;
-        updateCategory.value = dto[index].category;
+        updateCategory.value = dto[index].cid;
         updateTags.value = dto[index].tags;
         updateQuestion.value = dto[index].question;
         updateAnswer.value = dto[index].answer;
@@ -62,7 +65,7 @@ function updateModalSubmit(){
                 if (listHttpRequest.response == 1) {
                     alert("수정 성공");
                     // 해당 줄 내용 수정
-                    if (dto[target].category == updateCategory.value) {
+                    if (dto[target].cid == updateCategory.value) {
                         dto[target].tags = updateTags.value;
                         dto[target].question = updateQuestion.value;
                         dto[target].answer = updateAnswer.value;
@@ -91,7 +94,7 @@ function updateModalSubmit(){
     listHttpRequest.open('POST',
         '/card/cardUpdate'
         + "?id=" + updateId.innerText
-        + "&category=" + updateCategory.value
+        + "&cid=" + updateCategory.value
         + "&question=" + updateQuestion.value
         + "&answer=" + updateAnswer.value
         + "&tags=" + updateTags.value );
@@ -160,7 +163,7 @@ remove.addEventListener('click', () => {
         listHttpRequest.open('POST',
             '/card/cardDelete'
             + "?id=" + dto[target].id
-            + "&category=" + dto[target].category
+            + "&cid=" + dto[target].cid
             + "&question=" + dto[target].question
             + "&answer=" + dto[target].answer
             + "&tags=" + dto[target].tags);
@@ -169,4 +172,15 @@ remove.addEventListener('click', () => {
 });
 
 window.onload = function(){
+    // 카테고리 해싱
+    categoryMap = new Map();
+    for (let i = 0; i < categoryDto.length; i++) {
+        categoryMap.set(categoryDto[i].cid, categoryDto[i].cname);
+    }
+
+    // 카테고리 변환
+    const categoryCids = document.querySelectorAll(".category");
+    for (let i = 0; i < categoryCids.length; i++) {
+        categoryCids[i].innerText = categoryMap.get(parseInt(categoryCids[i].innerText));
+    }
 }

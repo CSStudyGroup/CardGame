@@ -1,7 +1,19 @@
 window.onload = function(){
+    // 카드가 0개 일 경우 예외 처리
+    if (dto.length == 0) {
+        alert("선택 된 카테고리의 카드가 없습니다.\n메인으로 돌아갑니다.");
+        window.location = "/card";
+    }
+
+    // 카테고리 해싱
+    let categoryMap = new Map();
+    for (let i = 0; i < categoryDto.length; i++) {
+        categoryMap.set(categoryDto[i].cid, categoryDto[i].cname);
+    }
+
     // 카테고리 표시
     const categoryname = document.getElementById("directory");
-    categoryname.innerText = "카테고리 > " + dto[0].category;
+    categoryname.innerText = "카테고리 > " + categoryMap.get(dto[0].cid);
 
     // 각 종 elements
     const card = document.querySelector(".container");
