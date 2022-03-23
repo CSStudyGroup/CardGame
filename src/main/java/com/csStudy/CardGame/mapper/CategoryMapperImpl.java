@@ -12,6 +12,7 @@ public class CategoryMapperImpl implements CategoryMapper{
         }
         else {
             Category category = new Category();
+            category.setCid(categoryDto.getCid());
             category.setCname(categoryDto.getCname());
             category.setCnt(categoryDto.getCnt());
             return category;

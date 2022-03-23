@@ -12,7 +12,10 @@
         <p id="title">Category</p>
         <div class="container-item">
             <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
-                <div style="display: inline-block" class="category" th:text="${categoryDto.cname}"></div>
+                <div style="display: inline-block" class="category">
+                    <a th:text="${categoryDto.cname}"></a>
+                    <input type="hidden" class="newCategoryName">
+                </div>
                 <td>
                     <img class="update" height="50px" width="auto"
                          th:attr="onclick=|categoryUpdate('${categoryDtoStat.index}')|"
@@ -20,14 +23,21 @@
                 </td>
                 <td>
                     <img class="delete" height="50px" width="auto"
-                         th:attr="onclick=|categoryDel('${categoryDtoStat.index}')|"
+                         th:attr="onclick=|categoryDelete('${categoryDtoStat.index}')|"
                          th:src="@{/img/delete_image.png}">
                 </td>
             </div>
-            <div class="containerBody">
-                <div style="display: inline-block" class="category" onclick="test()">+</div>
+            <div class="containerLast">
+                <div style="display: inline-block" class="category" id="newCategory" onclick="categoryInsert()">
+                    <a id="plusMark">+</a>
+                    <input type="hidden" id="newCategoryName">
+                </div>
+                <button style="display: none;" type="button" id="createCategory" onclick="createCategory()">생성</button>
             </div>
         </div>
     </div>
+    <script th:inline="javascript">
+        var dto = [[${categoryDtoList}]];
+    </script>
 </body>
 </html>
