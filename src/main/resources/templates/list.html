@@ -56,6 +56,9 @@
         <form style="display: inline">
             <select id="updateCategory">
                 <option value="none" selected disabled hidden>===선택===</option>
+                <option th:each="categoryDto : ${categoryDtoList}"
+                        th:value="${categoryDto.cname}"
+                        th:text="${categoryDto.cname}"></option>
             </select>
         </form><br><br>
         <h3 style="display: inline">태그 : </h3><input type="text" id="updateTags" style="display: inline"><br><br>

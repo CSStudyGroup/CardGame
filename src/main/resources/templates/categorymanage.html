@@ -13,7 +13,7 @@
         <div class="container-item">
             <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
                 <div style="display: inline-block" class="category">
-                    <a th:text="${categoryDto.cname}"></a>
+                    <a class="categoryName" th:text="${categoryDto.cname}"></a>
                     <input type="hidden" class="newCategoryName">
                 </div>
                 <td>
@@ -36,6 +36,11 @@
             </div>
         </div>
     </div>
+    <dialog class="dialog">
+        <h2 class="checkCaution"></h2><br><br>
+        <button class="remove" type="reset">삭제</button>
+        <button class="cancel" type="reset">취소</button>
+    </dialog>
     <script th:inline="javascript">
         var dto = [[${categoryDtoList}]];
     </script>
