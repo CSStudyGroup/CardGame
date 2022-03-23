@@ -46,3 +46,21 @@ html {
 #newCategoryName, .newCategoryName {
     font-size: 40px;
 }
+
+.dialog {
+    width: 600px;
+    height: 300px;
+    text-align: center;
+}
+
+.checkCaution {
+    margin-top: 100px;
+}
+
+.del {
+    margin-right: 10px;
+}
+
+.cancel {
+    margin-left: 10px;
+}

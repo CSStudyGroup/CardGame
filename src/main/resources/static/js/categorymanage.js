@@ -1,13 +1,15 @@
 // AJAX용 변수
 var cManageHttpRequest;
 
-function categoryDelete(index){
-    if (dto[index].cnt != 0) {
-        alert("해당 카테고리의 카드 수가 0개가 아니기에 삭제할 수 없습니다.");
-    }
-    else {
-        // AJAX 처리
-        console.log(dto[index]);
+// 삭제 처리
+const cancel = document.querySelector('.cancel');
+cancel.addEventListener('click', () => {
+    dialog.close();
+});
+
+const remove = document.querySelector('.remove');
+remove.addEventListener('click', () => {
+    if (target != -1) {
         cManageHttpRequest = new XMLHttpRequest();
         cManageHttpRequest.onreadystatechange = postInsertCategory;
 
@@ -17,6 +19,13 @@ function categoryDelete(index){
                     if (cManageHttpRequest.response == 1) {
                         alert("삭제 성공");
                         // 해당 줄 삭제
+                        const temp = document.querySelectorAll(".containerBody");
+                        for (let i = 0; i < temp.length; i++) {
+                            if (temp[i].children[0].children[0].innerText == dto[target].cname) {
+                                temp[i].remove();
+                                break;
+                            }
+                        }
                     }
                     else {
                         alert("삭제 실패");
@@ -24,21 +33,45 @@ function categoryDelete(index){
                 } else {
                     alert('Request Error!');
                 }
+                dialog.close();
+                target = -1;
             }
         }
+
         cManageHttpRequest.open('POST',
             '/card/categoryDelete'
-            + "?cid=" + dto[index].cid
-            + "&cname=" + dto[index].cname
-            + "&cnt=" + dto[index].cnt);
+            + "?cid=" + dto[target].cid
+            + "&cname=" + dto[target].cname
+            + "&cnt=" + dto[target].cnt);
         cManageHttpRequest.send()
+    }
+});
+
+const dialog = document.querySelector('.dialog');
+const checkCaution = document.querySelector('.checkCaution');
+var target = -1;
+function categoryDelete(index){
+    if (dto[index].cnt != 0) {
+        alert("해당 카테고리의 카드 수가 0개가 아니기에 삭제할 수 없습니다.");
+    }
+    else {
+        checkCaution.textContent = dto[index].cname + " 카테고리를 정말로 삭제하시겠습니까?";
+        target = index;
+        if (typeof dialog.showModal === 'function') {
+            dialog.showModal();
+        } else {
+            alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
+        }
     }
 }
 
+// 카테고리 수정
 function categoryUpdate(index){
+    const original_name = document.querySelectorAll(".categoryName");
     const input_box = document.querySelectorAll(".newCategoryName");
-    console.log(input_box);
     input_box[index].setAttribute("type", "text");
+    input_box[index].value = original_name[index].innerText;
+    original_name[index].innerText = "";
 }
 
 // 카테고리 추가
@@ -77,9 +110,18 @@ function createCategory() {
                     let new_div = document.createElement("div");
                     new_div.style.display = "inline-block";
                     new_div.setAttribute("class", "category");
-                    new_div.innerText = inputText.value;
+
+                    let new_a = document.createElement("a");
+                    new_a.text = inputText.value;
+                    new_a.setAttribute("class", "categoryName");
+                    new_div.appendChild(new_a);
+
+                    let new_input = document.createElement("input");
+                    new_input.setAttribute("type", "hidden");
+                    new_input.setAttribute("class", "newCategoryName");
+                    new_div.appendChild(new_input);
+
                     new_container.append(new_div);
-                    // 구조변경에 따른 추가 수정 필요..
 
                     // update 추가
                     let new_update = document.createElement("img");
@@ -126,4 +168,5 @@ function createCategory() {
 }
 
 window.onload = function(){
+    console.log(dto);
 }

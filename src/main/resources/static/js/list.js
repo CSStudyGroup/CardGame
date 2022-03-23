@@ -140,7 +140,6 @@ remove.addEventListener('click', () => {
                         // 리스트에서 해당 줄 제거
                         const temp = document.querySelectorAll(".tableBody");
                         for (let i = 0; i < temp.length; i++) {
-                            console.log(temp[i].children[0].innerHTML);
                             if (temp[i].children[0].innerHTML == dto[target].id) {
                                 temp[i].remove();
                                 break;
@@ -170,28 +169,4 @@ remove.addEventListener('click', () => {
 });
 
 window.onload = function(){
-    const updateCategory = document.getElementById("updateCategory");
-
-    listHttpRequest = new XMLHttpRequest();
-    listHttpRequest.onreadystatechange = getCategory;
-
-    function getCategory(){
-        if (listHttpRequest.readyState === XMLHttpRequest.DONE) {
-            if (listHttpRequest.status === 200) {
-                var results = listHttpRequest.response;
-                for (const result of results) {
-                    var op = new Option();
-                    op.value = result.cname;
-                    op.text = result.cname;
-                    updateCategory.appendChild(op);
-                }
-            } else {
-                alert('Request Error!');
-            }
-        }
-    }
-
-    listHttpRequest.open('POST', '/card/categoryList');
-    listHttpRequest.responseType = "json";
-    listHttpRequest.send();
 }
