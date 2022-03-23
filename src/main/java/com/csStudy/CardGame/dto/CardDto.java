@@ -9,7 +9,7 @@ import lombok.*;
 public class CardDto {
     private Long id;
 
-    private String category;
+    private int cid;
 
     private String question;
 

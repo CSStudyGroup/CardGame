@@ -21,7 +21,7 @@ public class MariaDBCardRepositoryTests {
     @Test
     public void insert() {
         Card card = new Card();
-        card.setCategory("graph");
+        card.setCid(1);
         card.setQuestion("about dynamic Programming");
         card.setAnswer("great Answer");
         card.setTags("graph, dijkstra");
@@ -36,21 +36,21 @@ public class MariaDBCardRepositoryTests {
         List<Card> expected = repository.filterByTag("dijkstra");
 
         Card card = new Card();
-        card.setCategory("graph");
+        card.setCid(1);
         card.setQuestion("about dynamic Programming");
         card.setAnswer("great Answer");
         card.setTags("graph, dijkstra");
         repository.insert(card);
 
         Card card2 = new Card();
-        card2.setCategory("graph");
+        card2.setCid(1);
         card2.setQuestion("about dynamic Programming2");
         card2.setAnswer("great Answer");
         card2.setTags("graph, dijkstra");
         repository.insert(card2);
 
         Card card3 = new Card();
-        card3.setCategory("graph");
+        card3.setCid(1);
         card3.setQuestion("about dynamic Programming3");
         card3.setAnswer("great Answer");
         card3.setTags("graph");
@@ -68,21 +68,21 @@ public class MariaDBCardRepositoryTests {
         List<Card> expected = repository.findAll();
 
         Card card = new Card();
-        card.setCategory("graph");
+        card.setCid(1);
         card.setQuestion("about dynamic Programming");
         card.setAnswer("great Answer");
         card.setTags("graph, dijkstra");
         repository.insert(card);
 
         Card card2 = new Card();
-        card2.setCategory("graph");
+        card2.setCid(1);
         card2.setQuestion("about dynamic Programming2");
         card2.setAnswer("great Answer");
         card2.setTags("graph, dijkstra");
         repository.insert(card2);
 
         Card card3 = new Card();
-        card3.setCategory("graph");
+        card3.setCid(1);
         card3.setQuestion("about dynamic Programming3");
         card3.setAnswer("great Answer");
         card3.setTags("graph");
@@ -98,30 +98,30 @@ public class MariaDBCardRepositoryTests {
 
     @Test
     public void filterByCategory() {
-        List<Card> expected = repository.filterByCategory("dynamic_programming");
+        List<Card> expected = repository.filterByCategory(2);
 
         Card card = new Card();
-        card.setCategory("graph");
+        card.setCid(1);
         card.setQuestion("about dynamic Programming");
         card.setAnswer("great Answer");
         card.setTags("graph, dijkstra");
         repository.insert(card);
 
         Card card2 = new Card();
-        card2.setCategory("graph");
+        card2.setCid(1);
         card2.setQuestion("about dynamic Programming2");
         card2.setAnswer("great Answer");
         card2.setTags("graph, dijkstra");
         repository.insert(card2);
 
         Card card3 = new Card();
-        card3.setCategory("dynamic_programming");
+        card3.setCid(2);
         card3.setQuestion("about dynamic Programming3");
         card3.setAnswer("great Answer");
         card3.setTags("graph");
         repository.insert(card3);
 
-        List<Card> result = repository.filterByCategory("dynamic_programming");
+        List<Card> result = repository.filterByCategory(2);
         expected.add(card3);
 
         Assertions.assertThat(result).isEqualTo(expected);
@@ -130,7 +130,7 @@ public class MariaDBCardRepositoryTests {
     @Test
     public void updateById() {
         Card card = new Card();
-        card.setCategory("graph");
+        card.setCid(1);
         card.setQuestion("about dynamic Programming");
         card.setAnswer("great Answer");
         card.setTags("graph, dijkstra");
@@ -138,7 +138,7 @@ public class MariaDBCardRepositoryTests {
 
         Card card2 = new Card();
         card2.setId(card.getId());
-        card2.setCategory("graph");
+        card2.setCid(1);
         card2.setQuestion("about dynamic Programming2");
         card2.setAnswer("great Answer");
         card2.setTags("test");
@@ -151,7 +151,7 @@ public class MariaDBCardRepositoryTests {
     @Test
     public void deleteById() {
         Card card = new Card();
-        card.setCategory("graph");
+        card.setCid(1);
         card.setQuestion("about dynamic Programming");
         card.setAnswer("great Answer");
         card.setTags("graph, dijkstra");
@@ -166,14 +166,14 @@ public class MariaDBCardRepositoryTests {
 
     @Test
     public void filterByCategories() {
-        ArrayList<String> keywords = new ArrayList<>();
-        keywords.add("graph");
-        keywords.add("c1");
+        ArrayList<Integer> keywords = new ArrayList<>();
+        keywords.add(1);
+        keywords.add(2);
 
         List<Card> expected = repository.filterByCategories(keywords);
 
         Card card = new Card();
-        card.setCategory("graph");
+        card.setCid(1);
         card.setQuestion("about dynamic Programming");
         card.setAnswer("great Answer");
         card.setTags("graph, dijkstra");
@@ -192,7 +192,7 @@ public class MariaDBCardRepositoryTests {
         List<Card> expected = repository.filterByQuestionContaining(keyword);
 
         Card card = new Card();
-        card.setCategory("graph");
+        card.setCid(1);
         card.setQuestion("about best1 dynamic Programming");
         card.setAnswer("great Answer");
         card.setTags("graph, dijkstra");

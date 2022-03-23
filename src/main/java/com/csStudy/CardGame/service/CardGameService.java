@@ -53,15 +53,15 @@ public class CardGameService {
     }
 
     // 카테고리로 카드 필터링
-    public List<CardDto> filterCardsByCategory(String category) {
-        return cardRepository.filterByCategory(category).stream()
+    public List<CardDto> filterCardsByCategory(int cid) {
+        return cardRepository.filterByCategory(cid).stream()
                 .map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     // 여러개의 카테고리로 카드 필터링
-    public List<CardDto> filterCardsByCategories(List<String> categories) {
-        return cardRepository.filterByCategories(categories).stream()
+    public List<CardDto> filterCardsByCategories(List<Integer> cidList) {
+        return cardRepository.filterByCategories(cidList).stream()
                 .map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
