@@ -22,7 +22,7 @@ function insertModalSubmit(){
     insertModalOverlay.style.display = "none";
 
     // AJAX 수정 요청
-    httpRequest = new XMLHttpRequest();
+    let httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = postInsertCard;
 
     function postInsertCard(){
