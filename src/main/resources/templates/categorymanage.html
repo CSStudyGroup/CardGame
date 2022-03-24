@@ -12,35 +12,25 @@
         <p id="title">Category</p>
         <div class="container-item">
             <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
-                <div style="display: inline-block" class="category">
-                    <a class="categoryName" th:text="${categoryDto.cname}"></a>
-                    <input type="hidden" class="newCategoryName">
-                </div>
-                <td>
-                    <img class="update" height="50px" width="auto"
-                         th:attr="onclick=|categoryUpdate('${categoryDtoStat.index}')|"
-                         th:src="@{/img/edit_image.png}">
-                </td>
-                <td>
-                    <img class="delete" height="50px" width="auto"
-                         th:attr="onclick=|categoryDelete('${categoryDtoStat.index}')|"
-                         th:src="@{/img/delete_image.png}">
-                </td>
+                <a class="categoryName" th:text="${categoryDto.cname}"></a>
+                <input type="hidden" class="newCategoryName">
+                <img class="delete clickable" height="50px" width="auto"
+                     th:attr="onclick=|categoryDelete('${categoryDto.cname}')|"
+                     th:src="@{/img/delete_image.png}">
+                <img class="update clickable" height="50px" width="auto"
+                     th:attr="onclick=|categoryUpdate('${categoryDto.cname}')|"
+                     th:src="@{/img/edit_image.png}">
             </div>
-            <div class="containerLast">
-                <div style="display: inline-block" class="category" id="newCategory" onclick="categoryInsert()">
-                    <a id="plusMark">+</a>
-                    <input type="hidden" id="newCategoryName">
-                </div>
-                <button style="display: none;" type="button" id="createCategory" onclick="createCategory()">생성</button>
+            <div class="containerLast clickable" onclick="categoryInsert()">
+                <a id="plusMark">+</a>
+                <input type="hidden" class="newCategoryName" id="newCategoryName">
+                <button type="button" id="createCategory" onclick="createCategory()">추가</button>
             </div>
         </div>
+        <div class="save">
+            <button class="clickable" type="button" id="save">변경내용 저장</button>
+        </div>
     </div>
-    <dialog class="dialog">
-        <h2 class="checkCaution"></h2><br><br>
-        <button class="remove" type="reset">삭제</button>
-        <button class="cancel" type="reset">취소</button>
-    </dialog>
     <script th:inline="javascript">
         var dto = [[${categoryDtoList}]];
     </script>

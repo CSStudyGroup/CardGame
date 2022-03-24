@@ -14,14 +14,19 @@ const viewQuestion = document.getElementById("viewQuestion");
 const viewAnswer = document.getElementById("viewAnswer");
 var check = false;
 
-function text(index) {
+function text(id) {
     if (!check) {
-        viewId.innerText = dto[index].id;
-        viewCategory.innerText = categoryMap.get(dto[index].cid);
-        viewTags.innerText = dto[index].tags;
-        viewQuestion.innerText = dto[index].question;
-        viewAnswer.innerText = dto[index].answer;
-        viewModal.style.display = "block";
+        for (let i = 0; i < dto.length; i++) {
+            if (dto[i].id == id) {
+                viewId.innerText = dto[i].id;
+                viewCategory.innerText = categoryMap.get(dto[i].cid);
+                viewTags.innerText = dto[i].tags;
+                viewQuestion.innerText = dto[i].question;
+                viewAnswer.innerText = dto[i].answer;
+                viewModal.style.display = "block";
+                break;
+            }
+        }
         check = true;
     }
 }
@@ -39,15 +44,20 @@ const updateTags = document.getElementById("updateTags");
 const updateQuestion = document.getElementById("updateQuestion");
 const updateAnswer = document.getElementById("updateAnswer");
 
-function update(index){
+function update(id){
     if (!check) {
-        target = index
-        updateId.innerText = dto[index].id;
-        updateCategory.value = dto[index].cid;
-        updateTags.value = dto[index].tags;
-        updateQuestion.value = dto[index].question;
-        updateAnswer.value = dto[index].answer;
-        updateModal.style.display = "block";
+        for (let i = 0; i < dto.length; i++) {
+            if (dto[i].id == id) {
+                target = i;
+                updateId.innerText = dto[i].id;
+                updateCategory.value = dto[i].cid;
+                updateTags.value = dto[i].tags;
+                updateQuestion.value = dto[i].question;
+                updateAnswer.value = dto[i].answer;
+                updateModal.style.display = "block";
+                break;
+            }
+        }
         check = true;
     }
 }
@@ -64,22 +74,19 @@ function updateModalSubmit(){
             if (listHttpRequest.status === 200) {
                 if (listHttpRequest.response == 1) {
                     alert("수정 성공");
-                    // 해당 줄 내용 수정
-                    if (dto[target].cid == updateCategory.value) {
-                        dto[target].tags = updateTags.value;
-                        dto[target].question = updateQuestion.value;
-                        dto[target].answer = updateAnswer.value;
-                    }
-                    // 카테고리 변경시 순회하며 체킹
-                    else {
-                        const temp = document.querySelectorAll(".tableBody");
-                        for (let i = 0; i < temp.length; i++) {
-                            if (temp[i].children[0].innerHTML == dto[target].id) {
-                                temp[i].remove();
-                                break;
-                            }
-                        }
-                    }
+                    // dto 및 테이블 내용 수정
+                    const temp = document.querySelectorAll(".tableBody")[target];
+
+                    // dto 수정
+                    dto[target].cid = updateCategory.value;
+                    dto[target].tags = updateTags.value;
+                    dto[target].question = updateQuestion.value;
+                    dto[target].answer = updateAnswer.value;
+
+                    // 테이블 수정
+                    temp.children[1].innerText = categoryMap.get(parseInt(updateCategory.value));
+                    temp.children[2].innerText = updateQuestion.value;
+                    temp.children[3].innerText = updateTags.value;
                 }
                 else {
                     alert("수정 실패");
@@ -108,11 +115,16 @@ function updateModalClose(){
 
 // 삭제
 const dialog = document.querySelector('.dialog');
-const caution = document.querySelector(".caution");
-function del(index){
+const deleteCaution = document.querySelector(".delete-caution");
+function del(id){
     if (!check) {
-        caution.textContent = dto[index].id + "번을 정말로 삭제하시겠습니까?";
-        target = index;
+        for (let i = 0; i < dto.length; i++) {
+            if (dto[i].id == id) {
+                target = i;
+                break;
+            }
+        }
+        deleteCaution.textContent = dto[target].id + "번을 정말로 삭제하시겠습니까?";
         if (typeof dialog.showModal === 'function') {
             dialog.showModal();
         } else {
@@ -140,14 +152,7 @@ remove.addEventListener('click', () => {
                 if (listHttpRequest.status === 200) {
                     if (listHttpRequest.response == 1) {
                         alert("삭제 성공");
-                        // 리스트에서 해당 줄 제거
-                        const temp = document.querySelectorAll(".tableBody");
-                        for (let i = 0; i < temp.length; i++) {
-                            if (temp[i].children[0].innerHTML == dto[target].id) {
-                                temp[i].remove();
-                                break;
-                            }
-                        }
+                        window.location.reload();
                     }
                     else {
                         alert("삭제 실패");
@@ -172,6 +177,12 @@ remove.addEventListener('click', () => {
 });
 
 window.onload = function(){
+    // 0개 대응
+    if (dto.length == 0) {
+        const main = document.querySelector(".table");
+        main.innerHTML = "<br><br><br><br><br><br><br><br>검색 결과가 없습니다.<br><br>다른 검색어로 검색해주세요";
+    }
+
     // 카테고리 해싱
     categoryMap = new Map();
     for (let i = 0; i < categoryDto.length; i++) {
