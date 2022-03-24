@@ -64,3 +64,36 @@ function interview() {
         alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
     }
 }
+
+// 검색
+const searchCriteria = document.getElementById("searchCriteria");
+const searchKeyword = document.getElementById("searchKeyword");
+const categoryKey = document.getElementById("categoryKey");
+const tagKey = document.getElementById("tagKey");
+const questionKey = document.getElementById("questionKey");
+const searchForm = document.getElementById("searchForm");
+
+function search() {
+    let kw = searchKeyword.value;
+
+    switch(searchCriteria.value) {
+        case 'category':
+            let cid = null;
+            for(let i=0; i<categoryDtoList.length; i++) {
+                if(categoryDtoList[i].cname == kw) {
+                    cid = categoryDtoList[i].cid;
+                    break;
+                }
+            }
+            categoryKey.value = cid;
+            break;
+        case 'tag':
+            tagKey.value = kw;
+            break;
+        case 'question':
+            questionKey.value = kw;
+            break;
+    }
+
+    searchForm.submit();
+}

@@ -12,8 +12,8 @@
                 <a class="nav-link" onclick="insert()">카드 추가</a>
             </div>
             <div class="navbar-search">
-                <form id="search-form" method="get" action="">
-                    <select class="search_criteria">
+                <div id="container-search">
+                    <select id="searchCriteria">
                         <option value="category">
                             카테고리
                         </option>
@@ -24,9 +24,17 @@
                             질문
                         </option>
                     </select>
-                    <input type="text" class="search_keyword" />
-                    <button id="btn-search">검색</button>
+                    <input type="text" id="searchKeyword" />
+                    <button id="btn-search" onclick="search()">검색</button>
+                </div>
+                <form id="searchForm" method="get" action="/card/list">
+                    <input type="hidden" name="tag" id="tagKey">
+                    <input type="hidden" name="question" id="questionKey">
+                    <input type="hidden" name="cid" id="categoryKey">
                 </form>
+                <script th:inline="javascript">
+                    let categoryDtoList = [[${categoryDtoList}]];
+                </script>
             </div>
         </nav>
         <dialog id="dialog-interview">
