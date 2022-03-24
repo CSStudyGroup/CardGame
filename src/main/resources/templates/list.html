@@ -23,19 +23,19 @@
                         th:text="${cardDto.id}"></td>
                     <td class="category"
                         th:text="${cardDto.cid}"></td>
-                    <td class="question"
-                        th:attr="onclick=|text('${cardDtoStat.index}')|"
+                    <td class="question clickable"
+                        th:attr="onclick=|text('${cardDto.id}')|"
                         th:text="${cardDto.question}"></td>
                     <td class="tags"
                         th:text="${cardDto.tags}"></td>
                     <td class="update">
-                        <img height="30px" width="auto"
-                             th:attr="onclick=|update('${cardDtoStat.index}')|"
+                        <img class="clickable" height="30px" width="auto"
+                             th:attr="onclick=|update('${cardDto.id}')|"
                              th:src="@{/img/edit_image.png}">
                     </td>
                     <td class="delete">
-                        <img height="30px" width="auto"
-                             th:attr="onclick=|del('${cardDtoStat.index}')|"
+                        <img class="clickable" height="30px" width="auto"
+                             th:attr="onclick=|del('${cardDto.id}')|"
                              th:src="@{/img/delete_image.png}">
                     </td>
                 </tr>
@@ -64,11 +64,11 @@
         <h3 style="display: inline">태그 : </h3><input type="text" id="updateTags" style="display: inline"><br><br>
         <h3 style="display: inline">질문 : </h3><input type="text" id="updateQuestion" style="display: inline"><br><br>
         <h3 style="display: inline">답변 : </h3><input type="text" id="updateAnswer" style="display: inline"><br><br>
-        <button type="button" onclick="updateModalSubmit()">수정</button>
-        <button type="button" onclick="updateModalClose()">닫기</button>
+        <button class="clickable" type="button" onclick="updateModalSubmit()">수정</button>
+        <button class="clickable" type="button" onclick="updateModalClose()">닫기</button>
     </div>
     <dialog class="dialog">
-        <h2 class="caution"></h2><br><br>
+        <h2 class="delete-caution"></h2><br><br>
         <button class="remove" type="reset">삭제</button>
         <button class="cancel" type="reset">취소</button>
     </dialog>

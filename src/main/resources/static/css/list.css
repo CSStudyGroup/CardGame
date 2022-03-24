@@ -48,15 +48,15 @@ tr:hover {
 }
 
 .id {
-    width: 5%;
+    width: 7%;
 }
 
 .category {
-    width: 10%;
+    width: 13%;
 }
 
 .question {
-    width: 52%;
+    width: 47%;
 }
 
 .tags {
@@ -93,7 +93,7 @@ tr:hover {
     text-align: center;
 }
 
-.caution {
+.delete-caution {
     margin-top: 100px;
 }
 
@@ -103,4 +103,8 @@ tr:hover {
 
 .cancel {
     margin-left: 10px;
+}
+
+.clickable {
+    cursor: pointer;
 }

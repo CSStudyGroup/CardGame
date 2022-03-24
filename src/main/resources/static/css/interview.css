@@ -110,3 +110,7 @@ html {
 .cancel {
     margin-left: 10px;
 }
+
+.clickable {
+    cursor: pointer;
+}

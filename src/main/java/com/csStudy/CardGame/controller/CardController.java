@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 @Controller
 public class CardController {
 
@@ -65,7 +67,7 @@ public class CardController {
     @GetMapping("/card/list")
     public String list(@RequestParam("tag") String tag,
                        @RequestParam("question") String question,
-                       @RequestParam("cid") Integer cid, Model model) {
+                       @RequestParam("cid") String cid, Model model) {
         // 빈 배열 선언
         List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
 
@@ -75,8 +77,8 @@ public class CardController {
         else if (question != "") {
             cardDtoList = cardService.filterCardsByQuestion(question);
         }
-        else if (cid != null) {
-            cardDtoList = cardService.filterCardsByCategory(cid);
+        else if (cid != "") {
+            cardDtoList = cardService.filterCardsByCategory(parseInt(cid));
         }
 
         // 모델 추가
