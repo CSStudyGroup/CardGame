@@ -28,7 +28,7 @@ function insertModalSubmit(){
     function postInsertCard(){
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
             if (httpRequest.status === 200) {
-                if (httpRequest.response == 1) {
+                if (httpRequest.response != null) {
                     alert("삽입 성공");
                 }
                 else {
