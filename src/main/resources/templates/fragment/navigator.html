@@ -32,19 +32,16 @@
                     <input type="hidden" name="question" id="questionKey">
                     <input type="hidden" name="cid" id="categoryKey">
                 </form>
-                <script th:inline="javascript">
-                    let categoryDtoList = [[${categoryDtoList}]];
-                </script>
             </div>
         </nav>
         <dialog id="dialog-interview">
             <h2 class="caution">카테고리 선택</h2>
-            <form th:method="get" th:action="@{/card/interview}">
+            <form th:method="get" th:action="@{/card/interview}" id="interviewForm">
                 <th:block th:each="categoryDto: ${ categoryDtoList }">
                     <label><input th:type="checkbox" th:name="keyword" th:value="${ categoryDto.cid }" th:text="${ categoryDto.cname }"></label>
                 </th:block>
-                <input th:type="submit" th:value="시작">
             </form>
+            <button id="interviewFormSubmit" onclick="interviewSubmit()">시작</button>
         </dialog>
         <div class="modal-overlay" id="insertModalOverlay">
             <div class="modal-insert" id="insertModal">
@@ -64,5 +61,8 @@
                 <button type="button" onclick="insertModalClose()">닫기</button>
             </div>
         </div>
+        <script th:inline="javascript">
+            let categoryDtoList = [[${categoryDtoList}]];
+        </script>
     </th:block>
 </html>

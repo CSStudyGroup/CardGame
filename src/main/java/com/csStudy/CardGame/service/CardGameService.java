@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +38,18 @@ public class CardGameService {
     // 카드 추가
     public CardDto addCard(CardDto cardDto) {
         return cardMapper.toDto(cardRepository.insert(cardMapper.toEntity(cardDto)));
+    }
+
+    // 카드 여러개 추가
+    public List<CardDto> addCards(List<CardDto> cardDtoList) {
+        if (cardDtoList == null) {
+            return null;
+        }
+        List<CardDto> result = new ArrayList<>();
+        for(CardDto cardDto:cardDtoList) {
+            result.add(cardMapper.toDto(cardRepository.insert(cardMapper.toEntity(cardDto))));
+        }
+        return result;
     }
 
     // id로 카드 찾기
@@ -85,9 +98,33 @@ public class CardGameService {
         return cardRepository.update(cardMapper.toEntity(cardDto));
     }
 
+    // 카드 여러개 수정
+    public List<Integer> updateCards(List<CardDto> cardDtoList) {
+        if (cardDtoList == null) {
+            return null;
+        }
+        List<Integer> result = new ArrayList<>();
+        for(CardDto cardDto:cardDtoList) {
+            result.add(cardRepository.update(cardMapper.toEntity(cardDto)));
+        }
+        return result;
+    }
+
     // 카드 삭제
     public int deleteCard(CardDto cardDto) {
         return cardRepository.delete(cardMapper.toEntity(cardDto));
+    }
+
+    // 카드 여러개 삭제
+    public List<Integer> deleteCards(List<CardDto> cardDtoList) {
+        if (cardDtoList == null) {
+            return null;
+        }
+        List<Integer> result = new ArrayList<>();
+        for(CardDto cardDto:cardDtoList) {
+            result.add(cardRepository.delete(cardMapper.toEntity(cardDto)));
+        }
+        return result;
     }
 
     // 카테고리 전부 가져오기
@@ -102,13 +139,49 @@ public class CardGameService {
         return categoryMapper.toDto(categoryRepository.insert(categoryMapper.toEntity(categoryDto)));
     }
 
+    // 카테고리 여러개 추가
+    public List<CategoryDto> addCategories(List<CategoryDto> categoryDtoList) {
+        if (categoryDtoList == null) {
+            return null;
+        }
+        List<CategoryDto> result = new ArrayList<>();
+        for(CategoryDto categoryDto:categoryDtoList) {
+            result.add(categoryMapper.toDto(categoryRepository.insert(categoryMapper.toEntity(categoryDto))));
+        }
+        return result;
+    }
+
     // 카테고리 수정
     public int updateCategory(CategoryDto categoryDto) {
         return categoryRepository.update(categoryMapper.toEntity(categoryDto));
     }
 
+    // 카테고리 여러개 수정
+    public List<Integer> updateCategories(List<CategoryDto> categoryDtoList) {
+        if (categoryDtoList == null) {
+            return null;
+        }
+        List<Integer> result = new ArrayList<>();
+        for(CategoryDto categoryDto:categoryDtoList) {
+            result.add(categoryRepository.update(categoryMapper.toEntity(categoryDto)));
+        }
+        return result;
+    }
+
     // 카테고리 삭제
     public int deleteCategory(CategoryDto categoryDto) {
         return categoryRepository.delete(categoryMapper.toEntity(categoryDto));
+    }
+
+    // 카테고리 여러개 삭제
+    public List<Integer> deleteCategories(List<CategoryDto> categoryDtoList) {
+        if (categoryDtoList == null) {
+            return null;
+        }
+        List<Integer> result = new ArrayList<>();
+        for(CategoryDto categoryDto:categoryDtoList) {
+            result.add(categoryRepository.delete(categoryMapper.toEntity(categoryDto)));
+        }
+        return result;
     }
 }
