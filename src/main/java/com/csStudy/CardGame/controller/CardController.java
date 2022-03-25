@@ -2,11 +2,17 @@ package com.csStudy.CardGame.controller;
 import com.csStudy.CardGame.dto.CardDto;
 import com.csStudy.CardGame.dto.CategoryDto;
 import com.csStudy.CardGame.service.CardGameService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -142,5 +148,39 @@ public class CardController {
     @PostMapping("card/categoryDelete")
     public int categoryDelete(CategoryDto categoryDto) {
         return cardService.deleteCategory(categoryDto);
+    }
+
+    // 카테고리 변경 체크
+    @ResponseBody
+    @PostMapping("card/categoryChange")
+    public int categoryChange(@RequestBody String jsonList) throws JsonProcessingException {
+        JSONObject jObject = new JSONObject(jsonList);
+        ObjectMapper mapper = new ObjectMapper();
+
+        // 추가
+        List<CategoryDto> insertDtoList = new ArrayList<>();
+        JSONArray insertList = jObject.getJSONArray("insert");
+        for (int i = 0; i < insertList.length(); i++) {
+            insertDtoList.add(mapper.readValue(insertList.get(i).toString(), CategoryDto.class));
+        }
+        System.out.println(cardService.addCategories(insertDtoList));
+
+        // 수정
+        List<CategoryDto> updateDtoList = new ArrayList<>();
+        JSONArray updateList = jObject.getJSONArray("update");
+        for (int i = 0; i < updateList.length(); i++) {
+            updateDtoList.add(mapper.readValue(updateList.get(i).toString(), CategoryDto.class));
+        }
+        System.out.println(cardService.updateCategories(updateDtoList));
+
+        // 삭제
+        List<CategoryDto> deleteDtoList = new ArrayList<>();
+        JSONArray deleteList = jObject.getJSONArray("delete");
+        for (int i = 0; i < deleteList.length(); i++) {
+            deleteDtoList.add(mapper.readValue(deleteList.get(i).toString(), CategoryDto.class));
+        }
+        System.out.println(cardService.deleteCategories(deleteDtoList));
+
+        return 1;
     }
 }

@@ -48,7 +48,7 @@
         <h3 style="display: inline">태그 : </h3><h3 id="viewTags" style="display: inline"></h3><br><br>
         <h3 style="display: inline">질문 : </h3><h3 id="viewQuestion" style="display: inline"></h3><br><br>
         <h3 style="display: inline">답변 : </h3><h3 id="viewAnswer" style="display: inline"></h3><br><br>
-        <button type="button" onclick="viewModalClose()">닫기</button>
+        <button type="button clickable" onclick="viewModalClose()">닫기</button>
     </div>
     <div class="modal" id="updateModal">
         <h3 style="display: inline">번호 : </h3><h3 id="updateId" style="display: inline"></h3><br><br>
@@ -69,8 +69,8 @@
     </div>
     <dialog class="dialog">
         <h2 class="delete-caution"></h2><br><br>
-        <button class="remove" type="reset">삭제</button>
-        <button class="cancel" type="reset">취소</button>
+        <button class="remove clickable" type="reset">삭제</button>
+        <button class="cancel clickable" type="reset">취소</button>
     </dialog>
     <script th:inline="javascript">
         var dto = [[${cardDtoList}]];

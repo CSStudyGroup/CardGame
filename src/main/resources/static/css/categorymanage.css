@@ -88,6 +88,24 @@ html {
     background-color: aqua;
 }
 
+.dialog {
+    width: 450px;
+    height: 300px;
+    text-align: center;
+}
+
+.change-caution {
+    margin-top: 100px;
+}
+
+.change {
+    margin-right: 10px;
+}
+
+.cancel {
+    margin-left: 10px;
+}
+
 .clickable {
     cursor: pointer;
 }
