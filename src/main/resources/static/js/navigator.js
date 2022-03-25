@@ -65,6 +65,27 @@ function interview() {
     }
 }
 
+const interviewForm = document.getElementById("interviewForm");
+function interviewSubmit() {
+    let check = 0;
+    let count = 0;
+    for(let i=0; i<interviewForm.childElementCount; i++) {
+        if (interviewForm.children[i].firstElementChild.checked) {
+            check = true;
+            count += categoryDtoList[i].cnt;
+        }
+    }
+    if (!check) {
+        alert("카테고리를 하나 이상 선택해주세요.");
+    }
+    else if (count == 0) {
+        alert("선택하신 카테고리에 해당하는 질문이 없습니다.");
+    }
+    else {
+        interviewForm.submit();
+    }
+}
+
 // 검색
 const searchCriteria = document.getElementById("searchCriteria");
 const searchKeyword = document.getElementById("searchKeyword");
