@@ -1,11 +1,10 @@
 // 카드 추가를 위한 element
-const category = document.getElementById("insertCategory");
-const insertModal = document.getElementById("insertModal");
-const insertModalOverlay = document.getElementById("insertModalOverlay");
-const insertCategory = document.getElementById("insertCategory");
-const insertTags = document.getElementById("insertTags");
-const insertQuestion = document.getElementById("insertQuestion");
-const insertAnswer = document.getElementById("insertAnswer");
+const insertModal = document.querySelector("#insertModal");
+const insertModalOverlay = document.querySelector("#insertModalOverlay");
+const insertCategory = document.querySelector("#insertCategory");
+const insertTags = document.querySelector("#insertTags");
+const insertQuestion = document.querySelector("#insertQuestion");
+const insertAnswer = document.querySelector("#insertAnswer");
 
 function insert() {
     insertCategory.value = "none";
@@ -17,7 +16,6 @@ function insert() {
 }
 
 function insertModalSubmit(){
-    console.log(insertModal);
     insertModal.style.display = "none";
     insertModalOverlay.style.display = "none";
 
@@ -28,8 +26,13 @@ function insertModalSubmit(){
     function postInsertCard(){
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
             if (httpRequest.status === 200) {
-                if (httpRequest.response != null) {
+                let addedCard = httpRequest.response;
+                if (addedCard != null) {
                     alert("삽입 성공");
+                    const newCardAddedEvent = new CustomEvent('newcard', {
+                        detail: JSON.parse(addedCard)
+                    });
+                    document.dispatchEvent(newCardAddedEvent);
                 }
                 else {
                     alert("삽입 실패");
@@ -53,9 +56,8 @@ function insertModalClose(){
     insertModalOverlay.style.display = "none";
 }
 
-
 // 인터뷰 링크
-const interviewDialog = document.getElementById("dialog-interview");
+const interviewDialog = document.querySelector("#dialog-interview");
 
 function interview() {
     if (typeof interviewDialog.showModal === 'function') {
@@ -65,7 +67,7 @@ function interview() {
     }
 }
 
-const interviewForm = document.getElementById("interviewForm");
+const interviewForm = document.querySelector("#interviewForm");
 function interviewSubmit() {
     let check = 0;
     let count = 0;
@@ -87,12 +89,12 @@ function interviewSubmit() {
 }
 
 // 검색
-const searchCriteria = document.getElementById("searchCriteria");
-const searchKeyword = document.getElementById("searchKeyword");
-const categoryKey = document.getElementById("categoryKey");
-const tagKey = document.getElementById("tagKey");
-const questionKey = document.getElementById("questionKey");
-const searchForm = document.getElementById("searchForm");
+const searchCriteria = document.querySelector("#searchCriteria");
+const searchKeyword = document.querySelector("#searchKeyword");
+const categoryKey = document.querySelector("#categoryKey");
+const tagKey = document.querySelector("#tagKey");
+const questionKey = document.querySelector("#questionKey");
+const searchForm = document.querySelector("#searchForm");
 
 function search() {
     let kw = searchKeyword.value;
@@ -118,3 +120,22 @@ function search() {
 
     searchForm.submit();
 }
+
+// 내비게이션바 크기변화시 본문 패딩 자동변화
+const mainDiv = document.querySelector(".main");
+const navbar = document.querySelector(".navbar");
+const navbarMenu = navbar.querySelector(".navbar-menu");
+const navbarToggler = navbar.querySelector(".navbar-toggler");
+function resize(entries) {
+    mainDiv.style.paddingTop = `${ entries[0].contentRect.height }px`;
+    if (entries[0].contentRect.width < 1000) {
+        navbarMenu.style.display = "none";
+        navbarToggler.style.display = "inline-block";
+    }
+    else {
+        navbarMenu.style.display = "flex";
+        navbarToggler.style.display = "none";
+    }
+}
+const resizeObserver = new ResizeObserver(resize);
+resizeObserver.observe(navbar);

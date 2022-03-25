@@ -12,7 +12,7 @@
                 <a class="nav-link" onclick="insert()">카드 추가</a>
             </div>
             <div class="navbar-search">
-                <div id="container-search">
+                <div class="container-search">
                     <select id="searchCriteria">
                         <option value="category">
                             카테고리
@@ -33,6 +33,7 @@
                     <input type="hidden" name="cid" id="categoryKey">
                 </form>
             </div>
+            <button class="navbar-toggler" onclick="narrowNavbarToggle()"></button>
         </nav>
         <dialog id="dialog-interview">
             <h2 class="caution">카테고리 선택</h2>
@@ -60,6 +61,19 @@
                 <button type="button" onclick="insertModalSubmit()">추가</button>
                 <button type="button" onclick="insertModalClose()">닫기</button>
             </div>
+        </div>
+        <div class="navbar-narrow">
+            <ul>
+                <li>
+                    <a class="nav-link" onclick="interview()">인터뷰</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/card/management">카테고리 관리</a>
+                </li>
+                <li>
+                    <a class="nav-link" onclick="insert()">카드 추가</a>
+                </li>
+            </ul>
         </div>
         <script th:inline="javascript">
             let categoryDtoList = [[${categoryDtoList}]];
