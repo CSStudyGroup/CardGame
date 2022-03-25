@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <th:block th:replace="fragment/head::headFragment"></th:block>
-        <link rel="stylesheet" href="/css/card.css?ver=1">
-    </head>
+<head>
+    <th:block th:replace="fragment/head::headFragment"></th:block>
+    <link rel="stylesheet" th:href="@{/css/card.css(ver=${#calendars.createNow()})}">
+    <script defer th:src="@{/js/card.js(ver=${#calendars.createNow()})}"></script>
+</head>
 
-    <body>
-        <th:block th:replace="fragment/navigator::navigator"></th:block>
-        <div class="main">
-            <div class="card-container" th:each="categoryDto: ${ categoryDtoList }">
-                <div class="card-category" th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.cid }'|">
-                    <p class="category-name" th:text="${ categoryDto.cname }"></p>
-                    <p class="category-count" th:text="${ categoryDto.cnt }"></p>
-                </div>
-            </div>
+<body>
+<th:block th:replace="fragment/navigator::navigator"></th:block>
+<div class="main">
+    <div class="card-container">
+        <div class="card-category" th:each="categoryDto: ${ categoryDtoList }" th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.cid }'|">
+            <p class="category-name" th:text="${ categoryDto.cname }"></p>
+            <p class="category-count" th:text="${ categoryDto.cnt }"></p>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

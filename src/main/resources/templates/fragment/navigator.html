@@ -1,68 +1,82 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-    <!--Navigator Fragment-->
-    <th:block th:fragment="navigator">
-        <nav class="navbar">
-            <div class="navbar-brand">
-                <a href="/card">CS Study</a>
-            </div>
-            <div class="navbar-menu">
-                <a class="nav-link" onclick="interview()">인터뷰</a>
-                <a class="nav-link" href="/card/management">카테고리 관리</a>
-                <a class="nav-link" onclick="insert()">카드 추가</a>
-            </div>
-            <div class="navbar-search">
-                <div id="container-search">
-                    <select id="searchCriteria">
-                        <option value="category">
-                            카테고리
-                        </option>
-                        <option value="tag">
-                            태그
-                        </option>
-                        <option value="question">
-                            질문
-                        </option>
-                    </select>
-                    <input type="text" id="searchKeyword" />
-                    <button id="btn-search" onclick="search()">검색</button>
-                </div>
-                <form id="searchForm" method="get" action="/card/list">
-                    <input type="hidden" name="tag" id="tagKey">
-                    <input type="hidden" name="question" id="questionKey">
-                    <input type="hidden" name="cid" id="categoryKey">
-                </form>
-            </div>
-        </nav>
-        <dialog id="dialog-interview">
-            <h2 class="caution">카테고리 선택</h2>
-            <form th:method="get" th:action="@{/card/interview}" id="interviewForm">
-                <th:block th:each="categoryDto: ${ categoryDtoList }">
-                    <label><input th:type="checkbox" th:name="keyword" th:value="${ categoryDto.cid }" th:text="${ categoryDto.cname }"></label>
-                </th:block>
-            </form>
-            <button id="interviewFormSubmit" onclick="interviewSubmit()">시작</button>
-        </dialog>
-        <div class="modal-overlay" id="insertModalOverlay">
-            <div class="modal-insert" id="insertModal">
-                <h3 style="display: inline">장르 : </h3>
-                <form style="display: inline">
-                    <select id="insertCategory">
-                        <option value="none" selected disabled hidden>===선택===</option>
-                        <th:block th:each="categoryDto: ${ categoryDtoList }">
-                            <option th:value="${ categoryDto.cid }" th:text="${ categoryDto.cname }"></option>
-                        </th:block>
-                    </select>
-                </form><br><br>
-                <h3 style="display: inline">태그 : </h3><input type="text" id="insertTags" style="display: inline"><br><br>
-                <h3 style="display: inline">질문 : </h3><input type="text" id="insertQuestion" style="display: inline"><br><br>
-                <h3 style="display: inline">답변 : </h3><input type="text" id="insertAnswer" style="display: inline"><br><br>
-                <button type="button" onclick="insertModalSubmit()">추가</button>
-                <button type="button" onclick="insertModalClose()">닫기</button>
-            </div>
+<!--Navigator Fragment-->
+<th:block th:fragment="navigator">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="/card">CS Study</a>
         </div>
-        <script th:inline="javascript">
+        <div class="navbar-menu">
+            <a class="nav-link" onclick="interview()">인터뷰</a>
+            <a class="nav-link" href="/card/management">카테고리 관리</a>
+            <a class="nav-link" onclick="insert()">카드 추가</a>
+        </div>
+        <div class="navbar-search">
+            <div class="container-search">
+                <select id="searchCriteria">
+                    <option value="category">
+                        카테고리
+                    </option>
+                    <option value="tag">
+                        태그
+                    </option>
+                    <option value="question">
+                        질문
+                    </option>
+                </select>
+                <input type="text" id="searchKeyword" />
+                <button id="btn-search" onclick="search()">검색</button>
+            </div>
+            <form id="searchForm" method="get" action="/card/list">
+                <input type="hidden" name="tag" id="tagKey">
+                <input type="hidden" name="question" id="questionKey">
+                <input type="hidden" name="cid" id="categoryKey">
+            </form>
+        </div>
+        <button class="navbar-toggler" onclick="narrowNavbarToggle()"></button>
+    </nav>
+    <dialog id="dialog-interview">
+        <h2 class="caution">카테고리 선택</h2>
+        <form th:method="get" th:action="@{/card/interview}" id="interviewForm">
+            <th:block th:each="categoryDto: ${ categoryDtoList }">
+                <label><input th:type="checkbox" th:name="keyword" th:value="${ categoryDto.cid }" th:text="${ categoryDto.cname }"></label>
+            </th:block>
+        </form>
+        <button id="interviewFormSubmit" onclick="interviewSubmit()">시작</button>
+    </dialog>
+    <div class="modal-overlay" id="insertModalOverlay">
+        <div class="modal-insert" id="insertModal">
+            <h3 style="display: inline">장르 : </h3>
+            <form style="display: inline">
+                <select id="insertCategory">
+                    <option value="none" selected disabled hidden>===선택===</option>
+                    <th:block th:each="categoryDto: ${ categoryDtoList }">
+                        <option th:value="${ categoryDto.cid }" th:text="${ categoryDto.cname }"></option>
+                    </th:block>
+                </select>
+            </form><br><br>
+            <h3 style="display: inline">태그 : </h3><input type="text" id="insertTags" style="display: inline"><br><br>
+            <h3 style="display: inline">질문 : </h3><input type="text" id="insertQuestion" style="display: inline"><br><br>
+            <h3 style="display: inline">답변 : </h3><input type="text" id="insertAnswer" style="display: inline"><br><br>
+            <button type="button" onclick="insertModalSubmit()">추가</button>
+            <button type="button" onclick="insertModalClose()">닫기</button>
+        </div>
+    </div>
+    <div class="navbar-narrow">
+        <ul>
+            <li>
+                <a class="nav-link" onclick="interview()">인터뷰</a>
+            </li>
+            <li>
+                <a class="nav-link" href="/card/management">카테고리 관리</a>
+            </li>
+            <li>
+                <a class="nav-link" onclick="insert()">카드 추가</a>
+            </li>
+        </ul>
+    </div>
+    <script th:inline="javascript">
             let categoryDtoList = [[${categoryDtoList}]];
         </script>
-    </th:block>
+</th:block>
 </html>
