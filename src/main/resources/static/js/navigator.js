@@ -85,6 +85,9 @@ function interviewSubmit() {
         interviewForm.submit();
     }
 }
+function interviewCancel() {
+    interviewDialog.close();
+}
 
 // 검색
 const searchCriteria = document.querySelector("#searchCriteria");
@@ -119,7 +122,6 @@ function search() {
 }
 
 // 내비게이션바 크기변화시 본문 패딩 자동변화
-const mainDiv = document.querySelector(".main");
 const navbar = document.querySelector(".navbar");
 const navbarMenu = navbar.querySelector(".navbar-menu");
 const navbarShow = navbar.querySelector(".navbar-narrow-show");
@@ -127,11 +129,10 @@ const narrowNav = document.querySelector(".navbar-narrow");
 const narrowNavOverlay = document.querySelector(".navbar-narrow-overlay");
 
 function resize(entries) {
-    mainDiv.style.paddingTop = `${ entries[0].contentRect.height }px`;
     if (entries[0].contentRect.width < 1000) {
         navbarMenu.style.display = "none";
         navbarShow.style.display = "inline-block";
-        narrowNav.style.display = "flex";
+        narrowNav.style.display = "block";
     }
     else {
         navbarMenu.style.display = "flex";

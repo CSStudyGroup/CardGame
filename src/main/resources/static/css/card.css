@@ -1,4 +1,7 @@
-.container-card{
+.card-main {
+    padding-top: 45px;
+}
+.card-container{
 }
 .card-category {
     display: inline-block;
