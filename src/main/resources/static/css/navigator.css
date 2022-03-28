@@ -107,7 +107,7 @@ body {
 .navbar-narrow-top {
     display: flex;
     justify-content: space-between;
-    align-content: center;
+    align-items: center;
 }
 
 .navbar-narrow-brand {
