@@ -33,7 +33,7 @@
                 <input type="hidden" name="cid" id="categoryKey">
             </form>
         </div>
-        <button class="navbar-toggler" onclick="narrowNavbarToggle()"></button>
+        <button class="navbar-narrow-show" onclick="narrowNavbarShow()"></button>
     </nav>
     <dialog id="dialog-interview">
         <h2 class="caution">카테고리 선택</h2>
@@ -62,21 +62,32 @@
             <button type="button" onclick="insertModalClose()">닫기</button>
         </div>
     </div>
+    <div class="navbar-narrow-overlay" onclick="narrowNavbarHide()"></div>
     <div class="navbar-narrow">
-        <ul>
-            <li>
-                <a class="nav-link" onclick="interview()">인터뷰</a>
-            </li>
-            <li>
-                <a class="nav-link" href="/card/management">카테고리 관리</a>
-            </li>
-            <li>
-                <a class="nav-link" onclick="insert()">카드 추가</a>
-            </li>
-        </ul>
+        <div class="navbar-narrow-top">
+            <div class="navbar-narrow-brand">
+                <a href="/card">CS Study</a>
+            </div>
+            <button class="navbar-narrow-hide" onclick="narrowNavbarHide()"></button>
+        </div>
+        <div class="navbar-narrow-container">
+            <div class="nav-link-box">
+                <ul>
+                    <li>
+                        <a class="nav-link" onclick="interview()">인터뷰</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/card/management">카테고리 관리</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" onclick="insert()">카드 추가</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <script th:inline="javascript">
             let categoryDtoList = [[${categoryDtoList}]];
-        </script>
+    </script>
 </th:block>
 </html>

@@ -122,17 +122,34 @@ function search() {
 const mainDiv = document.querySelector(".main");
 const navbar = document.querySelector(".navbar");
 const navbarMenu = navbar.querySelector(".navbar-menu");
-const navbarToggler = navbar.querySelector(".navbar-toggler");
+const navbarShow = navbar.querySelector(".navbar-narrow-show");
+const narrowNav = document.querySelector(".navbar-narrow");
+const narrowNavOverlay = document.querySelector(".navbar-narrow-overlay");
+
 function resize(entries) {
     mainDiv.style.paddingTop = `${ entries[0].contentRect.height }px`;
     if (entries[0].contentRect.width < 1000) {
         navbarMenu.style.display = "none";
-        navbarToggler.style.display = "inline-block";
+        navbarShow.style.display = "inline-block";
+        narrowNav.style.display = "flex";
     }
     else {
         navbarMenu.style.display = "flex";
-        navbarToggler.style.display = "none";
+        navbarShow.style.display = "none";
+        narrowNav.style.display = "none";
+        narrowNavOverlay.style.display = "none";
+        narrowNav.classList.remove("navbar-narrow-appear");
     }
 }
 const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(navbar);
+
+function narrowNavbarShow() {
+    narrowNavOverlay.style.display = "flex";
+    narrowNav.classList.add('navbar-narrow-appear');
+}
+
+function narrowNavbarHide() {
+    narrowNavOverlay.style.display = "none";
+    narrowNav.classList.remove('navbar-narrow-appear');
+}
