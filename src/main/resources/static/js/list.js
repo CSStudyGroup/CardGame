@@ -194,4 +194,87 @@ window.onload = function(){
     for (let i = 0; i < categoryCids.length; i++) {
         categoryCids[i].innerText = categoryMap.get(parseInt(categoryCids[i].innerText));
     }
+
+    // 카드 추가 이벤트
+    function newCardHandler(event) {
+        // 현재 리스트 조건에 맞는지 체크 후 추가
+        var flag = false;
+
+        if (tag != "") {
+            // 검색어 포함 태그 탐색
+            console.log("tag")
+        }
+        else if (question != "") {
+            // 검색어 포함 질문 탐색
+            console.log("question")
+        }
+        else if (cid != "") {
+            if (event.detail.cid == cid) {
+                flag = true;
+            }
+        }
+
+        if (flag) {
+            // 새로운 tr
+            let new_tr = document.createElement("tr");
+            new_tr.setAttribute("class", "tableBody");
+
+            // id
+            let new_id = document.createElement("td");
+            new_id.textContent = event.detail.id;
+            new_id.setAttribute("class", "id");
+            new_tr.append(new_id);
+
+            // category
+            let new_category = document.createElement("td");
+            new_category.textContent = categoryMap.get(event.detail.cid);
+            new_category.setAttribute("class", "category");
+            new_tr.append(new_category);
+
+            // question
+            let new_question = document.createElement("td");
+            new_question.setAttribute("class", "question clickable");
+            new_question.setAttribute("onclick", "text('" + event.detail.id + "')");
+            new_question.textContent = event.detail.question;
+            new_tr.append(new_question);
+
+            // tags
+            let new_tags = document.createElement("td");
+            new_tags.textContent = event.detail.tags;
+            new_tags.setAttribute("class", "tags");
+            new_tr.append(new_tags);
+
+            // update
+            let new_update = document.createElement("td");
+            new_update.setAttribute("class", "update");
+            let new_update_img = document.createElement("img");
+            new_update_img.setAttribute("class", "clickable");
+            new_update_img.setAttribute("height", "30px");
+            new_update_img.setAttribute("width", "auto");
+            new_update_img.setAttribute("src", "/img/edit_image.png");
+            new_update_img.setAttribute("onclick", "update('" + event.detail.id + "')");
+            new_update.append(new_update_img);
+            new_tr.append(new_update);
+
+            // delete
+            let new_delete = document.createElement("td");
+            new_delete.setAttribute("class", "delete");
+            let new_delete_img = document.createElement("img");
+            new_delete_img.setAttribute("class", "clickable");
+            new_delete_img.setAttribute("height", "30px");
+            new_delete_img.setAttribute("width", "auto");
+            new_delete_img.setAttribute("src", "/img/delete_image.png");
+            new_delete_img.setAttribute("onclick", "del('" + event.detail.id + "')");
+            new_delete.append(new_delete_img);
+            new_tr.append(new_delete);
+
+            // 새로운 줄 추가
+            const table = document.querySelector(".table");
+            table.children[0].append(new_tr);
+
+            // dto 추가
+            dto.push(event.detail);
+        }
+    }
+    document.addEventListener('newcard', newCardHandler);
 }

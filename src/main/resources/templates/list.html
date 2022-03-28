@@ -11,12 +11,14 @@
     <div class="info">
         <p id="list">List</p>
         <div class="container">
-            <table class="table">
+            <table class="table" style="table-layout: fixed">
                 <tr class="head">
-                    <th>ID</th>
-                    <th>Category</th>
-                    <th>Question</th>
-                    <th>Tags</th>
+                    <th width="5%">ID</th>
+                    <th width="10%">Category</th>
+                    <th width="45%">Question</th>
+                    <th width="20%">Tags</th>
+                    <th width="7%" class="noline"></th>
+                    <th width="3%" class="noline"></th>
                 </tr>
                 <tr class="tableBody" th:each="cardDto : ${cardDtoList}">
                     <td class="id"
@@ -75,6 +77,9 @@
     <script th:inline="javascript">
         var dto = [[${cardDtoList}]];
         var categoryDto = [[${categoryDtoList}]];
+        var tag = [[${tag}]];
+        var question = [[${question}]];
+        var cid = [[${cid}]]
     </script>
 </body>
 </html>

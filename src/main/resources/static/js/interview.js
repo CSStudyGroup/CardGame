@@ -35,7 +35,7 @@ window.onload = function(){
 
     // 다음 문제 진행 요청
     const min = 0
-    const max = dto.length - 1;
+    var max = dto.length - 1;
     const next = document.getElementById("next");
     next.addEventListener("click", function () {
 
@@ -83,4 +83,18 @@ window.onload = function(){
     end.addEventListener('click', () => {
         window.location = "/card";
     });
+
+    // 카드 추가 이벤트
+    function newCardHandler(event) {
+        // 현재 리스트 조건에 맞는지 체크 후 추가
+        for (let i = 0; i < keywords.length; i++) {
+            if (keywords[i] == event.detail.cid) {
+                max += 1;
+                dto.push(event.detail);
+                headTitle.innerText = "Interview (총 문항 수 : " + dto.length + ")";
+                break
+            }
+        }
+    }
+    document.addEventListener('newcard', newCardHandler);
 }
