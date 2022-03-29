@@ -4,7 +4,6 @@ import com.csStudy.CardGame.dto.CategoryDto;
 import com.csStudy.CardGame.service.CardGameService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +58,10 @@ public class CardController {
         // 카테고리 리스트를 받아오는 부분
         List<CategoryDto> categoryDtoList = cardService.findAllCategories();
         model.addAttribute("categoryDtoList", categoryDtoList);
+
+        // 키워드 모델에 추가
+        model.addAttribute("keywords", keywords);
+
         return "interview";
     }
 
@@ -93,6 +96,11 @@ public class CardController {
         // 카테고리 리스트를 받아오는 부분
         List<CategoryDto> categoryDtoList = cardService.findAllCategories();
         model.addAttribute("categoryDtoList", categoryDtoList);
+
+        // 검색 키워드를 알기위한 키워드 전송
+        model.addAttribute("tag", tag);
+        model.addAttribute("question", question);
+        model.addAttribute("cid", cid);
 
         return "list";
     }

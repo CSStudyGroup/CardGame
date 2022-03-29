@@ -46,7 +46,7 @@ window.onload = function(){
     const nowele = document.getElementById("now");
     var now = 1;
     document.getElementById("total").innerText = String(dto.length);
-    const total = dto.length;
+    var total = dto.length;
 
     // 처음 로딩
     text.innerText = dto[now -1].question;
@@ -102,4 +102,14 @@ window.onload = function(){
             }
         }
     });
+
+    // 카드 추가 이벤트
+    function newCardHandler(event) {
+        if (dto[0].cid == event.detail.cid) {
+            total += 1
+            document.getElementById("total").innerText = String(total);
+            dto.push(event.detail);
+        }
+    }
+    document.addEventListener('newcard', newCardHandler);
 }

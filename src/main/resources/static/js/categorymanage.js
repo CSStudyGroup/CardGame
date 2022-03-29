@@ -232,6 +232,25 @@ function createCategory() {
 }
 
 window.onload = function(){
+    // 카드 추가 이벤트
+    function newCardHandler(event) {
+        for (let i = 0; i < categoryDtoList.length; i++) {
+            if (categoryDtoList[i].cid == event.detail.cid) {
+                categoryDtoList[i].cnt += 1;
+                // 존재할 경우 숫자 올리기
+                for (let j = 0; j < dto.length; j++) {
+                    if (dto[j].cname == categoryDtoList[i].cname) {
+                        dto[j].cnt += 1
+                        const original_name = document.querySelectorAll(".categoryName");
+                        original_name[j].innerText = dto[j].cname + " (" + dto[j].cnt + ")";
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+    document.addEventListener('newcard', newCardHandler);
 
     // 저장
     const dialog = document.querySelector('.dialog');
@@ -282,7 +301,15 @@ window.onload = function(){
         for (let i = 0; i < dto.length; i++) {
             // insert
             if (dto[i].cid == null) {
-                insertCategory.push(dto[i]);
+                var flag = true;
+                for (let j = 0; j < categoryDtoList.length; j++) {
+                    if (dto[i].cname == categoryDtoList[j].cname) {
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    insertCategory.push(dto[i]);
+                }
                 continue;
             }
 
@@ -300,7 +327,7 @@ window.onload = function(){
         for (let i = 0; i < categoryDtoList.length; i++) {
             var flag = true;
             for (let j = 0; j < dto.length; j++) {
-                if (dto[j].cid == categoryDtoList[i].cid) {
+                if (dto[j].cname == categoryDtoList[i].cname) {
                     flag = false;
                     break;
                 }
@@ -308,7 +335,13 @@ window.onload = function(){
 
             // delete
             if (flag) {
-                deleteCategory.push(categoryDtoList[i]);
+                if (categoryDtoList[i].cnt == 0) {
+                    deleteCategory.push(categoryDtoList[i]);
+                }
+                else {
+                    alert("카드가 있는 카테고리가 삭제되어 저장이 불가능합니다.\n새로고침을 시도합니다.");
+                    window.location.reload();
+                }
             }
         }
 
@@ -326,6 +359,7 @@ window.onload = function(){
                 if (categoryHttpRequest.status === 200) {
                     if (categoryHttpRequest.response == 1) {
                         alert("저장 성공");
+                        // categoryDtoList 수정
                     }
                     else {
                         alert("저장 실패");

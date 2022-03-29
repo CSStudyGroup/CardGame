@@ -26,6 +26,7 @@ html {
     background-color: aqua;
     justify-content: center;
     align-items: center;
+    word-break: break-word;
 }
 
 .rotate {
@@ -73,6 +74,8 @@ html {
 
 .text {
     font-size: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .prev {
