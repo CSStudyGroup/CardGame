@@ -299,49 +299,38 @@ window.onload = function(){
         var deleteCategory = [];
 
         for (let i = 0; i < dto.length; i++) {
-            // insert
+            // insert check
             if (dto[i].cid == null) {
-                var flag = true;
-                for (let j = 0; j < categoryDtoList.length; j++) {
-                    if (dto[i].cname == categoryDtoList[j].cname) {
-                        flag = false;
-                    }
-                }
-                if (flag) {
-                    insertCategory.push(dto[i]);
-                }
+                insertCategory.push(dto[i]);
                 continue;
             }
 
-            // 순회
+            // update check
             for (let j = 0; j < categoryDtoList.length; j++) {
-                // update
                 if (dto[i].cid == categoryDtoList[j].cid) {
                     if (dto[i].cname != categoryDtoList[j].cname) {
                         updateCategory.push(dto[i]);
+                        categoryDtoList[j].cname = dto[i].cname;
                     }
+                    break
                 }
             }
         }
 
-        for (let i = 0; i < categoryDtoList.length; i++) {
+        // delete check
+        for (let i = categoryDtoList.length - 1; i >= 0; i--) {
             var flag = true;
+
             for (let j = 0; j < dto.length; j++) {
-                if (dto[j].cname == categoryDtoList[i].cname) {
+                if (categoryDtoList[i].cid == dto[j].cid) {
                     flag = false;
-                    break;
+                    break
                 }
             }
 
-            // delete
             if (flag) {
-                if (categoryDtoList[i].cnt == 0) {
-                    deleteCategory.push(categoryDtoList[i]);
-                }
-                else {
-                    alert("카드가 있는 카테고리가 삭제되어 저장이 불가능합니다.\n새로고침을 시도합니다.");
-                    window.location.reload();
-                }
+                deleteCategory.push(categoryDtoList[i]);
+                categoryDtoList.splice(i, 1);
             }
         }
 
@@ -357,9 +346,22 @@ window.onload = function(){
         function postCategories(){
             if (categoryHttpRequest.readyState === XMLHttpRequest.DONE) {
                 if (categoryHttpRequest.status === 200) {
-                    if (categoryHttpRequest.response == 1) {
+                    if (categoryHttpRequest.response != null) {
                         alert("저장 성공");
                         // categoryDtoList 수정
+                        Array.prototype.push.apply(categoryDtoList, categoryHttpRequest.response);
+
+                        // dto 수정
+                        for (let i = 0; i < dto.length; i++) {
+                            if (dto[i].cid == null) {
+                                for (let j = 0; j < categoryHttpRequest.response.length; j++) {
+                                    if (dto[i].cname == categoryHttpRequest.response[j].cname) {
+                                        dto[i].cid = categoryHttpRequest.response[j].cid;
+                                        break
+                                    }
+                                }
+                            }
+                        }
                     }
                     else {
                         alert("저장 실패");

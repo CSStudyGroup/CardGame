@@ -202,11 +202,15 @@ window.onload = function(){
 
         if (tag != "") {
             // 검색어 포함 태그 탐색
-            console.log("tag")
+            if (event.detail.tags.includes(tag)) {
+                flag = true;
+            }
         }
         else if (question != "") {
             // 검색어 포함 질문 탐색
-            console.log("question")
+            if (event.detail.question.includes(question)) {
+                flag = true;
+            }
         }
         else if (cid != "") {
             if (event.detail.cid == cid) {

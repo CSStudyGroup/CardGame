@@ -161,25 +161,9 @@ public class CardController {
     // 카테고리 변경 체크
     @ResponseBody
     @PostMapping("card/categoryChange")
-    public int categoryChange(@RequestBody String jsonList) throws JsonProcessingException {
+    public List<CategoryDto> categoryChange(@RequestBody String jsonList) throws JsonProcessingException {
         JSONObject jObject = new JSONObject(jsonList);
         ObjectMapper mapper = new ObjectMapper();
-
-        // 추가
-        List<CategoryDto> insertDtoList = new ArrayList<>();
-        JSONArray insertList = jObject.getJSONArray("insert");
-        for (int i = 0; i < insertList.length(); i++) {
-            insertDtoList.add(mapper.readValue(insertList.get(i).toString(), CategoryDto.class));
-        }
-        System.out.println(cardService.addCategories(insertDtoList));
-
-        // 수정
-        List<CategoryDto> updateDtoList = new ArrayList<>();
-        JSONArray updateList = jObject.getJSONArray("update");
-        for (int i = 0; i < updateList.length(); i++) {
-            updateDtoList.add(mapper.readValue(updateList.get(i).toString(), CategoryDto.class));
-        }
-        System.out.println(cardService.updateCategories(updateDtoList));
 
         // 삭제
         List<CategoryDto> deleteDtoList = new ArrayList<>();
@@ -189,6 +173,22 @@ public class CardController {
         }
         System.out.println(cardService.deleteCategories(deleteDtoList));
 
-        return 1;
+        // 추가
+        List<CategoryDto> insertDtoList = new ArrayList<>();
+        JSONArray insertList = jObject.getJSONArray("insert");
+        for (int i = 0; i < insertList.length(); i++) {
+            insertDtoList.add(mapper.readValue(insertList.get(i).toString(), CategoryDto.class));
+        }
+        List<CategoryDto> temp = cardService.addCategories(insertDtoList);
+
+        // 수정
+        List<CategoryDto> updateDtoList = new ArrayList<>();
+        JSONArray updateList = jObject.getJSONArray("update");
+        for (int i = 0; i < updateList.length(); i++) {
+            updateDtoList.add(mapper.readValue(updateList.get(i).toString(), CategoryDto.class));
+        }
+        System.out.println(cardService.updateCategories(updateDtoList));
+
+        return temp;
     }
 }
