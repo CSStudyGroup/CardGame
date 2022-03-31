@@ -76,7 +76,8 @@ public class CardController {
     @GetMapping("/card/list")
     public String list(@RequestParam("tag") String tag,
                        @RequestParam("question") String question,
-                       @RequestParam("cid") String cid, Model model) {
+                       @RequestParam("cid") String cid,
+                       @RequestParam("keystring") String keystring, Model model) {
         // 빈 배열 선언
         List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
 
@@ -101,6 +102,7 @@ public class CardController {
         model.addAttribute("tag", tag);
         model.addAttribute("question", question);
         model.addAttribute("cid", cid);
+        model.addAttribute("keystring", keystring);
 
         return "list";
     }

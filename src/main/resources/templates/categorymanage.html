@@ -20,14 +20,14 @@
                  th:attr="onclick=|categoryUpdate('${categoryDto.cname}')|"
                  th:src="@{/img/edit_image.png}">
         </div>
-        <div class="containerLast clickable" onclick="categoryInsert()">
-            <a id="plusMark">+</a>
-            <input type="hidden" class="newCategoryName" id="newCategoryName">
-            <button class="clickable" type="button" id="createCategory" onclick="createCategory()">추가</button>
+        <div class="insert containerLast clickable" onclick="categoryInsert()">
+            <a class="insert" id="plusMark">+</a>
+            <input type="hidden" class="insert newCategoryName" id="newCategoryName">
+            <button class="insert clickable" type="button" id="createCategory" onclick="createCategory()">추가</button>
         </div>
     </div>
     <div class="save">
-        <button class="clickable" type="button" id="save">변경내용 저장</button>
+        <button class="clickable" type="button" id="save">SAVE</button>
     </div>
     <dialog class="dialog">
         <h2 class="change-caution">변경사항을 저장하시겠습니까?</h2><br><br>
