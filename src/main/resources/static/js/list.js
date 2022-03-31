@@ -185,8 +185,8 @@ window.onload = function(){
 
     // 카테고리 해싱
     categoryMap = new Map();
-    for (let i = 0; i < categoryDto.length; i++) {
-        categoryMap.set(categoryDto[i].cid, categoryDto[i].cname);
+    for (let i = 0; i < categoryDtoList.length; i++) {
+        categoryMap.set(categoryDtoList[i].cid, categoryDtoList[i].cname);
     }
 
     // 카테고리 변환
