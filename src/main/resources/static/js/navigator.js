@@ -1,3 +1,37 @@
+// 내비게이션바 크기변화시 본문 패딩 자동변화
+const navbar = document.querySelector(".navbar");
+const navbarMenu = navbar.querySelector(".navbar-menu");
+const navbarShow = navbar.querySelector(".navbar-narrow-show");
+const narrowNav = document.querySelector(".navbar-narrow");
+const narrowNavOverlay = document.querySelector(".navbar-narrow-overlay");
+
+function resize(entries) {
+    if (entries[0].contentRect.width < 1000) {
+        navbarMenu.style.display = "none";
+        navbarShow.style.display = "inline-block";
+        narrowNav.style.display = "block";
+    }
+    else {
+        navbarMenu.style.display = "flex";
+        navbarShow.style.display = "none";
+        narrowNav.style.display = "none";
+        narrowNavOverlay.style.display = "none";
+        narrowNav.classList.remove("navbar-narrow-appear");
+    }
+}
+const resizeObserver = new ResizeObserver(resize);
+resizeObserver.observe(navbar);
+
+function narrowNavbarShow() {
+    narrowNavOverlay.style.display = "flex";
+    narrowNav.classList.add('navbar-narrow-appear');
+}
+
+function narrowNavbarHide() {
+    narrowNavOverlay.style.display = "none";
+    narrowNav.classList.remove('navbar-narrow-appear');
+}
+
 // 카드 추가를 위한 element
 const insertModal = document.querySelector("#insertModal");
 const insertModalOverlay = document.querySelector("#insertModalOverlay");
@@ -18,6 +52,7 @@ function insert() {
 function insertModalSubmit(){
     insertModal.style.display = "none";
     insertModalOverlay.style.display = "none";
+    narrowNav.style.display = "block";
 
     // AJAX 수정 요청
     let httpRequest = new XMLHttpRequest();
@@ -91,11 +126,19 @@ function interviewCancel() {
 
 // 검색
 const searchCriteria = document.querySelector("#searchCriteria");
-const searchKeyword = document.querySelector("#searchKeyword");
 const categoryKey = document.querySelector("#categoryKey");
 const tagKey = document.querySelector("#tagKey");
 const questionKey = document.querySelector("#questionKey");
 const searchForm = document.querySelector("#searchForm");
+const searchKeyword = document.querySelector("#searchKeyword");
+const keyString = document.querySelector('#keystring');
+
+// 검색 결과 표시 페이지일 경우(list) 키워드 표시
+if (window.location.pathname === "/card/list") {
+    if (keystring != "") {
+        searchKeyword.value = keystring;
+    }
+}
 
 function search() {
     let kw = searchKeyword.value;
@@ -117,40 +160,13 @@ function search() {
             questionKey.value = kw;
             break;
     }
+    keyString.value = kw;
 
     searchForm.submit();
 }
 
-// 내비게이션바 크기변화시 본문 패딩 자동변화
-const navbar = document.querySelector(".navbar");
-const navbarMenu = navbar.querySelector(".navbar-menu");
-const navbarShow = navbar.querySelector(".navbar-narrow-show");
-const narrowNav = document.querySelector(".navbar-narrow");
-const narrowNavOverlay = document.querySelector(".navbar-narrow-overlay");
-
-function resize(entries) {
-    if (entries[0].contentRect.width < 1000) {
-        navbarMenu.style.display = "none";
-        navbarShow.style.display = "inline-block";
-        narrowNav.style.display = "block";
+function searchEnterKey(e) {
+    if (e.keyCode == 13) {
+        search();
     }
-    else {
-        navbarMenu.style.display = "flex";
-        navbarShow.style.display = "none";
-        narrowNav.style.display = "none";
-        narrowNavOverlay.style.display = "none";
-        narrowNav.classList.remove("navbar-narrow-appear");
-    }
-}
-const resizeObserver = new ResizeObserver(resize);
-resizeObserver.observe(navbar);
-
-function narrowNavbarShow() {
-    narrowNavOverlay.style.display = "flex";
-    narrowNav.classList.add('navbar-narrow-appear');
-}
-
-function narrowNavbarHide() {
-    narrowNavOverlay.style.display = "none";
-    narrowNav.classList.remove('navbar-narrow-appear');
 }

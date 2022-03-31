@@ -24,13 +24,14 @@
                         질문
                     </option>
                 </select>
-                <input type="text" id="searchKeyword" />
+                <input type="text" id="searchKeyword" onkeyup="searchEnterKey(event)"/>
                 <button id="btn-search" onclick="search()">검색</button>
             </div>
             <form id="searchForm" method="get" action="/card/list">
                 <input type="hidden" name="tag" id="tagKey">
                 <input type="hidden" name="question" id="questionKey">
                 <input type="hidden" name="cid" id="categoryKey">
+                <input type="hidden" name="keystring" id="keystring">
             </form>
         </div>
         <button class="navbar-narrow-show" onclick="narrowNavbarShow()"></button>
@@ -66,29 +67,26 @@
     <div class="navbar-narrow-overlay" onclick="narrowNavbarHide()"></div>
     <div class="navbar-narrow">
         <div class="navbar-narrow-top">
-            <div class="navbar-narrow-brand">
-                <a href="/card">CS Study</a>
-            </div>
             <button class="navbar-narrow-hide" onclick="narrowNavbarHide()"></button>
         </div>
         <div class="navbar-narrow-container">
-            <div class="nav-link-box">
-                <ul>
-                    <li>
-                        <a class="nav-link" onclick="interview()">인터뷰</a>
+            <div class="navbar-narrow-box">
+                <ul class="list-nav-link">
+                    <li onclick="interview()">
+                        인터뷰
                     </li>
-                    <li>
-                        <a class="nav-link" href="/card/management">카테고리 관리</a>
+                    <li onclick="location.href='/card/management'">
+                        카테고리 관리
                     </li>
-                    <li>
-                        <a class="nav-link" onclick="insert()">카드 추가</a>
+                    <li onclick="insert()">
+                        카드 추가
                     </li>
                 </ul>
             </div>
         </div>
     </div>
     <script th:inline="javascript">
-            let categoryDtoList = [[${categoryDtoList}]];
+        let categoryDtoList = [[${categoryDtoList}]];
     </script>
 </th:block>
 </html>
