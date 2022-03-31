@@ -41,6 +41,9 @@ function categoryDelete(cname){
 
         // dto 삭제
         dto.splice(deleteTarget, 1);
+
+        // 버튼 등장
+        changeSomething();
     }
     deleteTarget = -1;
 }
@@ -109,6 +112,9 @@ function categoryUpdate(cname){
             "categoryUpdate('" + input_box[updateTarget].value + "')")
         deleteButton[updateTarget].setAttribute("onclick",
             "categoryDelete('" + input_box[updateTarget].value + "')")
+
+        // 버튼 등장
+        changeSomething();
 
         // 원상 복귀
         input_box[updateTarget].setAttribute("type", "hidden");
@@ -211,6 +217,15 @@ function createCategory() {
     const last_item = document.querySelector(".containerLast");
     container_item.insertBefore(new_container, last_item);
 
+    new_container.addEventListener("mouseover", function () {
+        new_update.style.display = "block";
+        new_delete.style.display = "block";
+    });
+    new_container.addEventListener("mouseout", function () {
+        new_update.style.display = "none";
+        new_delete.style.display = "none";
+    });
+
     // dto 추가
     var new_dto = new Object();
     new_dto.cid = null;
@@ -225,13 +240,93 @@ function createCategory() {
     createButton.style.display = "none";
     inputText.value = "";
 
+    // 버튼 등장
+    changeSomething();
+
     // 동시 클릭 방지
     setTimeout(function () {
         insertCheck = false;
     }, 500);
 }
 
+// change check
+var changeCheck = true;
+function changeSomething() {
+    if (changeCheck) {
+        const saveButton = document.querySelector(".save");
+        saveButton.classList.add("savepopup");
+        changeCheck = false;
+    }
+}
+
 window.onload = function(){
+
+    // 다이얼로그 외부 터치
+    // const temp = document.getElementsByTagName("dialog:-internal-modal");
+    // temp.addEventListener("click", function (e) {
+    //     console.log("dialog out click");
+    // })
+
+    // 외부 터치 인식
+    window.addEventListener("click", function (e) {
+        console.log(e);
+        // insert 체크
+        if (!e.target.classList.contains("insert")){
+            if (insertCheck) {
+                plusMark.innerText = "+";
+                inputText.setAttribute("type", "hidden");
+                containerLast.classList.add("clickable");
+                createButton.style.display = "none";
+                inputText.value = "";
+                insertCheck = false;
+            }
+        }
+
+        // update 체크
+        if (updateCheck) {
+            const containerBody = document.querySelectorAll(".containerBody");
+            if (e.path[e.path.length - 6] != containerBody[updateTarget]) {
+                // 원상 복구
+                const original_name = document.querySelectorAll(".categoryName");
+                const input_box = document.querySelectorAll(".newCategoryName");
+                original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+                input_box[updateTarget].setAttribute("type", "hidden");
+                input_box[updateTarget].value = "";
+                updateCheck = false;
+                updateTarget = -1;
+            }
+        }
+    });
+
+    // 키보드 인식
+    window.addEventListener("keydown", function (e) {
+        if (e.key == "Enter") {
+            e.preventDefault();
+            if (updateCheck) {
+                categoryUpdate(dto[updateTarget].cname);
+            }
+            else if (insertCheck) {
+                createCategory();
+            }
+        }
+    }, {passive : false});
+
+    // 마우스 호버 이벤트
+    const cBody = document.querySelectorAll(".containerBody");
+    const cDelete = document.querySelectorAll(".delete");
+    const cUpdate = document.querySelectorAll(".update");
+
+    for (let i = 0; i < cBody.length; i++) {
+        cBody[i].addEventListener("mouseover", function () {
+            cDelete[i].style.display = "block";
+            cUpdate[i].style.display = "block";
+        });
+        cBody[i].addEventListener("mouseout", function () {
+            cDelete[i].style.display = "none";
+            cUpdate[i].style.display = "none";
+        });
+    }
+
     // 카드 추가 이벤트
     function newCardHandler(event) {
         for (let i = 0; i < categoryDtoList.length; i++) {
@@ -329,8 +424,14 @@ window.onload = function(){
             }
 
             if (flag) {
-                deleteCategory.push(categoryDtoList[i]);
-                categoryDtoList.splice(i, 1);
+                if (categoryDtoList[i].cnt == 0) {
+                    deleteCategory.push(categoryDtoList[i]);
+                    categoryDtoList.splice(i, 1);
+                }
+                else {
+                    alert("카드가 있는 카테고리가 삭제되어 저장이 불가능합니다.\n새로고침을 시도합니다.");
+                    window.location.reload();
+                }
             }
         }
 
@@ -362,6 +463,11 @@ window.onload = function(){
                                 }
                             }
                         }
+
+                        // 버튼 숨김
+                        const saveButton = document.querySelector(".save");
+                        saveButton.classList.remove("savepopup");
+                        changeCheck = true;
                     }
                     else {
                         alert("저장 실패");
