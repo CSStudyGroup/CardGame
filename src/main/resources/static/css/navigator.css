@@ -5,7 +5,7 @@ body {
     display: flex;
     position: fixed;
     align-items: center;
-    background-color: #E6E6E6;
+    background-color: aqua;
     width: 100%;
     height: auto;
     margin: 0;
@@ -34,6 +34,7 @@ body {
     margin-left: 10px;
     margin-right: 10px;
     cursor: pointer;
+    display: inline-block;
 }
 .nav-link:hover {
     text-decoration: underline;
@@ -53,7 +54,7 @@ body {
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.25);
-    z-index: 9;
+    z-index: 200;
 }
 .modal-insert {
     position: absolute;
@@ -67,7 +68,7 @@ body {
     background-color: white;
     padding-top: 30px;
     padding-left: 10px;
-    z-index: 10;
+    z-index: 201;
 }
 
 .navbar-narrow-show {
@@ -82,12 +83,13 @@ body {
 }
 
 .navbar-narrow {
+    border-left: solid 2px black;
     display: block;
     position: fixed;
     align-items: center;
-    background-color: #E6E6E6;
+    background-color: aqua;
     width: 300px;
-    right: -300px;
+    right: -302px;
     height: 100%;
     margin-right: 0;
     z-index: 102;
@@ -106,8 +108,9 @@ body {
 
 .navbar-narrow-top {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: right;
+    align-content: center;
+    border-bottom: 2px solid black;
 }
 
 .navbar-narrow-brand {
@@ -124,9 +127,6 @@ body {
 }
 
 .navbar-narrow-container {
-    display: flex;
-    justify-content: space-between;
-    align-content: center;
 }
 
 .navbar-narrow-appear {
@@ -142,4 +142,36 @@ body {
     display: none;
     background: rgba(0, 0, 0, 0.25);
     z-index: 101;
+}
+
+.navbar-narrow-box {
+    border-bottom: 1px solid black;
+}
+
+.list-nav-link {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+
+.list-nav-link li {
+    padding: 5px 0px 5px 5px;
+    border-bottom: 1px solid aqua;
+    font-size: 12px;
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+    background-color: aqua;
+}
+
+.list-nav-link li:hover {
+    padding: 5px 0px 5px 5px;
+    border-bottom: 1px solid aqua;
+    font-size: 12px;
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+    background-color: #e6e6e6;
+    filter: brightness(80%);
 }
