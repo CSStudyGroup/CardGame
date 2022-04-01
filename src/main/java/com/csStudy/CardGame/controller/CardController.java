@@ -1,6 +1,7 @@
 package com.csStudy.CardGame.controller;
 import com.csStudy.CardGame.dto.CardDto;
 import com.csStudy.CardGame.dto.CategoryDto;
+import com.csStudy.CardGame.dto.ChangeCategoryResultDto;
 import com.csStudy.CardGame.service.CardGameService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -163,17 +164,9 @@ public class CardController {
     // 카테고리 변경 체크
     @ResponseBody
     @PostMapping("card/categoryChange")
-    public List<CategoryDto> categoryChange(@RequestBody String jsonList) throws JsonProcessingException {
+    public ChangeCategoryResultDto categoryChange(@RequestBody String jsonList) throws JsonProcessingException {
         JSONObject jObject = new JSONObject(jsonList);
         ObjectMapper mapper = new ObjectMapper();
-
-        // 삭제
-        List<CategoryDto> deleteDtoList = new ArrayList<>();
-        JSONArray deleteList = jObject.getJSONArray("delete");
-        for (int i = 0; i < deleteList.length(); i++) {
-            deleteDtoList.add(mapper.readValue(deleteList.get(i).toString(), CategoryDto.class));
-        }
-        System.out.println(cardService.deleteCategories(deleteDtoList));
 
         // 추가
         List<CategoryDto> insertDtoList = new ArrayList<>();
@@ -181,7 +174,6 @@ public class CardController {
         for (int i = 0; i < insertList.length(); i++) {
             insertDtoList.add(mapper.readValue(insertList.get(i).toString(), CategoryDto.class));
         }
-        List<CategoryDto> temp = cardService.addCategories(insertDtoList);
 
         // 수정
         List<CategoryDto> updateDtoList = new ArrayList<>();
@@ -189,8 +181,14 @@ public class CardController {
         for (int i = 0; i < updateList.length(); i++) {
             updateDtoList.add(mapper.readValue(updateList.get(i).toString(), CategoryDto.class));
         }
-        System.out.println(cardService.updateCategories(updateDtoList));
 
-        return temp;
+        // 삭제
+        List<CategoryDto> deleteDtoList = new ArrayList<>();
+        JSONArray deleteList = jObject.getJSONArray("delete");
+        for (int i = 0; i < deleteList.length(); i++) {
+            deleteDtoList.add(mapper.readValue(deleteList.get(i).toString(), CategoryDto.class));
+        }
+
+        return cardService.changeCategories(insertDtoList, updateDtoList, deleteDtoList);
     }
 }

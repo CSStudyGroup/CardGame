@@ -22,8 +22,9 @@ html {
 
 .containerBody, .containerLast {
     margin: 10px;
-    height: 100px;
-    border-radius: 30px;
+    --height: 100px;
+    height: var(--height);
+    border-radius: calc(var(--height) * 0.2);
     border: 2px solid black;
     background-color: lightgray;
 }
@@ -33,7 +34,15 @@ html {
 }
 
 .containerBody:hover, .containerLast:hover {
-    background-color: chartreuse;
+    background-color: aqua;
+}
+
+.containerBody:hover .update {
+    display: block;
+}
+
+.containerBody:hover .delete {
+    display: block;
 }
 
 .update, .delete {
@@ -41,6 +50,10 @@ html {
     float: right;
     margin-top: 25px;
     margin-right: 25px;
+}
+
+.target {
+    display: block;
 }
 
 .categoryName{
@@ -77,18 +90,18 @@ html {
     bottom: -150px;
     right: 50px;
     padding: 10px;
-    border-radius: 10px;
     transition: bottom 1s;
 }
 
 #save {
     width: 80px;
-    height: 50px;
-    border-radius: 10px;
+    --height: 50px;
+    height: var(--height);
+    border-radius: calc(var(--height) * 0.2);
     border: 0px solid black;
     font-weight: bold;
     background-color: skyblue;
-    box-shadow: 0px 0px 20px 1px gray;
+    box-shadow: 0px 4px 10px 2px lightgray;
 }
 
 #save:hover {
@@ -99,22 +112,27 @@ html {
     bottom: 50px;
 }
 
-.dialog {
+.innerDialog {
     width: 450px;
     height: 300px;
     text-align: center;
 }
 
+.dialog {
+    padding: 0;
+}
+
 .change-caution {
-    margin-top: 100px;
+    padding-top: 110px;
+    margin: 0;
 }
 
 .change {
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .cancel {
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .clickable {
