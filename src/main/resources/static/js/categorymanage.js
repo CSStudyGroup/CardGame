@@ -6,7 +6,11 @@ function categoryDelete(cname){
         // 원상 복구
         const original_name = document.querySelectorAll(".categoryName");
         const input_box = document.querySelectorAll(".newCategoryName");
+        const updateButton = document.querySelectorAll(".update");
+        const deleteButton = document.querySelectorAll(".delete");
         original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+        updateButton[updateTarget].classList.remove("target");
+        deleteButton[updateTarget].classList.remove("target");
         input_box[updateTarget].setAttribute("type", "hidden");
         input_box[updateTarget].value = "";
         updateCheck = false;
@@ -52,6 +56,11 @@ function categoryDelete(cname){
 var updateCheck = false;
 var updateTarget = -1;
 function categoryUpdate(cname){
+    const original_name = document.querySelectorAll(".categoryName");
+    const input_box = document.querySelectorAll(".newCategoryName");
+    const updateButton = document.querySelectorAll(".update");
+    const deleteButton = document.querySelectorAll(".delete");
+
     // 추가 도중 수정 버튼을 눌렀을 경우
     if (insertCheck) {
         // 원상 복구
@@ -66,19 +75,14 @@ function categoryUpdate(cname){
     // 수정 도중 다른 수정 버튼을 눌렀을 경우
     if (updateCheck && dto[updateTarget].cname != cname) {
         // 원상 복구
-        const original_name = document.querySelectorAll(".categoryName");
-        const input_box = document.querySelectorAll(".newCategoryName");
         original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+        updateButton[updateTarget].classList.remove("target");
+        deleteButton[updateTarget].classList.remove("target");
         input_box[updateTarget].setAttribute("type", "hidden");
         input_box[updateTarget].value = "";
         updateCheck = false;
         updateTarget = -1;
     }
-
-    const original_name = document.querySelectorAll(".categoryName");
-    const input_box = document.querySelectorAll(".newCategoryName");
-    const updateButton = document.querySelectorAll(".update");
-    const deleteButton = document.querySelectorAll(".delete");
 
     if (updateCheck) {
         // 공백 체크
@@ -117,6 +121,8 @@ function categoryUpdate(cname){
         changeSomething();
 
         // 원상 복귀
+        updateButton[updateTarget].classList.remove("target");
+        deleteButton[updateTarget].classList.remove("target");
         input_box[updateTarget].setAttribute("type", "hidden");
         input_box[updateTarget].value = "";
         updateCheck = false;
@@ -129,6 +135,8 @@ function categoryUpdate(cname){
                 break;
             }
         }
+        updateButton[updateTarget].classList.add("target");
+        deleteButton[updateTarget].classList.add("target");
         input_box[updateTarget].setAttribute("type", "text");
         input_box[updateTarget].value = dto[updateTarget].cname;
         original_name[updateTarget].innerText = "";
@@ -149,7 +157,11 @@ function categoryInsert() {
         // 원상 복구
         const original_name = document.querySelectorAll(".categoryName");
         const input_box = document.querySelectorAll(".newCategoryName");
+        const updateButton = document.querySelectorAll(".update");
+        const deleteButton = document.querySelectorAll(".delete");
         original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+        updateButton[updateTarget].classList.remove("target");
+        deleteButton[updateTarget].classList.remove("target");
         input_box[updateTarget].setAttribute("type", "hidden");
         input_box[updateTarget].value = "";
         updateCheck = false;
@@ -192,6 +204,7 @@ function createCategory() {
     let new_input = document.createElement("input");
     new_input.setAttribute("type", "hidden");
     new_input.setAttribute("class", "newCategoryName");
+    new_input.setAttribute("onkeyup", "enterEvent(event)");
     new_container.append(new_input);
 
     // delete 추가
@@ -216,15 +229,6 @@ function createCategory() {
     const container_item = document.querySelector(".container-item");
     const last_item = document.querySelector(".containerLast");
     container_item.insertBefore(new_container, last_item);
-
-    new_container.addEventListener("mouseover", function () {
-        new_update.style.display = "block";
-        new_delete.style.display = "block";
-    });
-    new_container.addEventListener("mouseout", function () {
-        new_update.style.display = "none";
-        new_delete.style.display = "none";
-    });
 
     // dto 추가
     var new_dto = new Object();
@@ -259,17 +263,29 @@ function changeSomething() {
     }
 }
 
-window.onload = function(){
+// 키보드 인식
+function enterEvent (e) {
+    if (e.key == "Enter") {
+        e.preventDefault();
+        if (updateCheck) {
+            categoryUpdate(dto[updateTarget].cname);
+        }
+        else if (insertCheck) {
+            createCategory();
+        }
+    }
+}
 
-    // 다이얼로그 외부 터치
-    // const temp = document.getElementsByTagName("dialog:-internal-modal");
-    // temp.addEventListener("click", function (e) {
-    //     console.log("dialog out click");
-    // })
+window.onload = function(){
 
     // 외부 터치 인식
     window.addEventListener("click", function (e) {
-        console.log(e);
+        // dialog 체크
+        if (e.target.classList.contains("dialog")) {
+            const dialog = document.querySelector('.dialog');
+            dialog.close();
+        }
+
         // insert 체크
         if (!e.target.classList.contains("insert")){
             if (insertCheck) {
@@ -289,7 +305,11 @@ window.onload = function(){
                 // 원상 복구
                 const original_name = document.querySelectorAll(".categoryName");
                 const input_box = document.querySelectorAll(".newCategoryName");
+                const updateButton = document.querySelectorAll(".update");
+                const deleteButton = document.querySelectorAll(".delete");
                 original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+                updateButton[updateTarget].classList.remove("target");
+                deleteButton[updateTarget].classList.remove("target");
                 input_box[updateTarget].setAttribute("type", "hidden");
                 input_box[updateTarget].value = "";
                 updateCheck = false;
@@ -297,35 +317,6 @@ window.onload = function(){
             }
         }
     });
-
-    // 키보드 인식
-    window.addEventListener("keydown", function (e) {
-        if (e.key == "Enter") {
-            e.preventDefault();
-            if (updateCheck) {
-                categoryUpdate(dto[updateTarget].cname);
-            }
-            else if (insertCheck) {
-                createCategory();
-            }
-        }
-    }, {passive : false});
-
-    // 마우스 호버 이벤트
-    const cBody = document.querySelectorAll(".containerBody");
-    const cDelete = document.querySelectorAll(".delete");
-    const cUpdate = document.querySelectorAll(".update");
-
-    for (let i = 0; i < cBody.length; i++) {
-        cBody[i].addEventListener("mouseover", function () {
-            cDelete[i].style.display = "block";
-            cUpdate[i].style.display = "block";
-        });
-        cBody[i].addEventListener("mouseout", function () {
-            cDelete[i].style.display = "none";
-            cUpdate[i].style.display = "none";
-        });
-    }
 
     // 카드 추가 이벤트
     function newCardHandler(event) {
@@ -447,17 +438,17 @@ window.onload = function(){
         function postCategories(){
             if (categoryHttpRequest.readyState === XMLHttpRequest.DONE) {
                 if (categoryHttpRequest.status === 200) {
-                    if (categoryHttpRequest.response != null) {
+                    if (categoryHttpRequest.response.done) {
                         alert("저장 성공");
                         // categoryDtoList 수정
-                        Array.prototype.push.apply(categoryDtoList, categoryHttpRequest.response);
+                        Array.prototype.push.apply(categoryDtoList, categoryHttpRequest.response.insertResult);
 
                         // dto 수정
                         for (let i = 0; i < dto.length; i++) {
                             if (dto[i].cid == null) {
-                                for (let j = 0; j < categoryHttpRequest.response.length; j++) {
-                                    if (dto[i].cname == categoryHttpRequest.response[j].cname) {
-                                        dto[i].cid = categoryHttpRequest.response[j].cid;
+                                for (let j = 0; j < categoryHttpRequest.response.insertResult.length; j++) {
+                                    if (dto[i].cname == categoryHttpRequest.response.insertResult[j].cname) {
+                                        dto[i].cid = categoryHttpRequest.response.insertResult[j].cid;
                                         break
                                     }
                                 }

@@ -12,7 +12,7 @@
     <div class="container-item">
         <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
             <a class="categoryName" th:text="|${categoryDto.cname} (${categoryDto.cnt})|"></a>
-            <input type="hidden" class="newCategoryName">
+            <input type="hidden" class="newCategoryName" onkeyup="enterEvent(event)">
             <img class="delete clickable" height="50px" width="auto"
                  th:attr="onclick=|categoryDelete('${categoryDto.cname}')|"
                  th:src="@{/img/delete_image.png}">
@@ -22,7 +22,7 @@
         </div>
         <div class="insert containerLast clickable" onclick="categoryInsert()">
             <a class="insert" id="plusMark">+</a>
-            <input type="hidden" class="insert newCategoryName" id="newCategoryName">
+            <input type="hidden" class="insert newCategoryName" id="newCategoryName" onkeyup="enterEvent(event)">
             <button class="insert clickable" type="button" id="createCategory" onclick="createCategory()">추가</button>
         </div>
     </div>
@@ -30,9 +30,11 @@
         <button class="clickable" type="button" id="save">SAVE</button>
     </div>
     <dialog class="dialog">
-        <h2 class="change-caution">변경사항을 저장하시겠습니까?</h2><br><br>
-        <button class="change clickable" type="reset">저장</button>
-        <button class="cancel clickable" type="reset">취소</button>
+        <div class="innerDialog">
+            <h2 class="change-caution">변경사항을 저장하시겠습니까?</h2><br><br>
+            <button class="change clickable" type="reset">저장</button>
+            <button class="cancel clickable" type="reset">취소</button>
+        </div>
     </dialog>
     <script th:inline="javascript">
         var dto = [[${categoryDtoList}]];
