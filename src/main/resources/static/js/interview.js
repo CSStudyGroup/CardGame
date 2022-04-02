@@ -36,19 +36,20 @@ window.onload = function(){
     // 다음 문제 진행 요청
     const min = 0
     var max = dto.length - 1;
+    var now = 0
     const next = document.getElementById("next");
     next.addEventListener("click", function () {
 
         if (check == null){
             // 랜덤 추출
-            var rand = Math.floor(Math.random() * (max - min + 1)) + min;
-            console.log(rand);
+            now = (now + 1) % dto.length;
+            console.log(now);
 
             card.classList.add("nextshow");
             setTimeout(function () {
-                text.innerText = dto[rand].question;
-                question.innerText = dto[rand].question;
-                answer.innerText = dto[rand].answer;
+                text.innerText = dto[now].question;
+                question.innerText = dto[now].question;
+                answer.innerText = dto[now].answer;
             }, 1000);
             check = setTimeout(function () {
                 card.classList.remove("nextshow");
@@ -57,11 +58,25 @@ window.onload = function(){
         }
     });
 
+    // knuth shuffle
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const rand = Math.floor(Math.random() * (i + 1));
+            const temp = array[i];
+            array[i] = array[rand];
+            array[rand] = temp;
+        }
+    }
+    shuffle(dto);
+    console.log(dto);
+
+
     // 초기 로딩
-    var rand = Math.floor(Math.random() * (max - min + 1)) + min;
-    text.innerText = dto[rand].question;
-    question.innerText = dto[rand].question;
-    answer.innerText = dto[rand].answer;
+    text.innerText = dto[now].question;
+    question.innerText = dto[now].question;
+    answer.innerText = dto[now].answer;
+    console.log(now);
+
 
     // 끝내기 다이얼로그
     const dialog = document.querySelector('.dialog');
@@ -90,7 +105,9 @@ window.onload = function(){
         for (let i = 0; i < keywords.length; i++) {
             if (keywords[i] == event.detail.cid) {
                 max += 1;
-                dto.push(event.detail);
+                // 현재 위치 뒤에 무작위 삽입
+                dto.splice(Math.floor(Math.random() * (dto.length - now)) + now + 1, 0, event.detail);
+                console.log(now, dto);
                 headTitle.innerText = "Interview (총 문항 수 : " + dto.length + ")";
                 break
             }
