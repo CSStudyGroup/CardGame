@@ -24,7 +24,6 @@ dependencies {
 	implementation 'org.json:json:20190722'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
 tasks.named('test') {

@@ -34,7 +34,6 @@ function narrowNavbarHide() {
 
 // 카드 추가를 위한 element
 const insertModal = document.querySelector("#insertModal");
-const insertModalOverlay = document.querySelector("#insertModalOverlay");
 const insertCategory = document.querySelector("#insertCategory");
 const insertTags = document.querySelector("#insertTags");
 const insertQuestion = document.querySelector("#insertQuestion");
@@ -45,13 +44,11 @@ function insert() {
     insertQuestion.value = "";
     insertAnswer.value = "";
     insertTags.value = "";
-    insertModal.style.display = "block";
-    insertModalOverlay.style.display = "flex";
+    insertModal.style.display = "flex";
 }
 
 function insertModalSubmit(){
     insertModal.style.display = "none";
-    insertModalOverlay.style.display = "none";
     narrowNav.style.display = "block";
 
     // AJAX 수정 요청
@@ -86,7 +83,6 @@ function insertModalSubmit(){
 }
 function insertModalClose(){
     insertModal.style.display = "none";
-    insertModalOverlay.style.display = "none";
 }
 
 // 인터뷰 링크

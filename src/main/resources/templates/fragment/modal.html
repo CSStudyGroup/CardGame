@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="modalFragment(modalId, title, buttons)"
+         th:with="content=(${ content } ?: null),
+         closeButton=(${ closeButton } ?: true),
+         escClose=(${ escClose } ?: false),
+         outClose=(${ outClose } ?: false)"
+         class="modal-overlay"
+         th:id="${ modalId }">
+        <div class="modal-window">
+            <div class="modal-title">
+                <th:block th:replace="${title}"></th:block>
+            </div>
+            <div class="modal-contents" th:if="${content != null}">
+                <th:block th:replace="${content}"></th:block>
+            </div>
+            <div class="modal-buttons">
+                <th:block th:replace="${buttons}"></th:block>
+                <button class="modal-close"
+                        th:if="${closeButton}"
+                        th:attr="onclick=|closeModal('${modalId}')|" >
+                    닫기
+                </button>
+            </div>
+            <script defer th:if="${escClose}" th:inline="javascript">
+                document.addEventListener("keyup", (e) => {
+                    if (e.keyCode == 27) {
+                        closeModal([[${modalId}]]);
+                    }
+                });
+            </script>
+            <script defer th:if="${outClose}" th:inline="javascript">
+                document.querySelector(`#${[[${modalId}]]}`).addEventListener("click", (e) => {
+                    if(e.target === e.currentTarget) {
+                        closeModal([[${modalId}]]);
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</html>
