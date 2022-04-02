@@ -44,32 +44,6 @@ body {
     margin-left: 10px;
     margin-right: 20px;
 }
-.modal-overlay {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.25);
-    z-index: 200;
-}
-.modal-insert {
-    position: absolute;
-    top: 20%;
-    left: 10%;
-    width: 80%;
-    height: 600px;
-    display: none;
-    border-radius: 40px;
-    border: 1px solid black;
-    background-color: white;
-    padding-top: 30px;
-    padding-left: 10px;
-    z-index: 201;
-}
 
 .navbar-narrow-show {
     width: 40px;
