@@ -34,7 +34,7 @@ public class CardController {
         // 카테고리 리스트를 받아오는 부분
         List<CategoryDto> categoryDtoList = cardService.findAllCategories();
         model.addAttribute("categoryDtoList", categoryDtoList);
-        return "card";
+        return "cardmain";
     }
 
     // 선택된 카테고리에 맞게 표시
