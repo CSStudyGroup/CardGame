@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="cardFragment(cardId, content, width, height)"
+     class="card-frame"
+     th:with="classlist=(${ classlist } ?: null)"
+     th:id="${#ids.seq(cardId)}"
+     th:classappend="${classlist}">
+    <div class="card-content" th:insert="${content}"></div>
+</div>
+</html>
