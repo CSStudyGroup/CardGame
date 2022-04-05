@@ -12,28 +12,23 @@ const viewCategory = document.getElementById("viewCategory");
 const viewTags = document.getElementById("viewTags");
 const viewQuestion = document.getElementById("viewQuestion");
 const viewAnswer = document.getElementById("viewAnswer");
-var check = false;
 
 function text(id) {
-    if (!check) {
-        for (let i = 0; i < dto.length; i++) {
-            if (dto[i].id == id) {
-                viewId.innerText = dto[i].id;
-                viewCategory.innerText = categoryMap.get(dto[i].cid);
-                viewTags.innerText = dto[i].tags;
-                viewQuestion.innerText = dto[i].question;
-                viewAnswer.innerText = dto[i].answer;
-                viewModal.style.display = "block";
-                break;
-            }
+    for (let i = 0; i < dto.length; i++) {
+        if (dto[i].id == id) {
+            viewId.innerText = dto[i].id;
+            viewCategory.innerText = categoryMap.get(dto[i].cid);
+            viewTags.innerText = dto[i].tags;
+            viewQuestion.innerText = dto[i].question;
+            viewAnswer.innerText = dto[i].answer;
+            viewModal.style.display = "block";
+            break;
         }
-        check = true;
     }
 }
 
 function viewModalClose(){
     viewModal.style.display = "none";
-    check = false;
 }
 
 // 수정하기
@@ -45,20 +40,17 @@ const updateQuestion = document.getElementById("updateQuestion");
 const updateAnswer = document.getElementById("updateAnswer");
 
 function update(id){
-    if (!check) {
-        for (let i = 0; i < dto.length; i++) {
-            if (dto[i].id == id) {
-                target = i;
-                updateId.innerText = dto[i].id;
-                updateCategory.value = dto[i].cid;
-                updateTags.value = dto[i].tags;
-                updateQuestion.value = dto[i].question;
-                updateAnswer.value = dto[i].answer;
-                updateModal.style.display = "block";
-                break;
-            }
+    for (let i = 0; i < dto.length; i++) {
+        if (dto[i].id == id) {
+            target = i;
+            updateId.innerText = dto[i].id;
+            updateCategory.value = dto[i].cid;
+            updateTags.value = dto[i].tags;
+            updateQuestion.value = dto[i].question;
+            updateAnswer.value = dto[i].answer;
+            updateModal.style.display = "block";
+            break;
         }
-        check = true;
     }
 }
 
@@ -77,11 +69,14 @@ function updateModalSubmit(){
                     // dto 및 테이블 내용 수정
                     const temp = document.querySelectorAll(".tableBody")[target];
 
+                    console.log(dto[target]);
                     // dto 수정
-                    dto[target].cid = updateCategory.value;
+                    dto[target].cid = parseInt(updateCategory.value);
                     dto[target].tags = updateTags.value;
                     dto[target].question = updateQuestion.value;
                     dto[target].answer = updateAnswer.value;
+
+                    console.log(dto[target]);
 
                     // 테이블 수정
                     temp.children[1].innerText = categoryMap.get(parseInt(updateCategory.value));
@@ -94,7 +89,6 @@ function updateModalSubmit(){
             } else {
                 alert('Request Error!');
             }
-            check = false;
             target = -1;
         }
     }
@@ -110,34 +104,29 @@ function updateModalSubmit(){
 
 function updateModalClose(){
     updateModal.style.display = "none";
-    check = false;
 }
 
 // 삭제
 const dialog = document.querySelector('.dialog');
 const deleteCaution = document.querySelector(".delete-caution");
 function del(id){
-    if (!check) {
-        for (let i = 0; i < dto.length; i++) {
-            if (dto[i].id == id) {
-                target = i;
-                break;
-            }
+    for (let i = 0; i < dto.length; i++) {
+        if (dto[i].id == id) {
+            target = i;
+            break;
         }
-        deleteCaution.textContent = dto[target].id + "번을 정말로 삭제하시겠습니까?";
-        if (typeof dialog.showModal === 'function') {
-            dialog.showModal();
-        } else {
-            alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
-        }
-        check = true
+    }
+    deleteCaution.textContent = dto[target].id + "번을 정말로 삭제하시겠습니까?";
+    if (typeof dialog.showModal === 'function') {
+        dialog.showModal();
+    } else {
+        alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
     }
 }
 
 const cancel = document.querySelector('.cancel');
 cancel.addEventListener('click', () => {
     dialog.close();
-    check = false;
 });
 
 const remove = document.querySelector('.remove');
@@ -161,7 +150,6 @@ remove.addEventListener('click', () => {
                     alert('Request Error!');
                 }
                 dialog.close();
-                check = false;
                 target = -1;
             }
         }
