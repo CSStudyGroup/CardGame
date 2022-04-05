@@ -51,16 +51,16 @@
         <button id="interviewCancel" onclick="interviewCancel()">취소</button>
     </dialog>
     <div th:replace="fragment/modal::modalFragment(modalId='insertModal',
-        title=~{::.modalTitle},
-        content=~{::.modalContent},
-        buttons=~{::.modalButtons},
+        title=~{::.navModalTitle},
+        content=~{::.navModalContent},
+        buttons=~{::.navModalButtons},
         closeButton=false,
         escClose=true,
         outClose=true)">
-        <th:block class="modalTitle">
+        <th:block class="navModalTitle">
              <h1>카드 추가</h1>
         </th:block>
-        <th:block class="modalContent">
+        <th:block class="navModalContent">
              <h3 style="display: inline">장르 : </h3>
              <form style="display: inline">
                  <select id="insertCategory">
@@ -74,7 +74,7 @@
              <h3 style="display: inline">질문 : </h3><input type="text" id="insertQuestion" style="display: inline"><br><br>
              <h3 style="display: inline">답변 : </h3><input type="text" id="insertAnswer" style="display: inline"><br><br>
         </th:block>
-        <th:block class="modalButtons">
+        <th:block class="navModalButtons">
             <button type="button" onclick="insertModalSubmit()">추가</button>
             <button type="button" onclick="insertModalClose()">닫기</button>
         </th:block>

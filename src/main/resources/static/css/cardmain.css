@@ -1,28 +1,33 @@
-.card-main {
-    padding-top: 45px;
+.cardmain-body {
+    padding-top: 65px;
 }
-.card-container{
+
+.category-container {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-rows: repeat(auto-fit, 150px);
 }
-.card-category {
+
+.card-category-frame {
     display: inline-block;
-    border-radius: 40px;
-    border: 2px solid black;
-    background-color: aqua;
+}
+
+.card-category {
     width: 200px;
     height: 100px;
-    margin: 10px;
+    border-radius: 20px;
+    margin-top: 10px;
     padding: 5px;
 }
 
 .card-category:hover {
-    display: inline-block;
-    border-radius: 40px;
-    border: 2px solid black;
-    background-color: aqua;
     filter: brightness(80%);
     width: 200px;
     height: 100px;
-    margin: 10px;
+    border-radius: 20px;
+    margin-top: 10px;
     padding: 5px;
 }
 .category-name {
