@@ -44,30 +44,56 @@
             </table>
         </div>
     </div>
-    <div class="modal" id="viewModal">
-        <h3 style="display: inline">번호 : </h3><h3 id="viewId" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">장르 : </h3><h3 id="viewCategory" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">태그 : </h3><h3 id="viewTags" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">질문 : </h3><h3 id="viewQuestion" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">답변 : </h3><h3 id="viewAnswer" style="display: inline"></h3><br><br>
-        <button type="button clickable" onclick="viewModalClose()">닫기</button>
+    <div th:replace="fragment/modal::modalFragment(modalId='viewModal',
+        title=~{::.viewModalTitle},
+        content=~{::.viewModalContent},
+        buttons=~{::.viewModalButtons},
+        closeButton=false,
+        escClose=true,
+        outClose=true)">
+        <th:block class="viewModalTitle">
+            <h1>카드 내용</h1>
+        </th:block>
+        <th:block class="viewModalContent">
+            <h3 style="display: inline">번호 : </h3><h3 id="viewId" style="display: inline"></h3><br><br>
+            <h3 style="display: inline">장르 : </h3><h3 id="viewCategory" style="display: inline"></h3><br><br>
+            <h3 style="display: inline">태그 : </h3><h3 id="viewTags" style="display: inline"></h3><br><br>
+            <h3 style="display: inline">질문 : </h3><h3 id="viewQuestion" style="display: inline"></h3><br><br>
+            <h3 style="display: inline">답변 : </h3><h3 id="viewAnswer" style="display: inline"></h3><br><br>
+        </th:block>
+        <th:block class="viewModalButtons">
+            <button type="button clickable" onclick="viewModalClose()">닫기</button>
+        </th:block>
     </div>
-    <div class="modal" id="updateModal">
-        <h3 style="display: inline">번호 : </h3><h3 id="updateId" style="display: inline"></h3><br><br>
-        <h3 style="display: inline">장르 : </h3>
-        <form style="display: inline">
-            <select id="updateCategory">
-                <option value="none" selected disabled hidden>===선택===</option>
-                <option th:each="categoryDto : ${categoryDtoList}"
-                        th:value="${categoryDto.cid}"
-                        th:text="${categoryDto.cname}"></option>
-            </select>
-        </form><br><br>
-        <h3 style="display: inline">태그 : </h3><input type="text" id="updateTags" style="display: inline"><br><br>
-        <h3 style="display: inline">질문 : </h3><input type="text" id="updateQuestion" style="display: inline"><br><br>
-        <h3 style="display: inline">답변 : </h3><input type="text" id="updateAnswer" style="display: inline"><br><br>
-        <button class="clickable" type="button" onclick="updateModalSubmit()">수정</button>
-        <button class="clickable" type="button" onclick="updateModalClose()">닫기</button>
+    <div th:replace="fragment/modal::modalFragment(modalId='updateModal',
+        title=~{::.updateModalTitle},
+        content=~{::.updateModalContent},
+        buttons=~{::.updateModalButtons},
+        closeButton=false,
+        escClose=true,
+        outClose=true)">
+        <th:block class="updateModalTitle">
+            <h1>카드 수정</h1>
+        </th:block>
+        <th:block class="updateModalContent">
+            <h3 style="display: inline">번호 : </h3><h3 id="updateId" style="display: inline"></h3><br><br>
+            <h3 style="display: inline">장르 : </h3>
+            <form style="display: inline">
+                <select id="updateCategory">
+                    <option value="none" selected disabled hidden>===선택===</option>
+                    <option th:each="categoryDto : ${categoryDtoList}"
+                            th:value="${categoryDto.cid}"
+                            th:text="${categoryDto.cname}"></option>
+                </select>
+            </form><br><br>
+            <h3 style="display: inline">태그 : </h3><input type="text" id="updateTags" style="display: inline"><br><br>
+            <h3 style="display: inline">질문 : </h3><input type="text" id="updateQuestion" style="display: inline"><br><br>
+            <h3 style="display: inline">답변 : </h3><input type="text" id="updateAnswer" style="display: inline"><br><br>
+        </th:block>
+        <th:block class="updateModalButtons">
+            <button class="clickable" type="button" onclick="updateModalSubmit()">수정</button>
+            <button class="clickable" type="button" onclick="updateModalClose()">닫기</button>
+        </th:block>
     </div>
     <dialog class="dialog">
         <h2 class="delete-caution"></h2><br><br>
