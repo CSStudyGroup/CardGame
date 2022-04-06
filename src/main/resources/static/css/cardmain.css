@@ -7,7 +7,7 @@
     justify-content: center;
     justify-items: center;
     grid-template-columns: repeat(auto-fit, 250px);
-    grid-template-rows: repeat(auto-fit, 150px);
+    grid-row-gap: 30px;
 }
 
 .card-category-frame {
