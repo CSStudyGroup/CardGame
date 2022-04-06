@@ -4,10 +4,10 @@
     <head th:fragment="headFragment">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" th:href="@{/css/card_common.css(ver=${#calendars.createNow()})}">
         <link rel="stylesheet" th:href="@{/css/navigator.css(ver=${#calendars.createNow()})}">
-        <link rel="stylesheet" th:href="@{/css/modal.css(ver=${#calendars.createNow()})}">
+        <script defer th:src="@{/js/card_common.js(ver=${#calendars.createNow()})}"></script>
         <script defer th:src="@{/js/navigator.js(ver=${#calendars.createNow()})}"></script>
-        <script defer th:src="@{/js/modal.js(ver=${#calendars.createNow()})}"></script>
         <title>CS Study</title>
     </head>
 </html>
