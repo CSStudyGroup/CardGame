@@ -8,41 +8,38 @@
 </head>
 <body>
     <th:block th:replace="fragment/navigator::navigator"></th:block>
-    <div class="info">
+    <div class="head-div">
         <p id="list">List</p>
-        <div class="container">
-            <table class="table" style="table-layout: fixed">
-                <tr class="head">
-                    <th width="5%">ID</th>
-                    <th width="10%">Category</th>
-                    <th width="45%">Question</th>
-                    <th width="20%">Tags</th>
-                    <th width="7%" class="noline"></th>
-                    <th width="3%" class="noline"></th>
-                </tr>
-                <tr class="tableBody" th:each="cardDto : ${cardDtoList}">
-                    <td class="id"
-                        th:text="${cardDto.id}"></td>
-                    <td class="category"
-                        th:text="${cardDto.cid}"></td>
-                    <td class="question clickable"
-                        th:attr="onclick=|text('${cardDto.id}')|"
-                        th:text="${cardDto.question}"></td>
-                    <td class="tags"
-                        th:text="${cardDto.tags}"></td>
-                    <td class="update">
-                        <img class="clickable" height="30px" width="auto"
-                             th:attr="onclick=|update('${cardDto.id}')|"
-                             th:src="@{/img/edit_image.png}">
-                    </td>
-                    <td class="delete">
-                        <img class="clickable" height="30px" width="auto"
-                             th:attr="onclick=|del('${cardDto.id}')|"
-                             th:src="@{/img/delete_image.png}">
-                    </td>
-                </tr>
-            </table>
-        </div>
+    </div>
+    <div class="container">
+        <table class="table" style="table-layout: fixed">
+            <tr class="head">
+                <th width="10%">ID</th>
+                <th width="22%">Category</th>
+                <th width="55%">Question</th>
+                <th width="30px" class="noline"></th>
+                <th width="30px" class="noline"></th>
+            </tr>
+            <tr class="tableBody" th:each="cardDto : ${cardDtoList}">
+                <td class="id"
+                    th:text="${cardDto.id}"></td>
+                <td class="category"
+                    th:text="${cardDto.cid}"></td>
+                <td class="question clickable"
+                    th:attr="onclick=|text('${cardDto.id}')|"
+                    th:text="${cardDto.question}"></td>
+                <td class="update">
+                    <img class="clickable" height="30px" width="auto"
+                         th:attr="onclick=|update('${cardDto.id}')|"
+                         th:src="@{/img/edit_image.png}">
+                </td>
+                <td class="delete">
+                    <img class="clickable" height="30px" width="auto"
+                         th:attr="onclick=|del('${cardDto.id}')|"
+                         th:src="@{/img/delete_image.png}">
+                </td>
+            </tr>
+        </table>
     </div>
     <div th:replace="fragment/modal::modalFragment(modalId='viewModal',
         title=~{::.viewModalTitle},

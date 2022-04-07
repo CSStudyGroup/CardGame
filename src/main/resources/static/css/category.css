@@ -6,27 +6,45 @@ html {
     border: 0;
 }
 
-#directory {
+.head-div {
     position: absolute;
-    top: 50px;
-    left: 1%;
-    font-size: 20px;
+    top: 65px;
+    left: 30px;
+}
+
+#category {
+    font-size: 40px;
+    margin: 0;
     border-bottom: 2px solid black;
+}
+
+#directory {
+    font-size: 20px;
+    margin: 0;
 }
 
 .container {
     display: flex;
     position: absolute;
-    top: 15%;
-    left: 15%;
-    width: 70%;
-    height: 70%;
+    margin-top: 200px;
+    margin-bottom: 70px;
+    margin-left: 170px;
+    margin-right: 170px;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
     border-radius: 40px;
-    border: 2px solid black;
-    background-color: aqua;
     justify-content: center;
     align-items: center;
     word-break: break-word;
+}
+
+#card-title {
+    position: inherit;
+    left: 20px;
+    top: 10px;
+    font-size: 100px;
+    font-family: "Ink Free";
+    margin: 0;
 }
 
 .rotate {
@@ -48,11 +66,11 @@ html {
 @keyframes left2right {
     49% {
         opacity: 0;
-        margin-left: 60%;
+        transform: translateX(60%);
     }
     50% {
         opacity: 0;
-        margin-left: -60%;
+        transform: translateX(-60%);
     }
 }
 
@@ -64,32 +82,38 @@ html {
 @keyframes right2left {
     49% {
         opacity: 0;
-        margin-left: -60%;
+        transform: translateX(-60%);
     }
     50% {
         opacity: 0;
-        margin-left: 60%;
+        transform: translateX(60%);
     }
 }
 
 .text {
-    font-size: 50px;
+    font-size: min(6vw, 50px);
     padding-left: 20px;
     padding-right: 20px;
 }
 
 .prev {
     position: absolute;
-    top: 50%;
-    left: 8%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    margin-top: 200px;
+    margin-bottom: 70px;
+    height: -webkit-fill-available;
+    left: 50px;
+    align-items: center;
 }
 
 .next {
     position: absolute;
-    top: 50%;
-    left: 92%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    margin-top: 200px;
+    margin-bottom: 70px;
+    height: -webkit-fill-available;
+    right: 50px;
+    align-items: center;
 }
 
 #prev, #next {
@@ -105,9 +129,9 @@ html {
 
 .indicator {
     position: absolute;
-    top: 90%;
+    bottom: 30px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
 }
 
 .clickable {

@@ -5,6 +5,27 @@ window.onload = function(){
         window.location = "/card";
     }
 
+    // // 사이즈에 따른 모양 변화
+    // const prevShape = document.querySelector(".prev");
+    // const nextShape = document.querySelector(".next");
+    // const card = document.querySelector(".container");
+    // function categoryResize(entries) {
+    //     if (entries[0].contentRect.width < 1000) {
+    //         prevShape.style.display = "none";
+    //         nextShape.style.display = "none";
+    //         card.style.marginLeft = "70px";
+    //         card.style.marginRight = "70px";
+    //     }
+    //     else {
+    //         prevShape.style.display = "flex";
+    //         nextShape.style.display = "flex";
+    //         card.style.marginLeft = "170px";
+    //         card.style.marginRight = "170px";
+    //     }
+    // }
+    // const categoryResizeObserver = new ResizeObserver(categoryResize);
+    // categoryResizeObserver.observe(navbar);
+
     // 카테고리 해싱
     let categoryMap = new Map();
     for (let i = 0; i < categoryDto.length; i++) {
@@ -13,24 +34,27 @@ window.onload = function(){
 
     // 카테고리 표시
     const categoryname = document.getElementById("directory");
-    categoryname.innerText = "카테고리 > " + categoryMap.get(dto[0].cid);
+    categoryname.innerText = "> " + categoryMap.get(dto[0].cid);
 
     // 각 종 elements
-    const card = document.querySelector(".container");
-    const text = document.getElementById("text");
-    const question = document.getElementById("question");
-    const answer = document.getElementById("answer");
+    const cardTitle = document.getElementById("card-title");
+    const text = document.getElementById("card-text");
+    const question = document.getElementById("card-question");
+    const answer = document.getElementById("card-answer");
 
     // 카드 클릭 애니메이션
     var check = null;
+    const card = document.querySelector(".container");
     card.addEventListener("click", function () {
         if (check == null){
             card.classList.add("rotate")
             setTimeout(function () {
                 if (text.innerText == question.innerText) {
+                    cardTitle.innerText = "A.";
                     text.innerText = answer.innerText;
                 }
                 else {
+                    cardTitle.innerText = "Q.";
                     text.innerText = question.innerText;
                 }
                 check = null;
@@ -66,6 +90,7 @@ window.onload = function(){
                 card.classList.add("left2right");
                 setTimeout(function () {
                     //텍스트 변환
+                    cardTitle.innerText = "Q.";
                     text.innerText = dto[now -1].question;
                     question.innerText = dto[now - 1].question;
                     answer.innerText = dto[now - 1].answer;
@@ -91,6 +116,7 @@ window.onload = function(){
                 card.classList.add("right2left");
                 setTimeout(function () {
                     //텍스트 변환
+                    cardTitle.innerText = "Q.";
                     text.innerText = dto[now -1].question;
                     question.innerText = dto[now - 1].question;
                     answer.innerText = dto[now - 1].answer;

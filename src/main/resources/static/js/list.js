@@ -69,19 +69,15 @@ function updateModalSubmit(){
                     // dto 및 테이블 내용 수정
                     const temp = document.querySelectorAll(".tableBody")[target];
 
-                    console.log(dto[target]);
                     // dto 수정
                     dto[target].cid = parseInt(updateCategory.value);
                     dto[target].tags = updateTags.value;
                     dto[target].question = updateQuestion.value;
                     dto[target].answer = updateAnswer.value;
 
-                    console.log(dto[target]);
-
                     // 테이블 수정
                     temp.children[1].innerText = categoryMap.get(parseInt(updateCategory.value));
                     temp.children[2].innerText = updateQuestion.value;
-                    temp.children[3].innerText = updateTags.value;
                 }
                 else {
                     alert("수정 실패");
@@ -229,12 +225,6 @@ window.onload = function(){
             new_question.setAttribute("onclick", "text('" + event.detail.id + "')");
             new_question.textContent = event.detail.question;
             new_tr.append(new_question);
-
-            // tags
-            let new_tags = document.createElement("td");
-            new_tags.textContent = event.detail.tags;
-            new_tags.setAttribute("class", "tags");
-            new_tr.append(new_tags);
 
             // update
             let new_update = document.createElement("td");

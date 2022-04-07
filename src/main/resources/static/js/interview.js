@@ -5,24 +5,55 @@ window.onload = function(){
         window.location = "/card";
     }
 
+    // // 사이즈에 따른 모양 변화
+    // const prevShape = document.querySelector(".prev");
+    // const nextShape = document.querySelector(".next");
+    // const card = document.querySelector(".container");
+    // function interviewResize(entries) {
+    //     if (entries[0].contentRect.width < 1000) {
+    //         prevShape.style.display = "none";
+    //         nextShape.style.display = "none";
+    //         card.style.marginLeft = "70px";
+    //         card.style.marginRight = "70px";
+    //     }
+    //     else {
+    //         prevShape.style.display = "flex";
+    //         nextShape.style.display = "flex";
+    //         card.style.marginLeft = "170px";
+    //         card.style.marginRight = "170px";
+    //     }
+    // }
+    // const interviewResizeObserver = new ResizeObserver(interviewResize);
+    // interviewResizeObserver.observe(navbar);
+
     // 문항 수 표시
-    const headTitle = document.querySelector(".headTitle");
-    headTitle.innerText = "Interview (총 문항 수 : " + dto.length + ")";
+    const counter = document.getElementById("counter");
+    counter.innerText = "(문항 수 : " + dto.length + ")";
+
+    // 카테고리 해싱
+    let categoryMap = new Map();
+    for (let i = 0; i < categoryDtoList.length; i++) {
+        categoryMap.set(categoryDtoList[i].cid, categoryDtoList[i].cname);
+    }
 
     // 카드 클릭 애니메이션
-    const card = document.querySelector(".container");
-    const text = document.getElementById("text");
-    const question = document.getElementById("question");
-    const answer = document.getElementById("answer");
+    const cardTitle = document.getElementById("card-title");
+    const text = document.getElementById("card-text");
+    const question = document.getElementById("card-question");
+    const answer = document.getElementById("card-answer");
+    const category = document.getElementById("card-category");
     var check = null;
+    const card = document.querySelector(".container");
     card.addEventListener("click", function () {
         if (check == null){
             card.classList.add("rotate");
             setTimeout(function () {
                 if (text.innerText == question.innerText) {
+                    cardTitle.innerText = "A.";
                     text.innerText = answer.innerText;
                 }
                 else {
+                    cardTitle.innerText = "Q.";
                     text.innerText = question.innerText;
                 }
             }, 500);
@@ -33,20 +64,44 @@ window.onload = function(){
         }
     })
 
-    // 다음 문제 진행 요청
+    // 문항 수 관련 변수
     const min = 0
     var max = dto.length - 1;
     var now = 0
+
+    // 이전 문제 진행 요청
+    const prev = document.getElementById("prev");
+    prev.addEventListener("click", function () {
+
+        if (check == null){
+            now = (now - 1) - (dto.length * Math.floor((now - 1)/dto.length));
+
+            card.classList.add("prevshow");
+            setTimeout(function () {
+                cardTitle.innerText = "Q.";
+                category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
+                text.innerText = dto[now].question;
+                question.innerText = dto[now].question;
+                answer.innerText = dto[now].answer;
+            }, 1000);
+            check = setTimeout(function () {
+                card.classList.remove("prevshow");
+                check = null;
+            }, 2000);
+        }
+    });
+
+    // 다음 문제 진행 요청
     const next = document.getElementById("next");
     next.addEventListener("click", function () {
 
         if (check == null){
-            // 랜덤 추출
             now = (now + 1) % dto.length;
-            console.log(now);
 
             card.classList.add("nextshow");
             setTimeout(function () {
+                cardTitle.innerText = "Q.";
+                category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
                 text.innerText = dto[now].question;
                 question.innerText = dto[now].question;
                 answer.innerText = dto[now].answer;
@@ -72,6 +127,7 @@ window.onload = function(){
 
 
     // 초기 로딩
+    category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
     text.innerText = dto[now].question;
     question.innerText = dto[now].question;
     answer.innerText = dto[now].answer;
@@ -108,7 +164,7 @@ window.onload = function(){
                 // 현재 위치 뒤에 무작위 삽입
                 dto.splice(Math.floor(Math.random() * (dto.length - now)) + now + 1, 0, event.detail);
                 console.log(now, dto);
-                headTitle.innerText = "Interview (총 문항 수 : " + dto.length + ")";
+                counter.innerText = "(문항 수 : " + dto.length + ")";
                 break
             }
         }

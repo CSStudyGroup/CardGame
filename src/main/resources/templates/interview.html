@@ -8,20 +8,28 @@
 </head>
 <body>
     <th:block th:replace="fragment/navigator::navigator"></th:block>
-    <p class="headTitle" id="interview"></p>
-    <div class="container clickable">
-        <p class="text" id="text"></p>
-        <p style="display: none" id="question"></p>
-        <p style="display: none" id="answer"></p>
+    <div class="head-div">
+        <p id="interview">Interview</p>
+        <p id="counter"></p>
+    </div>
+    <div class="card-frame container clickable">
+        <p id="card-title">Q.</p>
+        <p id="card-category">카테고리</p>
+        <p class="text" id="card-text"></p>
+        <p style="display: none" id="card-question"></p>
+        <p style="display: none" id="card-answer"></p>
     </div>
     <div class="finish">
         <button class="clickable" type="button" id="finish">끝내기</button>
     </div>
+    <div class="prev">
+        <button class="clickable" type="button" id="prev"><<</button>
+    </div>
     <div class="next">
-        <button class="clickable" type="button" id="next">다음 문제</button>
+        <button class="clickable" type="button" id="next">>></button>
     </div>
     <dialog class="dialog">
-        <h2 class="caution">정말로 끝내시겠습니까?</h2><br><br>
+        <h2 class="close-caution">정말로 끝내시겠습니까?</h2><br><br>
         <button class="end clickable" type="reset">끝내기</button>
         <button class="cancel clickable" type="reset">취소</button>
     </dialog>
