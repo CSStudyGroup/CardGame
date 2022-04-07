@@ -5,13 +5,18 @@ html {
     border: 0;
 }
 
-#list {
+.head-div {
     position: absolute;
-    top: 20px;
-    left: 3%;
+    top: 65px;
+    left: 30px;
+}
+
+#list {
     font-size: 40px;
+    margin: 0;
     border-bottom: 2px solid black;
 }
+
 
 .container {
     position: absolute;
@@ -57,7 +62,7 @@ tr:hover {
     background-color: white;
 }
 
-.id, .category, .question, .tags {
+.id, .category, .question {
     border-bottom: 1px solid lightgray;
 }
 

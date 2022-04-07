@@ -8,13 +8,15 @@
 </head>
 <body>
     <th:block th:replace="fragment/navigator::navigator"></th:block>
-    <div class="info">
+    <div class="head-div">
+        <p id="category">Category</p>
         <p id="directory"></p>
     </div>
-    <div class="container clickable">
-        <p class="text" id="text"></p>
-        <p style="display: none" id="question"></p>
-        <p style="display: none" id="answer"></p>
+    <div class="card-frame container clickable">
+        <p id="card-title">Q.</p>
+        <p class="text" id="card-text"></p>
+        <p style="display: none" id="card-question"></p>
+        <p style="display: none" id="card-answer"></p>
     </div>
     <div class="prev">
         <button class="clickable" type="button" id="prev"><<</button>

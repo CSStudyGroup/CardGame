@@ -6,27 +6,53 @@ html {
     border: 0;
 }
 
-.headTitle {
+.head-div {
     position: absolute;
-    top: 20px;
-    left: 3%;
+    top: 65px;
+    left: 30px;
+}
+
+#interview {
     font-size: 40px;
+    margin: 0;
     border-bottom: 2px solid black;
+}
+
+#counter {
+    font-size: 20px;
+    margin: 0;
 }
 
 .container {
     display: flex;
     position: absolute;
-    top: 15%;
-    left: 15%;
-    width: 70%;
-    height: 70%;
+    margin-top: 200px;
+    margin-bottom: 70px;
+    margin-left: 170px;
+    margin-right: 170px;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
     border-radius: 40px;
-    border: 2px solid black;
-    background-color: aqua;
     justify-content: center;
     align-items: center;
     word-break: break-word;
+}
+
+#card-title {
+    position: inherit;
+    left: 20px;
+    top: 10px;
+    font-size: 100px;
+    font-family: "Ink Free";
+    margin: 0;
+}
+
+#card-category {
+    position: inherit;
+    right: 30px;
+    top: 30px;
+    font-size: 20px;
+    margin: 0;
 }
 
 .rotate {
@@ -41,36 +67,66 @@ html {
 }
 
 .text {
-    font-size: 50px;
+    font-size: min(6vw, 50px);
     padding-left: 20px;
     padding-right: 20px;
 }
 
-.next {
+.prev {
     position: absolute;
-    bottom: 50px;
-    right: 170px;
+    display: flex;
+    margin-top: 200px;
+    margin-bottom: 70px;
+    height: -webkit-fill-available;
+    left: 50px;
+    align-items: center;
 }
 
-#next {
-    width: 100px;
-    height: 50px;
-    border-radius: 10px;
+.next {
+    position: absolute;
+    display: flex;
+    margin-top: 200px;
+    margin-bottom: 70px;
+    height: -webkit-fill-available;
+    right: 50px;
+    align-items: center;
+}
+
+#prev, #next {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
     border: 0px solid black;
 }
 
-#next:hover {
+#prev:hover, #next:hover {
     background-color: aqua;
+}
+
+@keyframes prevshow {
+    49% {
+        opacity: 0;
+        transform: translateX(60%);
+    }
+    50% {
+        opacity: 0;
+        transform: translateX(-60%);
+    }
+}
+
+.prevshow {
+    animation-name: prevshow;
+    animation-duration: 2s;
 }
 
 @keyframes nextshow {
     49% {
         opacity: 0;
-        margin-left: -60%;
+        transform: translateX(-60%);
     }
     50% {
         opacity: 0;
-        margin-left: 60%;
+        transform: translateX(60%);
     }
 }
 
@@ -81,15 +137,16 @@ html {
 
 .finish {
     position: absolute;
-    bottom: 50px;
+    top: 90px;
     right: 50px;
 }
 
 #finish {
-    width: 100px;
+    width: 80px;
     height: 50px;
     border-radius: 10px;
     border: 0px solid black;
+    box-shadow: 0px 4px 10px 2px lightgray;
 }
 
 #finish:hover {
@@ -102,7 +159,7 @@ html {
     text-align: center;
 }
 
-.caution {
+.close-caution {
     margin-top: 100px;
 }
 
