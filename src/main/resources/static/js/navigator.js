@@ -120,6 +120,20 @@ function interviewCancel() {
     interviewDialog.close();
 }
 
+const navbarSitemapDropdown = document.querySelector('.navbar-dropdown-sitemap');
+let navbarSitemapDropdownTimer;
+function showNavbarSitemapDropdown() {
+    navbarSitemapDropdown.style.display = "block";
+    if (navbarSitemapDropdownTimer) {
+        navbarSitemapDropdownTimer = clearTimeout(navbarSitemapDropdownTimer);
+    }
+}
+function hideNavbarSitemapDropdown() {
+    navbarSitemapDropdownTimer = setTimeout(function(e) {
+        navbarSitemapDropdown.style.display = "none";
+    }, 1);
+}
+
 // 검색
 const searchCriteria = document.querySelector("#searchCriteria");
 const categoryKey = document.querySelector("#categoryKey");
