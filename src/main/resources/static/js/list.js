@@ -6,18 +6,18 @@ let categoryMap;
 
 // 본문 보기
 var target = -1;
-const viewModal = document.getElementById("viewModal");
-const viewId = document.getElementById("viewId");
-const viewCategory = document.getElementById("viewCategory");
-const viewTags = document.getElementById("viewTags");
-const viewQuestion = document.getElementById("viewQuestion");
-const viewAnswer = document.getElementById("viewAnswer");
+const viewModal = document.getElementById("modal-view");
+const modalViewTitleText = document.getElementById("modal-view-title-text");
+const viewCategory = document.getElementById("modal-view-content-category");
+const viewTags = document.getElementById("modal-view-content-tags");
+const viewQuestion = document.getElementById("modal-view-content-question");
+const viewAnswer = document.getElementById("modal-view-content-answer");
 
 function text(id) {
     for (let i = 0; i < dto.length; i++) {
         if (dto[i].id == id) {
-            viewId.innerText = dto[i].id;
-            viewCategory.innerText = categoryMap.get(dto[i].cid);
+            modalViewTitleText.innerText = dto[i].id + "번 카드 내용";
+            viewCategory.innerText = "(" + categoryMap.get(dto[i].cid) + ")";
             viewTags.innerText = dto[i].tags;
             viewQuestion.innerText = dto[i].question;
             viewAnswer.innerText = dto[i].answer;
@@ -32,18 +32,18 @@ function viewModalClose(){
 }
 
 // 수정하기
-const updateModal = document.getElementById("updateModal");
-const updateId = document.getElementById("updateId");
-const updateCategory = document.getElementById("updateCategory");
-const updateTags = document.getElementById("updateTags");
-const updateQuestion = document.getElementById("updateQuestion");
-const updateAnswer = document.getElementById("updateAnswer");
+const updateModal = document.getElementById("modal-update");
+const modalUpdateTitleText = document.getElementById("modal-update-title-text");
+const updateCategory = document.getElementById("modal-update-content-category-select");
+const updateTags = document.getElementById("modal-update-content-tags");
+const updateQuestion = document.getElementById("modal-update-content-question");
+const updateAnswer = document.getElementById("modal-update-content-answer");
 
 function update(id){
     for (let i = 0; i < dto.length; i++) {
         if (dto[i].id == id) {
             target = i;
-            updateId.innerText = dto[i].id;
+            modalUpdateTitleText.innerText = dto[i].id + "번 카드 수정";
             updateCategory.value = dto[i].cid;
             updateTags.value = dto[i].tags;
             updateQuestion.value = dto[i].question;
@@ -90,7 +90,7 @@ function updateModalSubmit(){
     }
     listHttpRequest.open('POST',
         '/card/cardUpdate'
-        + "?id=" + updateId.innerText
+        + "?id=" + dto[target].id
         + "&cid=" + updateCategory.value
         + "&question=" + updateQuestion.value
         + "&answer=" + updateAnswer.value
