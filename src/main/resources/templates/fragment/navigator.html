@@ -7,9 +7,10 @@
             <a href="/card">CS Study</a>
         </div>
         <div class="navbar-menu">
-            <a class="nav-link" onclick="interview()">인터뷰</a>
-            <a class="nav-link" href="/card/management">카테고리 관리</a>
-            <a class="nav-link" onclick="insert()">카드 추가</a>
+            <a class="nav-link" id="nav-link-interview" onclick="interview()">인터뷰</a>
+            <a class="nav-link" id="nav-link-categorymanage" href="/card/management">카테고리 관리</a>
+            <a class="nav-link" id="nav-link-insert" onclick="insert()">카드 추가</a>
+            <a class="nav-link" id="nav-link-sitemap" href="#" onmouseenter="showNavbarSitemapDropdown()" onmouseleave="hideNavbarSitemapDropdown()">사이트맵</a>
         </div>
         <div class="navbar-search">
             <div class="container-search">
@@ -36,6 +37,21 @@
         </div>
         <button class="navbar-narrow-show" onclick="narrowNavbarShow()"></button>
     </nav>
+    <div class="navbar-dropdown-sitemap" onmouseenter="showNavbarSitemapDropdown()" onmouseleave="hideNavbarSitemapDropdown()">
+        <div class="section" id="section-cardgame">
+            <h1>card game inner menu</h1>
+            <div class="slick-slider-sitemap">
+                <button class="btn-sitemap-pre" onclick="alert('pre button')">pre</button>
+                <div class="container-sitemap">
+                    <img src="/img/app_image_cardgame.png">
+                    <img src="/img/app_image_cardgame.png">
+                    <img src="/img/app_image_cardgame.png">
+                    <img src="/img/app_image_cardgame.png">
+                </div>
+                <button class="btn-sitemap-nxt" onclick="alert('nxt button')">nxt</button>
+            </div>
+        </div>
+    </div>
     <dialog id="dialog-interview">
         <h2 class="caution">카테고리 선택</h2>
         <form th:method="get" th:action="@{/card/interview}" id="interviewForm">
