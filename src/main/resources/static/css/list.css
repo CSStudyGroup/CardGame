@@ -74,19 +74,188 @@ tr:hover {
     padding: 0px;
 }
 
-.modal {
+#modal-view .modal-window {
+    background-color: #fcfcfc;
+}
+
+#modal-view .modal-contents {
+    height: 52%;
+}
+
+#modal-view-title-text {
     position: absolute;
-    top: 20%;
-    left: 10%;
-    width: 80%;
-    height: 600px;
-    display: none;
-    border-radius: 40px;
-    border: 1px solid black;
-    background-color: white;
-    padding-top: 30px;
+    top: 20px;
+    left: 20px;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#modal-view-content-category {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    height: 30px;
+    font-size: 20px;
+}
+
+#modal-view-content-qtitle {
+    position: absolute;
+    margin-left: 15px;
+    margin-top: 105px;
+    font-size: 30px;
+    font-family: "Ink Free";
+}
+
+#modal-view-content-atitle {
+    position: absolute;
+    margin-left: 15px;
+    margin-top: 5px;
+    font-size: 30px;
+    font-family: "Ink Free";
+}
+
+#modal-view-content-ttitle {
+    position: absolute;
+    margin-left: 15px;
+    margin-top: 5px;
+    font-size: 30px;
+    font-family: "Ink Free";
+}
+
+.modal-view-content-texts {
+    margin-left: 50px;
+    margin-right: 20px;
     padding-left: 10px;
-    word-wrap: break-word;
+    padding-right: 10px;
+    height: 50px;
+    width: -webkit-fill-available;
+    font-size: 20px;
+    resize: none;
+    background-color: white;
+}
+
+#modal-view-content-question {
+    margin-top: 100px;
+}
+
+#modal-view-content-answer {
+    height: -webkit-fill-available;
+}
+
+#modal-view-content-tags {
+    margin-bottom: 50px;
+}
+
+#modal-view-buttons-close {
+    position: absolute;
+    width: 50px;
+    height: 30px;
+    bottom: 25px;
+    right: 40px;
+    border-radius: 5px;
+    border: 1px solid deepskyblue;
+    background-color: paleturquoise;
+}
+
+#modal-view-buttons-close:hover {
+    background-color: aqua;
+}
+
+#modal-update .modal-window {
+    background-color: #fcfcfc;
+}
+
+#modal-update .modal-contents {
+    height: 52%;
+}
+
+#modal-update-title-text {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#modal-update-content-category {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+}
+
+#modal-update-content-category-select {
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+#modal-update-content-qtitle {
+    position: absolute;
+    margin-left: 15px;
+    margin-top: 105px;
+    font-size: 30px;
+    font-family: "Ink Free";
+}
+
+#modal-update-content-atitle {
+    position: absolute;
+    margin-left: 15px;
+    margin-top: 5px;
+    font-size: 30px;
+    font-family: "Ink Free";
+}
+
+#modal-update-content-ttitle {
+    position: absolute;
+    margin-left: 15px;
+    margin-top: 5px;
+    font-size: 30px;
+    font-family: "Ink Free";
+}
+
+.modal-update-content-input {
+    margin-left: 50px;
+    margin-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 50px;
+    width: -webkit-fill-available;
+    font-size: 20px;
+    resize: none;
+}
+
+#modal-update-content-question {
+    margin-top: 100px;
+}
+
+#modal-update-content-answer {
+    height: -webkit-fill-available;
+}
+
+#modal-update-content-tags {
+    margin-bottom: 50px;
+}
+
+.modal-update-buttons {
+    position: absolute;
+    width: 50px;
+    height: 30px;
+    bottom: 25px;
+    border-radius: 5px;
+    border: 1px solid deepskyblue;
+    background-color: paleturquoise;
+}
+
+#modal-update-buttons-update {
+    right: 110px;
+}
+
+#modal-update-buttons-delete {
+    right: 40px;
+}
+
+.modal-update-buttons:hover {
+    background-color: aqua;
 }
 
 .dialog {
