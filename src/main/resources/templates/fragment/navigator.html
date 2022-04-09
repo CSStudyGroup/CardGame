@@ -38,18 +38,26 @@
         <button class="navbar-narrow-show" onclick="narrowNavbarShow()"></button>
     </nav>
     <div class="navbar-dropdown-sitemap" onmouseenter="showNavbarSitemapDropdown()" onmouseleave="hideNavbarSitemapDropdown()">
-        <div class="section" id="section-cardgame">
-            <h1>card game inner menu</h1>
-            <div class="slick-slider-sitemap">
-                <button class="btn-sitemap-pre" onclick="alert('pre button')">pre</button>
-                <div class="container-sitemap">
-                    <img src="/img/app_image_cardgame.png">
-                    <img src="/img/app_image_cardgame.png">
-                    <img src="/img/app_image_cardgame.png">
-                    <img src="/img/app_image_cardgame.png">
-                </div>
-                <button class="btn-sitemap-nxt" onclick="alert('nxt button')">nxt</button>
+        <h1>Site Map</h1>
+        <div class="slick-slider-sitemap">
+            <div class="container-sitemap-list">
+                <ul class="sitemap-list">
+                    <li class="sitemap-list-item">
+                        <img class="sitemap-img" src="/img/app_image_cardgame.png">
+                    </li>
+                    <li class="sitemap-list-item">
+                        <img class="sitemap-img" src="/img/app_image_cardgame2.png">
+                    </li>
+                    <li class="sitemap-list-item">
+                        <img class="sitemap-img" src="/img/app_image_cardgame3.png">
+                    </li>
+                    <li class="sitemap-list-item">
+                        <img class="sitemap-img" src="/img/app_image_cardgame4.png">
+                    </li>
+                </ul>
             </div>
+            <button class="btn-sitemap-pre" onclick="preItem()">pre</button>
+            <button class="btn-sitemap-nxt" onclick="nxtItem()">nxt</button>
         </div>
     </div>
     <dialog id="dialog-interview">

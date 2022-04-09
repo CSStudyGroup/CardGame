@@ -9,3 +9,12 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: true
+
+  thymeleaf:
+    cache: false
