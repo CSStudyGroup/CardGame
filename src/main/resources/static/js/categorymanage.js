@@ -4,10 +4,12 @@ function categoryDelete(cname){
     // 수정 도중 삭제 버튼을 눌렀을 경우
     if (updateCheck) {
         // 원상 복구
+        const containerBody = document.querySelectorAll(".containerBody");
         const original_name = document.querySelectorAll(".categoryName");
         const input_box = document.querySelectorAll(".newCategoryName");
         const updateButton = document.querySelectorAll(".update");
         const deleteButton = document.querySelectorAll(".delete");
+        containerBody[updateTarget].classList.remove("hover");
         original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
         updateButton[updateTarget].classList.remove("target");
         deleteButton[updateTarget].classList.remove("target");
@@ -23,6 +25,7 @@ function categoryDelete(cname){
         plusMark.innerText = "+";
         inputText.setAttribute("type", "hidden");
         containerLast.classList.add("clickable");
+        containerLast.classList.remove("hover");
         createButton.style.display = "none";
         inputText.value = "";
         insertCheck = false;
@@ -56,6 +59,7 @@ function categoryDelete(cname){
 var updateCheck = false;
 var updateTarget = -1;
 function categoryUpdate(cname){
+    const containerBody = document.querySelectorAll(".containerBody");
     const original_name = document.querySelectorAll(".categoryName");
     const input_box = document.querySelectorAll(".newCategoryName");
     const updateButton = document.querySelectorAll(".update");
@@ -67,6 +71,7 @@ function categoryUpdate(cname){
         plusMark.innerText = "+";
         inputText.setAttribute("type", "hidden");
         containerLast.classList.add("clickable");
+        containerLast.classList.remove("hover");
         createButton.style.display = "none";
         inputText.value = "";
         insertCheck = false;
@@ -76,6 +81,7 @@ function categoryUpdate(cname){
     if (updateCheck && dto[updateTarget].cname != cname) {
         // 원상 복구
         original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+        containerBody[updateTarget].classList.remove("hover");
         updateButton[updateTarget].classList.remove("target");
         deleteButton[updateTarget].classList.remove("target");
         input_box[updateTarget].setAttribute("type", "hidden");
@@ -121,6 +127,7 @@ function categoryUpdate(cname){
         changeSomething();
 
         // 원상 복귀
+        containerBody[updateTarget].classList.remove("hover");
         updateButton[updateTarget].classList.remove("target");
         deleteButton[updateTarget].classList.remove("target");
         input_box[updateTarget].setAttribute("type", "hidden");
@@ -155,11 +162,13 @@ function categoryInsert() {
     // 수정 도중 추가 버튼을 눌렀을 경우
     if (updateCheck) {
         // 원상 복구
+        const containerBody = document.querySelectorAll(".containerBody");
         const original_name = document.querySelectorAll(".categoryName");
         const input_box = document.querySelectorAll(".newCategoryName");
         const updateButton = document.querySelectorAll(".update");
         const deleteButton = document.querySelectorAll(".delete");
         original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+        containerBody[updateTarget].classList.remove("hover");
         updateButton[updateTarget].classList.remove("target");
         deleteButton[updateTarget].classList.remove("target");
         input_box[updateTarget].setAttribute("type", "hidden");
@@ -173,6 +182,7 @@ function categoryInsert() {
         inputText.setAttribute("type", "text");
         createButton.style.display = "block";
         containerLast.classList.remove("clickable");
+        containerLast.classList.add("hover");
         insertCheck = true;
     }
 }
@@ -225,6 +235,17 @@ function createCategory() {
     new_update.setAttribute("onclick", "categoryUpdate('" + inputText.value + "')")
     new_container.append(new_update);
 
+    // 호버 이벤트 추가
+    new_container.addEventListener("mouseenter", function (e) {
+        e.target.classList.add("hover");
+    });
+    new_container.addEventListener("mouseleave", function (e) {
+        if (!e.target.children[2].classList.contains("target")) {
+            e.target.classList.remove("hover");
+            e.target.classList.add("buttons-pop-down");
+        }
+    });
+
     // 새로운 줄 추가
     const container_item = document.querySelector(".container-item");
     const last_item = document.querySelector(".containerLast");
@@ -241,6 +262,7 @@ function createCategory() {
     plusMark.innerText = "+";
     inputText.setAttribute("type", "hidden");
     containerLast.classList.add("clickable");
+    containerLast.classList.remove("hover");
     createButton.style.display = "none";
     inputText.value = "";
 
@@ -278,6 +300,20 @@ function enterEvent (e) {
 
 window.onload = function(){
 
+    // 컨테이너 호버 이벤트
+    const containerbodies = document.querySelectorAll(".containerBody");
+    for (let i = 0; i < containerbodies.length; i++) {
+        containerbodies[i].addEventListener("mouseenter", function (e) {
+            e.target.classList.add("hover");
+        });
+        containerbodies[i].addEventListener("mouseleave", function (e) {
+            if (!e.target.children[2].classList.contains("target")) {
+                e.target.classList.remove("hover");
+                e.target.classList.add("buttons-pop-down");
+            }
+        });
+    }
+
     // 외부 터치 인식
     window.addEventListener("click", function (e) {
         // dialog 체크
@@ -292,6 +328,7 @@ window.onload = function(){
                 plusMark.innerText = "+";
                 inputText.setAttribute("type", "hidden");
                 containerLast.classList.add("clickable");
+                containerLast.classList.remove("hover");
                 createButton.style.display = "none";
                 inputText.value = "";
                 insertCheck = false;
@@ -303,11 +340,13 @@ window.onload = function(){
             const containerBody = document.querySelectorAll(".containerBody");
             if (e.path[e.path.length - 6] != containerBody[updateTarget]) {
                 // 원상 복구
+                const containerBody = document.querySelectorAll(".containerBody");
                 const original_name = document.querySelectorAll(".categoryName");
                 const input_box = document.querySelectorAll(".newCategoryName");
                 const updateButton = document.querySelectorAll(".update");
                 const deleteButton = document.querySelectorAll(".delete");
                 original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+                containerBody[updateTarget].classList.remove("hover");
                 updateButton[updateTarget].classList.remove("target");
                 deleteButton[updateTarget].classList.remove("target");
                 input_box[updateTarget].setAttribute("type", "hidden");
@@ -348,6 +387,7 @@ window.onload = function(){
             plusMark.innerText = "+";
             inputText.setAttribute("type", "hidden");
             containerLast.classList.add("clickable");
+            containerLast.classList.remove("hover");
             createButton.style.display = "none";
             inputText.value = "";
             insertCheck = false;
@@ -356,9 +396,15 @@ window.onload = function(){
         // 수정 도중 저장 버튼을 눌렀을 경우
         if (updateCheck) {
             // 원상 복구
+            const containerBody = document.querySelectorAll(".containerBody");
             const original_name = document.querySelectorAll(".categoryName");
             const input_box = document.querySelectorAll(".newCategoryName");
+            const updateButton = document.querySelectorAll(".update");
+            const deleteButton = document.querySelectorAll(".delete");
             original_name[updateTarget].innerText = dto[updateTarget].cname + " (" + dto[updateTarget].cnt + ")";
+            containerBody[updateTarget].classList.remove("hover");
+            updateButton[updateTarget].classList.remove("target");
+            deleteButton[updateTarget].classList.remove("target");
             input_box[updateTarget].setAttribute("type", "hidden");
             input_box[updateTarget].value = "";
             updateCheck = false;

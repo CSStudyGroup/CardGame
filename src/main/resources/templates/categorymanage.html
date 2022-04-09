@@ -8,7 +8,9 @@
 </head>
 <body>
     <th:block th:replace="fragment/navigator::navigator"></th:block>
-    <p id="title">Category</p>
+    <div class="head-div">
+        <p id="category-manage">Category Manage</p>
+    </div>
     <div class="container-item">
         <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
             <a class="categoryName" th:text="|${categoryDto.cname} (${categoryDto.cnt})|"></a>

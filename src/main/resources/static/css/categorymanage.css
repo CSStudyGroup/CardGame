@@ -5,11 +5,15 @@ html {
     border: 0;
 }
 
-#title {
+.head-div {
     position: absolute;
-    top: 20px;
-    left: 3%;
+    top: 65px;
+    left: 30px;
+}
+
+#category-manage {
     font-size: 40px;
+    margin: 0;
     border-bottom: 2px solid black;
 }
 
@@ -20,40 +24,78 @@ html {
     padding-bottom: 100px;
 }
 
-.containerBody, .containerLast {
+.containerBody {
     margin: 10px;
     --height: 100px;
     height: var(--height);
     border-radius: calc(var(--height) * 0.2);
     border: 2px solid black;
-    background-color: lightgray;
+    background-size: 130% 100%;
+    background-image: linear-gradient(135deg, #e6e6e6, #e6e6e6 75%, aqua 80%, aqua 100%);
 }
 
 .containerLast {
+    margin: 10px;
+    --height: 100px;
+    height: var(--height);
+    border-radius: calc(var(--height) * 0.2);
+    border: 2px solid black;
     text-align: center;
+    background-color: #e6e6e6;
+    transition: background-color 500ms;
 }
 
-.containerBody:hover, .containerLast:hover {
+@keyframes pop-down {
+    0% {
+        background-position: -230px 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+@keyframes pop-up {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -230px 0;
+    }
+}
+
+.buttons-pop-down {
+    animation: pop-down 0.5s ease forwards;
+}
+
+.containerBody:hover {
+    animation: pop-up 0.5s ease forwards;
+}
+
+.containerBody.hover {
+    animation: pop-up 0.5s ease forwards;
+}
+
+.containerLast:hover {
     background-color: aqua;
 }
 
-.containerBody:hover .update {
-    display: block;
+.containerLast.hover {
+    background-color: aqua;
 }
 
-.containerBody:hover .delete {
-    display: block;
+.containerBody:hover .update, .containerBody:hover .delete {
+    opacity: 1;
 }
 
 .update, .delete {
-    display: none;
+    opacity: 0;
     float: right;
     margin-top: 25px;
     margin-right: 25px;
+    transition: opacity 500ms;
 }
 
 .target {
-    display: block;
+    opacity: 1;
 }
 
 .categoryName{
@@ -66,6 +108,7 @@ html {
 .newCategoryName {
     font-size: 40px;
     margin-top: 23px;
+    width: calc(100% - 300px);
 }
 
 #newCategoryName {
