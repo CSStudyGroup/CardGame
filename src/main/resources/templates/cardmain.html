@@ -5,20 +5,18 @@
     <link rel="stylesheet" th:href="@{/css/cardmain.css(ver=${#calendars.createNow()})}">
     <script defer th:src="@{/js/cardmain.js(ver=${#calendars.createNow()})}"></script>
 </head>
-
 <body>
-<th:block th:replace="fragment/navigator::navigator"></th:block>
-<div class="cardmain-body">
-    <div class="category-container">
-        <div class="card-category-frame" th:each="categoryDto: ${ categoryDtoList }"
-             th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.cid }'|">
-            <div class="card-frame card-category">
-                <p class="category-name" th:text="${ categoryDto.cname }"></p>
-                <p class="category-count" th:text="${ categoryDto.cnt }"></p>
+    <th:block th:replace="fragment/navigator::navigator"></th:block>
+    <div class="cardmain-body">
+        <div class="category-container">
+            <div class="card-category-frame" th:each="categoryDto: ${ categoryDtoList }"
+                 th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.cid }'|">
+                <div class="card-frame card-category">
+                    <p class="category-name" th:text="${ categoryDto.cname }"></p>
+                    <p class="category-count" th:text="${ categoryDto.cnt }"></p>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 </body>
 </html>

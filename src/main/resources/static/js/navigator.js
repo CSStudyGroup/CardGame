@@ -180,3 +180,52 @@ function searchEnterKey(e) {
         search();
     }
 }
+
+
+/* slick slider 구현 */
+const sitemapList = document.querySelector('.sitemap-list');
+const sitemapListItems = document.querySelectorAll('.sitemap-list-item');
+const lastIndex = sitemapListItems.length - 1;
+let selected = 0;
+
+function setTransition(value) {
+    sitemapList.style.transition = value;
+}
+
+function setTranslate({index, reset}) {
+    if (reset) {
+        sitemapList.style.transform = `translate(0, 0)`;
+    }
+    else {
+        sitemapList.style.transform = `translate(-${(index) * 260}px, 0)`;
+    }
+}
+
+
+function preItem() {
+    console.log("이전");
+    selected -= 1;
+    setTransition('transform 0.3s linear');
+    setTranslate({ index: selected });
+    if (selected < 0) {
+        selected = 0;
+        setTimeout(()=>{
+            setTransition('');
+            setTranslate({ reset: true });
+        }, 300);
+    }
+}
+
+function nxtItem() {
+    console.log("다음");
+    selected += 1;
+    setTransition('transform 0.3s linear');
+    setTranslate({ index: selected });
+    if (selected > lastIndex) {
+        selected = 0;
+        setTimeout(()=>{
+            setTransition('');
+            setTranslate({ reset: true });
+        }, 300);
+    }
+}
