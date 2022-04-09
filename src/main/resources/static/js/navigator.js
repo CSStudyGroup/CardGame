@@ -33,11 +33,11 @@ function narrowNavbarHide() {
 }
 
 // 카드 추가를 위한 element
-const insertModal = document.querySelector("#insertModal");
-const insertCategory = document.querySelector("#insertCategory");
-const insertTags = document.querySelector("#insertTags");
-const insertQuestion = document.querySelector("#insertQuestion");
-const insertAnswer = document.querySelector("#insertAnswer");
+const insertModal = document.querySelector("#modal-insert");
+const insertCategory = document.querySelector("#modal-insert-content-category-select");
+const insertTags = document.querySelector("#modal-insert-content-tags");
+const insertQuestion = document.querySelector("#modal-insert-content-question");
+const insertAnswer = document.querySelector("#modal-insert-content-answer");
 
 function insert() {
     insertCategory.value = "none";

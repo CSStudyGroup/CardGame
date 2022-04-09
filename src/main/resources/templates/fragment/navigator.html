@@ -66,33 +66,42 @@
         <button id="interviewFormSubmit" onclick="interviewSubmit()">시작</button>
         <button id="interviewCancel" onclick="interviewCancel()">취소</button>
     </dialog>
-    <div th:replace="fragment/modal::modalFragment(modalId='insertModal',
-        title=~{::.navModalTitle},
-        content=~{::.navModalContent},
-        buttons=~{::.navModalButtons},
+    <div th:replace="fragment/modal::modalFragment(modalId='modal-insert',
+        title=~{::.modal-insert-title},
+        content=~{::.modal-insert-content},
+        buttons=~{::.modal-insert-buttons},
         closeButton=false,
         escClose=true,
         outClose=true)">
-        <th:block class="navModalTitle">
-             <h1>카드 추가</h1>
+        <th:block class="modal-insert-title">
+            <a id="modal-insert-title-text">카드 추가</a>
         </th:block>
-        <th:block class="navModalContent">
-             <h3 style="display: inline">장르 : </h3>
-             <form style="display: inline">
-                 <select id="insertCategory">
-                     <option value="none" selected disabled hidden>===선택===</option>
-                     <th:block th:each="categoryDto: ${ categoryDtoList }">
-                         <option th:value="${ categoryDto.cid }" th:text="${ categoryDto.cname }"></option>
-                     </th:block>
-                 </select>
-             </form><br><br>
-             <h3 style="display: inline">태그 : </h3><input type="text" id="insertTags" style="display: inline"><br><br>
-             <h3 style="display: inline">질문 : </h3><input type="text" id="insertQuestion" style="display: inline"><br><br>
-             <h3 style="display: inline">답변 : </h3><input type="text" id="insertAnswer" style="display: inline"><br><br>
+        <th:block class="modal-insert-content">
+            <form id="modal-insert-content-category">
+                <select id="modal-insert-content-category-select">
+                    <option value="none" selected disabled hidden>===선택===</option>
+                    <option th:each="categoryDto : ${categoryDtoList}"
+                            th:value="${categoryDto.cid}"
+                            th:text="${categoryDto.cname}"></option>
+                </select>
+            </form>
+            <a id="modal-insert-content-qtitle">Q.</a>
+            <textarea maxlength="200" class="modal-insert-content-input"
+                      id="modal-insert-content-question"></textarea>
+            <a id="modal-insert-content-atitle">A.</a>
+            <textarea maxlength="800" class="modal-insert-content-input"
+                      id="modal-insert-content-answer"></textarea>
+            <a id="modal-insert-content-ttitle">T.</a>
+            <textarea maxlength="210" class="modal-insert-content-input"
+                      id="modal-insert-content-tags"></textarea>
         </th:block>
-        <th:block class="navModalButtons">
-            <button type="button" onclick="insertModalSubmit()">추가</button>
-            <button type="button" onclick="insertModalClose()">닫기</button>
+        <th:block class="modal-insert-buttons">
+            <button class="clickable modal-insert-buttons" type="button"
+                    id="modal-insert-buttons-update"
+                    onclick="insertModalSubmit()">추가</button>
+            <button class="clickable modal-insert-buttons" type="button"
+                    id="modal-insert-buttons-close"
+                    onclick="insertModalClose()">닫기</button>
         </th:block>
     </div>
     <div class="navbar-narrow-overlay" onclick="narrowNavbarHide()"></div>
