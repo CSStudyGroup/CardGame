@@ -86,7 +86,7 @@ function insertModalClose(){
 }
 
 // 인터뷰 링크
-const interviewDialog = document.querySelector("#dialog-interview");
+const interviewDialog = document.querySelector(".dialog-interview");
 
 function interview() {
     if (typeof interviewDialog.showModal === 'function') {
@@ -96,12 +96,13 @@ function interview() {
     }
 }
 
-const interviewForm = document.querySelector("#interviewForm");
+const interviewForm = document.querySelector(".form-interview");
+const checkList = document.querySelectorAll(".interview-category-checkbox");
 function interviewSubmit() {
     let check = 0;
     let count = 0;
-    for(let i=0; i<interviewForm.childElementCount; i++) {
-        if (interviewForm.children[i].firstElementChild.checked) {
+    for(let i=0; i<checkList.length; i++) {
+        if (checkList[i].checked) {
             check = true;
             count += categoryDtoList[i].cnt;
         }
@@ -118,20 +119,6 @@ function interviewSubmit() {
 }
 function interviewCancel() {
     interviewDialog.close();
-}
-
-const navbarSitemapDropdown = document.querySelector('.navbar-dropdown-sitemap');
-let navbarSitemapDropdownTimer;
-function showNavbarSitemapDropdown() {
-    navbarSitemapDropdown.style.display = "block";
-    if (navbarSitemapDropdownTimer) {
-        navbarSitemapDropdownTimer = clearTimeout(navbarSitemapDropdownTimer);
-    }
-}
-function hideNavbarSitemapDropdown() {
-    navbarSitemapDropdownTimer = setTimeout(function(e) {
-        navbarSitemapDropdown.style.display = "none";
-    }, 1);
 }
 
 // 검색
@@ -181,51 +168,75 @@ function searchEnterKey(e) {
     }
 }
 
-
-/* slick slider 구현 */
+/* 사이트맵 드롭다운  */
+const navbarSitemapDropdown = document.querySelector('.navbar-dropdown-sitemap');
+const navbarSitemapDropdownOverlay = document.querySelector('.dropdown-overlay');
 const sitemapList = document.querySelector('.sitemap-list');
 const sitemapListItems = document.querySelectorAll('.sitemap-list-item');
-const lastIndex = sitemapListItems.length - 1;
-let selected = 0;
+const sitemapPreButton = document.querySelector('#btn-sitemap-pre');
+const sitemapNxtButton = document.querySelector('#btn-sitemap-nxt');
+let navbarSitemapDropdownTimer;
+let selectedIndex = {
+    _value: 0,
+    _minBound: 0,
+    _maxBound: sitemapListItems.length - 1,
+    get value() {
+        return this._value;
+    },
+    set value(v) {
+        if (v < this._minBound) {
+            this._value = this._minBound;
+        }
+        else if (v > this._maxBound) {
+            this._value = this._maxBound;
+        }
+        this._value = v;
+        setTransition('transform 0.3s linear');
+        setTranslate(this._value);
+        if (this._value == this._minBound) {
+            sitemapPreButton.style.visibility = 'hidden';
+        }
+        else {
+            sitemapPreButton.style.visibility = 'visible';
+        }
+        if (this._value == this._maxBound) {
+            sitemapNxtButton.style.visibility = 'hidden';
+        }
+        else {
+            sitemapNxtButton.style.visibility = 'visible';
+        }
+    }
+};
 
 function setTransition(value) {
     sitemapList.style.transition = value;
 }
 
-function setTranslate({index, reset}) {
-    if (reset) {
-        sitemapList.style.transform = `translate(0, 0)`;
-    }
-    else {
-        sitemapList.style.transform = `translate(-${(index) * 260}px, 0)`;
+function setTranslate(index) {
+    sitemapList.style.transform = `translate(-${(index) * 260}px, 0)`;
+}
+
+function showNavbarSitemapDropdown() {
+    selectedIndex.value = 0;
+    navbarSitemapDropdownOverlay.style.display='block';
+    navbarSitemapDropdown.classList.add('dropdown-open');
+    if (navbarSitemapDropdownTimer) {
+        navbarSitemapDropdownTimer = clearTimeout(navbarSitemapDropdownTimer);
     }
 }
 
+function hideNavbarSitemapDropdown() {
+    navbarSitemapDropdownTimer = setTimeout(function(e) {
+        navbarSitemapDropdownOverlay.style.display='none';
+        navbarSitemapDropdown.classList.remove('dropdown-open');
+    }, 1);
+}
 
+/* slick slider 구현 */
 function preItem() {
-    console.log("이전");
-    selected -= 1;
-    setTransition('transform 0.3s linear');
-    setTranslate({ index: selected });
-    if (selected < 0) {
-        selected = 0;
-        setTimeout(()=>{
-            setTransition('');
-            setTranslate({ reset: true });
-        }, 300);
-    }
+    selectedIndex.value -= 1;
 }
 
 function nxtItem() {
-    console.log("다음");
-    selected += 1;
-    setTransition('transform 0.3s linear');
-    setTranslate({ index: selected });
-    if (selected > lastIndex) {
-        selected = 0;
-        setTimeout(()=>{
-            setTransition('');
-            setTranslate({ reset: true });
-        }, 300);
-    }
+    selectedIndex.value += 1;
 }
