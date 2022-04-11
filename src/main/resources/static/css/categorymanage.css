@@ -7,21 +7,19 @@ html {
 
 .head-div {
     position: absolute;
-    top: 65px;
-    left: 30px;
+    padding-top: 85px;
+    left: 40px;
 }
 
 #category-manage {
-    font-size: 40px;
+    font-size: 30px;
     margin: 0;
-    border-bottom: 2px solid black;
+    font-weight: bold;
+    font-family: Arial;
 }
 
 .container-item {
-    padding-top: 165px;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-bottom: 100px;
+    padding: 165px 10% 100px;
 }
 
 .containerBody {
@@ -29,9 +27,9 @@ html {
     --height: 100px;
     height: var(--height);
     border-radius: calc(var(--height) * 0.2);
-    border: 2px solid black;
-    background-size: 130% 100%;
-    background-image: linear-gradient(135deg, #e6e6e6, #e6e6e6 75%, aqua 80%, aqua 100%);
+    box-shadow: 3px 3px 5px 2px rgba(173, 174, 174, 0.6);
+    background-size: calc(100% + 300px) 100%;
+    background-image: linear-gradient(135deg, white, white calc(100% - 240px), #E78FFF calc(100% - 200px), #E78FFF 100%);
 }
 
 .containerLast {
@@ -39,9 +37,9 @@ html {
     --height: 100px;
     height: var(--height);
     border-radius: calc(var(--height) * 0.2);
-    border: 2px solid black;
+    box-shadow: 3px 3px 5px 2px rgba(173, 174, 174, 0.6);
     text-align: center;
-    background-color: #e6e6e6;
+    background-color: white;
     transition: background-color 500ms;
 }
 
@@ -75,11 +73,11 @@ html {
 }
 
 .containerLast:hover {
-    background-color: aqua;
+    background-color: #E78FFF;
 }
 
 .containerLast.hover {
-    background-color: aqua;
+    background-color: #E78FFF;
 }
 
 .containerBody:hover .update, .containerBody:hover .delete {
@@ -99,16 +97,16 @@ html {
 }
 
 .categoryName{
-    font-size: 40px;
+    font-size: 30px;
     float: left;
-    margin-top: 20px;
+    margin-top: 25px;
     margin-left: 50px;
 }
 
 .newCategoryName {
-    font-size: 40px;
-    margin-top: 23px;
-    width: calc(100% - 300px);
+    font-size: 30px;
+    margin-top: 28px;
+    width: calc(100% - 240px);
 }
 
 #newCategoryName {
@@ -141,14 +139,14 @@ html {
     --height: 50px;
     height: var(--height);
     border-radius: calc(var(--height) * 0.2);
-    border: 0px solid black;
+    border: 0 solid black;
     font-weight: bold;
-    background-color: skyblue;
-    box-shadow: 0px 4px 10px 2px lightgray;
+    background-color: #F7DFFF;
+    box-shadow: 0 4px 10px 2px lightgray;
 }
 
 #save:hover {
-    background-color: aqua;
+    background-color: #E78FFF;
 }
 
 .savepopup {
@@ -176,8 +174,4 @@ html {
 
 .cancel {
     margin-left: 20px;
-}
-
-.clickable {
-    cursor: pointer;
 }
