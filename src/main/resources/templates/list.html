@@ -15,10 +15,10 @@
         <table class="table" style="table-layout: fixed">
             <tr class="head">
                 <th width="10%">ID</th>
-                <th width="22%">Category</th>
-                <th width="55%">Question</th>
-                <th width="30px" class="noline"></th>
-                <th width="30px" class="noline"></th>
+                <th width="30%">Category</th>
+                <th width="60%">Question</th>
+                <th th:width="45px" class="noline"></th>
+                <th th:width="35px" class="noline"></th>
             </tr>
             <tr class="tableBody" th:each="cardDto : ${cardDtoList}">
                 <td class="id"
@@ -29,7 +29,7 @@
                     th:attr="onclick=|text('${cardDto.id}')|"
                     th:text="${cardDto.question}"></td>
                 <td class="update">
-                    <img class="clickable" height="30px" width="auto"
+                    <img class="clickable" height="30px" width="auto" style="margin-left: 10px"
                          th:attr="onclick=|update('${cardDto.id}')|"
                          th:src="@{/img/edit_image.png}">
                 </td>

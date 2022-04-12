@@ -8,18 +8,19 @@ html {
 
 .head-div {
     position: absolute;
-    top: 65px;
-    left: 30px;
+    padding-top: 85px;
+    left: 40px;
 }
 
 #category {
-    font-size: 40px;
+    font-size: 30px;
     margin: 0;
-    border-bottom: 2px solid black;
+    font-weight: bold;
+    font-family: Arial;
 }
 
 #directory {
-    font-size: 20px;
+    font-size: 18px;
     margin: 0;
 }
 
@@ -38,6 +39,7 @@ html {
     justify-content: center;
     align-items: center;
     word-break: break-word;
+    text-align: center;
 }
 
 #card-title {
@@ -62,7 +64,7 @@ html {
 
 .left2right {
     animation-name: left2right;
-    animation-duration: 2s;
+    animation-duration: 1s;
 }
 
 @keyframes left2right {
@@ -78,7 +80,7 @@ html {
 
 .right2left {
     animation-name: right2left;
-    animation-duration: 2s;
+    animation-duration: 1s;
 }
 
 @keyframes right2left {
@@ -119,14 +121,18 @@ html {
 }
 
 #prev, #next {
+    display: flex;
     width: 70px;
     height: 70px;
     border-radius: 35px;
     border: 0px solid black;
+    align-items: center;
+    justify-content: center;
+    background: none;
 }
 
 #prev:hover, #next:hover {
-    background-color: aqua;
+    background-color: var(--point-color);
 }
 
 .indicator {
@@ -134,4 +140,8 @@ html {
     bottom: 30px;
     left: 50%;
     transform: translate(-50%, 0);
+}
+
+.indicator text {
+    font-size: 18px;
 }

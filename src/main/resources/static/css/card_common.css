@@ -37,3 +37,9 @@
     background-color: white;
     z-index: 201;
 }
+
+/* variable */
+:root {
+    --main-color: #F7DFFF;
+    --point-color: #E78FFF;
+}

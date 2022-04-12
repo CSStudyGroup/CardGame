@@ -23,10 +23,14 @@
         <button class="clickable" type="button" id="finish">끝내기</button>
     </div>
     <div class="prev">
-        <button class="clickable" type="button" id="prev"><<</button>
+        <button class="clickable" type="button" id="prev">
+            <img th:src="@{/img/arrow_left_image.png}" height="30px" style="margin-right: 7px">
+        </button>
     </div>
     <div class="next">
-        <button class="clickable" type="button" id="next">>></button>
+        <button class="clickable" type="button" id="next">
+            <img th:src="@{/img/arrow_right_image.png}" height="30px" style="margin-left: 7px">
+        </button>
     </div>
     <dialog class="dialog">
         <h2 class="close-caution">정말로 끝내시겠습니까?</h2><br><br>
