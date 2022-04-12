@@ -94,11 +94,11 @@ window.onload = function(){
                     text.innerText = dto[now -1].question;
                     question.innerText = dto[now - 1].question;
                     answer.innerText = dto[now - 1].answer;
-                }, 1000);
+                }, 500);
                 check = setTimeout(function () {
                     card.classList.remove("left2right")
                     check = null;
-                }, 2000);
+                }, 1000);
             }
         }
     });
@@ -120,11 +120,11 @@ window.onload = function(){
                     text.innerText = dto[now -1].question;
                     question.innerText = dto[now - 1].question;
                     answer.innerText = dto[now - 1].answer;
-                }, 1000);
+                }, 500);
                 check = setTimeout(function () {
                     card.classList.remove("right2left")
                     check = null;
-                }, 2000);
+                }, 1000);
             }
         }
     });

@@ -23,9 +23,11 @@
                  th:src="@{/img/edit_image.png}">
         </div>
         <div class="insert containerLast clickable" onclick="categoryInsert()">
-            <a class="insert" id="plusMark">+</a>
+            <img class="insert" id="plusMark" th:src="@{/img/add_image.png}" height="50px">
             <input type="hidden" class="insert newCategoryName" id="newCategoryName" onkeyup="enterEvent(event)">
-            <button class="insert clickable" type="button" id="createCategory" onclick="createCategory()">추가</button>
+            <button class="insert clickable" type="button" id="createCategory" onclick="createCategory()">
+                <img class="insert" th:src="@{/img/add_image.png}" height="50px">
+            </button>
         </div>
     </div>
     <div class="save">

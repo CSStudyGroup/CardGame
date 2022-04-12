@@ -83,11 +83,11 @@ window.onload = function(){
                 text.innerText = dto[now].question;
                 question.innerText = dto[now].question;
                 answer.innerText = dto[now].answer;
-            }, 1000);
+            }, 500);
             check = setTimeout(function () {
                 card.classList.remove("prevshow");
                 check = null;
-            }, 2000);
+            }, 1000);
         }
     });
 
@@ -105,11 +105,11 @@ window.onload = function(){
                 text.innerText = dto[now].question;
                 question.innerText = dto[now].question;
                 answer.innerText = dto[now].answer;
-            }, 1000);
+            }, 500);
             check = setTimeout(function () {
                 card.classList.remove("nextshow");
                 check = null;
-            }, 2000);
+            }, 1000);
         }
     });
 

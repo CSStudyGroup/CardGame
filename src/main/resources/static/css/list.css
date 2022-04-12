@@ -7,16 +7,16 @@ html {
 
 .head-div {
     position: absolute;
-    top: 65px;
-    left: 30px;
+    padding-top: 85px;
+    left: 40px;
 }
 
 #list {
-    font-size: 40px;
+    font-size: 30px;
     margin: 0;
-    border-bottom: 2px solid black;
+    font-weight: bold;
+    font-family: Arial;
 }
-
 
 .container {
     position: absolute;
@@ -153,12 +153,12 @@ tr:hover {
     bottom: 25px;
     right: 40px;
     border-radius: 5px;
-    border: 1px solid deepskyblue;
-    background-color: paleturquoise;
+    border: 1px solid rgba(200, 200, 200, 0.3);
+    background-color: var(--main-color);
 }
 
 #modal-view-buttons-close:hover {
-    background-color: aqua;
+    background-color: var(--point-color);
 }
 
 #modal-update .modal-window {
@@ -242,8 +242,8 @@ tr:hover {
     height: 30px;
     bottom: 25px;
     border-radius: 5px;
-    border: 1px solid deepskyblue;
-    background-color: paleturquoise;
+    border: 1px solid rgba(200, 200, 200, 0.3);
+    background-color: var(--main-color);
 }
 
 #modal-update-buttons-update {
@@ -255,7 +255,7 @@ tr:hover {
 }
 
 .modal-update-buttons:hover {
-    background-color: aqua;
+    background-color: var(--point-color);
 }
 
 .dialog {
