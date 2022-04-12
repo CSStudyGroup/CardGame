@@ -10,9 +10,9 @@
             <a class="nav-link" id="nav-link-insert" onclick="insert()">카드 추가</a>
             <a class="nav-link" id="nav-link-sitemap" href="#" onmouseenter="showNavbarSitemapDropdown()" onmouseleave="hideNavbarSitemapDropdown()">사이트맵</a>
         </div>
-        <div class="navbar-search">
-            <div class="container-search">
-                <select id="searchCriteria">
+        <div class="navbar-search-container">
+            <div class="navbar-search">
+                <select id="search-criteria">
                     <option value="category">
                         카테고리
                     </option>
@@ -23,8 +23,8 @@
                         질문
                     </option>
                 </select>
-                <input type="text" id="searchKeyword" onkeyup="searchEnterKey(event)"/>
-                <button id="btn-search" onclick="search()">검색</button>
+                <input type="text" id="search-keyword" onkeyup="searchEnterKey(event)"/>
+                <button class="clickable" id="btn-search" onclick="search()"></button>
             </div>
             <form id="searchForm" method="get" action="/card/list">
                 <input type="hidden" name="tag" id="tagKey">
@@ -33,7 +33,7 @@
                 <input type="hidden" name="keystring" id="keystring">
             </form>
         </div>
-        <button class="navbar-narrow-show" onclick="narrowNavbarShow()"></button>
+        <button class="navbar-narrow-show clickable" onclick="narrowNavbarShow()"></button>
     </nav>
     <div class="dropdown-overlay"></div>
     <div class="navbar-dropdown-sitemap" onmouseenter="showNavbarSitemapDropdown()" onmouseleave="hideNavbarSitemapDropdown()">
@@ -115,14 +115,22 @@
         <div class="navbar-narrow-container">
             <div class="navbar-narrow-box">
                 <ul class="list-nav-link">
-                    <li onclick="interview()">
-                        인터뷰
+                    <li class="clickable" onclick="interview()">
+                        <div><span>인터뷰</span></div>
                     </li>
-                    <li onclick="location.href='/card/management'">
-                        카테고리 관리
+                    <li class="clickable" onclick="location.href='/card/management'">
+                        <div><span>카테고리 관리</span></div>
                     </li>
-                    <li onclick="insert()">
-                        카드 추가
+                    <li class="clickable" onclick="insert()">
+                        <div><span>카드 추가</span></div>
+                    </li>
+                    <li class="clickable" onclick="this.classList.toggle('nav-link-open')">
+                        <div><span>사이트맵</span><span class="drop-mark"></span></div>
+                        <ul>
+                            <li class="clickable" onclick="location.href='/card'">
+                                <div>Card Study</div>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
