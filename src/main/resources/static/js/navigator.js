@@ -122,12 +122,12 @@ function interviewCancel() {
 }
 
 // 검색
-const searchCriteria = document.querySelector("#searchCriteria");
+const searchCriteria = document.querySelector("#search-criteria");
 const categoryKey = document.querySelector("#categoryKey");
 const tagKey = document.querySelector("#tagKey");
 const questionKey = document.querySelector("#questionKey");
 const searchForm = document.querySelector("#searchForm");
-const searchKeyword = document.querySelector("#searchKeyword");
+const searchKeyword = document.querySelector("#search-keyword");
 const keyString = document.querySelector('#keystring');
 
 // 검색 결과 표시 페이지일 경우(list) 키워드 표시
