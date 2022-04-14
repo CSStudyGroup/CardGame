@@ -234,15 +234,16 @@ body {
 
 .navbar-dropdown-sitemap {
     position: fixed;
-    padding-top: 45px;
+    margin-top: 55px;
     padding-left: 10px;
     padding-right: 10px;
     width: calc(100% - 20px);;
     height: 350px;
     top: -360px;
     z-index: 99;
-    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 60%, rgba(247,223,255,1) 80%);
+    background: white;
     transition: top 0.3s ease-out;
+    border-top: 1px solid var(--point-color);
 }
 .navbar-dropdown-sitemap > * {
     opacity: 0;
