@@ -53,9 +53,17 @@ function insert() {
 }
 
 function insertModalSubmit(){
-    // 필수내용 작성 X
-    if (insertCategory.value == 'none' || insertQuestion.value == 'none' || insertAnswer.value == 'none') {
-        alert('몬가... 몬가비어있음...');
+    // 필수내용 작성 확인
+    if (insertCategory.value == 'none') {
+        alert('카테고리를 선택해주세요.');
+        return;
+    }
+    if (insertQuestion.value.trim() == '') {
+        alert('질문을 입력해주세요.');
+        return;
+    }
+    if (insertAnswer.value.trim() == '') {
+        alert('답변을 입력해주세요.');
         return;
     }
 
