@@ -1,5 +1,8 @@
 .cardmain-body {
-    padding-top: 65px;
+    height: calc(100vh - 95px);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    overflow-y: overlay;
 }
 
 .category-container {
@@ -18,22 +21,18 @@
     width: 200px;
     height: 100px;
     border-radius: 20px;
-    margin-top: 10px;
     padding: 5px;
 }
 
 .card-category:hover {
     filter: brightness(80%);
-    width: 200px;
-    height: 100px;
-    border-radius: 20px;
-    margin-top: 10px;
-    padding: 5px;
 }
+
 .category-name {
     text-align: center;
     font-weight: bold;
 }
+
 .category-count {
     text-align: right;
 }
