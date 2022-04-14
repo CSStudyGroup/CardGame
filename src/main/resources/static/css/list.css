@@ -258,20 +258,21 @@ tr:hover {
     background-color: var(--point-color);
 }
 
-.dialog {
-    width: 450px;
-    height: 300px;
+#modal-delete .modal-window {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(500px, 80%);
+    height: min(300px, 25%);
     text-align: center;
 }
-
 .delete-caution {
-    margin-top: 100px;
+    margin-top: min(90px, 20%);
 }
-
 .remove {
-    margin-right: 10px;
+    margin-top: min(60px, 10%);
+    margin-right: 20px;
 }
-
 .cancel {
-    margin-left: 10px;
+    margin-left: 20px;
 }

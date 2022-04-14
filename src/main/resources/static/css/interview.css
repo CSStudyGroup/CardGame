@@ -1,10 +1,10 @@
 html {
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
     margin: 0;
     padding: 0;
     border: 0;
 }
+
 
 .head-div {
     position: absolute;
@@ -162,20 +162,21 @@ html {
     background-color: var(--point-color);
 }
 
-.dialog {
-    width: 400px;
-    height: 300px;
+#modal-close .modal-window {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(450px, 80%);
+    height: min(300px, 25%);
     text-align: center;
 }
-
 .close-caution {
-    margin-top: 100px;
+    margin-top: min(90px, 20%);
 }
-
 .end {
-    margin-right: 10px;
+    margin-top: min(60px, 10%);
+    margin-right: 20px;
 }
-
 .cancel {
-    margin-left: 10px;
+    margin-left: 20px;
 }
