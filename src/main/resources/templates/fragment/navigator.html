@@ -33,8 +33,12 @@
                 <input type="hidden" name="keystring" id="keystring">
             </form>
         </div>
+        <button class="navbar-search-show clickable" onclick="navbarSearchShow()"></button>
         <button class="navbar-narrow-show clickable" onclick="narrowNavbarShow()"></button>
     </nav>
+    <div class="navbar-search-dropdown">
+
+    </div>
     <div class="dropdown-overlay"></div>
     <div class="navbar-dropdown-sitemap" onmouseenter="showNavbarSitemapDropdown()" onmouseleave="hideNavbarSitemapDropdown()">
         <h1>Site Map</h1>
@@ -50,25 +54,37 @@
             <button id="btn-sitemap-nxt" onclick="nxtItem()">다음</button>
         </div>
     </div>
-    <dialog class="dialog-interview">
-        <h2 class="caution">카테고리 선택</h2>
-        <form th:method="get" th:action="@{/card/interview}" class="form-interview">
-            <th:block th:each="categoryDto: ${ categoryDtoList }">
-                <input class="interview-category-checkbox"
-                       th:id="${ #ids.seq('interview-category-checkbox-') }"
-                       type="checkbox"
-                       name="keyword"
-                       th:value="${ categoryDto.cid }">
-                <label class="interview-category-item clickable"
-                       th:for="${ #ids.prev('interview-category-checkbox-') }">
-                    <span class="interview-category-checkview"></span>
-                    <span th:text="${ categoryDto.cname }"></span>
-                </label>
-            </th:block>
-        </form>
-        <button id="interviewFormSubmit" onclick="interviewSubmit()">시작</button>
-        <button id="interviewCancel" onclick="interviewCancel()">취소</button>
-    </dialog>
+    <div th:replace="fragment/modal::modalFragment(modalId='modal-interview',
+        title=~{::.modal-interview-title},
+        content=~{::.modal-interview-content},
+        buttons=~{::.modal-interview-buttons},
+        closeButton=false,
+        escClose=true,
+        outClose=true)">
+        <th:block class="modal-interview-title">
+            <h2 class="caution">카테고리 선택</h2>
+        </th:block>
+        <th:block class="modal-interview-content">
+            <form th:method="get" th:action="@{/card/interview}" class="form-interview">
+                <th:block th:each="categoryDto: ${ categoryDtoList }">
+                    <input class="interview-category-checkbox"
+                           th:id="${ #ids.seq('interview-category-checkbox-') }"
+                           type="checkbox"
+                           name="keyword"
+                           th:value="${ categoryDto.cid }">
+                    <label class="interview-category-item clickable"
+                           th:for="${ #ids.prev('interview-category-checkbox-') }">
+                        <span class="interview-category-checkview"></span>
+                        <span th:text="${ categoryDto.cname }"></span>
+                    </label>
+                </th:block>
+            </form>
+        </th:block>
+        <th:block class="modal-interview-buttons">
+            <button id="interviewFormSubmit" onclick="interviewSubmit()">시작</button>
+            <button id="interviewCancel" onclick="interviewCancel()">취소</button>
+        </th:block>
+    </div>
     <div th:replace="fragment/modal::modalFragment(modalId='modal-insert',
         title=~{::.modal-insert-title},
         content=~{::.modal-insert-content},
@@ -100,7 +116,7 @@
         </th:block>
         <th:block class="modal-insert-buttons">
             <button class="clickable modal-insert-buttons" type="button"
-                    id="modal-insert-buttons-update"
+                    id="modal-insert-buttons-insert"
                     onclick="insertModalSubmit()">추가</button>
             <button class="clickable modal-insert-buttons" type="button"
                     id="modal-insert-buttons-close"
@@ -136,6 +152,7 @@
             </div>
         </div>
     </div>
+    <div style="height: 55px;"></div>
     <script th:inline="javascript">
         let categoryDtoList = [[${categoryDtoList}]];
     </script>

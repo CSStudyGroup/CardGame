@@ -1,10 +1,11 @@
+
 // 내비게이션바 크기변화시 본문 패딩 자동변화
 const navbar = document.querySelector(".navbar");
 const navbarMenu = navbar.querySelector(".navbar-menu");
 const navbarShow = navbar.querySelector(".navbar-narrow-show");
 const narrowNav = document.querySelector(".navbar-narrow");
 const narrowNavOverlay = document.querySelector(".navbar-narrow-overlay");
-
+/*
 function resize(entries) {
     if (entries[0].contentRect.width < 1000) {
         navbarMenu.style.display = "none";
@@ -21,7 +22,7 @@ function resize(entries) {
 }
 const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(navbar);
-
+*/
 function narrowNavbarShow() {
     narrowNavOverlay.style.display = "flex";
     narrowNav.classList.add('navbar-narrow-appear');
@@ -30,6 +31,10 @@ function narrowNavbarShow() {
 function narrowNavbarHide() {
     narrowNavOverlay.style.display = "none";
     narrowNav.classList.remove('navbar-narrow-appear');
+}
+
+function navbarSearchShow() {
+
 }
 
 // 카드 추가를 위한 element
@@ -48,6 +53,12 @@ function insert() {
 }
 
 function insertModalSubmit(){
+    // 필수내용 작성 X
+    if (insertCategory.value == 'none' || insertQuestion.value == 'none' || insertAnswer.value == 'none') {
+        alert('몬가... 몬가비어있음...');
+        return;
+    }
+
     insertModal.style.display = "none";
     narrowNav.style.display = "block";
 
@@ -86,18 +97,17 @@ function insertModalClose(){
 }
 
 // 인터뷰 링크
-const interviewDialog = document.querySelector(".dialog-interview");
-
-function interview() {
-    if (typeof interviewDialog.showModal === 'function') {
-        interviewDialog.showModal();
-    } else {
-        alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
-    }
-}
-
+const interviewModal = document.querySelector("#modal-interview");
 const interviewForm = document.querySelector(".form-interview");
 const checkList = document.querySelectorAll(".interview-category-checkbox");
+
+function interview() {
+    for(let i=0; i<checkList.length; i++) {
+        checkList[i].checked = false;
+    }
+    interviewModal.style.display = "flex";
+}
+
 function interviewSubmit() {
     let check = 0;
     let count = 0;
@@ -118,7 +128,7 @@ function interviewSubmit() {
     }
 }
 function interviewCancel() {
-    interviewDialog.close();
+    interviewModal.style.display = "none";
 }
 
 // 검색

@@ -5,9 +5,9 @@ body {
     display: flex;
     position: fixed;
     align-items: stretch;
-    background-color: #F7DFFF;
+    background-color: var(--main-color);
     width: 100%;
-    height: auto;
+    height: 55px;
     margin: 0;
     z-index: 100;
 }
@@ -63,7 +63,7 @@ body {
 .navbar-search {
     display: flex;
     align-items: stretch;
-    border: 2px solid #E78FFF;
+    border: 2px solid var(--point-color);
     border-radius: 3px;
 }
 .navbar-search > * {
@@ -89,6 +89,20 @@ body {
     width: 30px;
 }
 
+.navbar-search-show {
+    width: 40px;
+    height: 30px;
+    min-width: 40px;
+    margin-left: auto;
+    background: url("/img/search_image.png") no-repeat;
+    background-size: contain;
+    border: 0;
+    display: none;
+    cursor: pointer;
+    align-self: center;
+    flex-grow: 0;
+}
+
 .navbar-narrow-show {
     width: 40px;
     height: 30px;
@@ -108,7 +122,7 @@ body {
     display: block;
     position: fixed;
     align-items: center;
-    background-color: #F7DFFF;
+    background-color: var(--main-color);
     width: 300px;
     right: -302px;
     height: 100%;
@@ -190,7 +204,7 @@ body {
     font-size: 20px;
     font-weight: bold;
     color: black;
-    background-color: #F7DFFF;
+    background-color: var(--main-color);
 }
 
 .list-nav-link > li:hover {
@@ -369,11 +383,11 @@ body {
     height: 30px;
     bottom: 25px;
     border-radius: 5px;
-    border: 1px solid deepskyblue;
-    background-color: paleturquoise;
+    border: 1px solid rgba(200, 200, 200, 0.3);
+    background-color: var(--main-color);
 }
 
-#modal-insert-buttons-update {
+#modal-insert-buttons-insert {
     right: 110px;
 }
 
@@ -382,7 +396,7 @@ body {
 }
 
 .modal-insert-buttons:hover {
-    background-color: #E78FFF;
+    background-color: var(--point-color);
 }
 
 .form-interview {
@@ -403,7 +417,7 @@ body {
 }
 
 .interview-category-item:hover {
-    background: #E78FFF;
+    background: var(--point-color);
 }
 
 .interview-category-checkview {
@@ -421,9 +435,30 @@ body {
 }
 
 .interview-category-checkbox:checked + label {
-    background: #E78FFF;
+    background: var(--point-color);
 }
 
 .interview-category-checkbox:checked + label > .interview-category-checkview {
     background: black;
+}
+
+@media screen and (max-width: 1000px) {
+    .navbar-menu {
+        display: none
+    }
+    .navbar-narrow-show {
+        display: inline-block;
+    }
+    .navbar-narrow {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .navbar-search {
+        display: none;
+    }
+    .navbar-search-show {
+        display: inline-block;
+    }
 }

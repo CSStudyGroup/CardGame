@@ -25,14 +25,14 @@
             <script defer th:if="${escClose}" th:inline="javascript">
                 document.addEventListener("keyup", (e) => {
                     if (e.keyCode == 27) {
-                        closeModal([[${modalId}]]);
+                        document.querySelector(`#${ [[${modalId}]] }`).style.display = 'none';
                     }
                 });
             </script>
             <script defer th:if="${outClose}" th:inline="javascript">
                 document.querySelector(`#${[[${modalId}]]}`).addEventListener("click", (e) => {
                     if(e.target === e.currentTarget) {
-                        closeModal([[${modalId}]]);
+                        document.querySelector(`#${ [[${modalId}]] }`).style.display = 'none';
                     }
                 });
             </script>

@@ -34,13 +34,10 @@
 }
 .modal-window {
     position: absolute;
-    top: 20%;
-    left: 10%;
-    width: 80%;
-    height: 600px;
-    border-radius: 40px;
-    border: 1px solid black;
+    border-radius: 3px;
+    border: 2px solid black;
     background-color: white;
+    padding: 5px;
     z-index: 201;
 }
 
@@ -51,9 +48,6 @@
 }
 
 /* scroll bar */
-html {
-    overflow-y: overlay;
-}
 ::-webkit-scrollbar {
     background: transparent;
     width: 12px;
@@ -64,10 +58,4 @@ html {
     border-radius: 5px;
     background-clip: padding-box;
     border: 3px solid transparent;
-}
-::-webkit-scrollbar-track {
-    margin-top: 60px;
-    margin-bottom: 5px;
-    background: var(--main-color);
-    border-radius: 5px;
 }
