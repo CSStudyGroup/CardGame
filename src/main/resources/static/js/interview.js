@@ -5,26 +5,26 @@ window.onload = function(){
         window.location = "/card";
     }
 
-    // // 사이즈에 따른 모양 변화
-    // const prevShape = document.querySelector(".prev");
-    // const nextShape = document.querySelector(".next");
-    // const card = document.querySelector(".container");
-    // function interviewResize(entries) {
-    //     if (entries[0].contentRect.width < 1000) {
-    //         prevShape.style.display = "none";
-    //         nextShape.style.display = "none";
-    //         card.style.marginLeft = "70px";
-    //         card.style.marginRight = "70px";
-    //     }
-    //     else {
-    //         prevShape.style.display = "flex";
-    //         nextShape.style.display = "flex";
-    //         card.style.marginLeft = "170px";
-    //         card.style.marginRight = "170px";
-    //     }
-    // }
-    // const interviewResizeObserver = new ResizeObserver(interviewResize);
-    // interviewResizeObserver.observe(navbar);
+    // 모바일에 따른 변화
+    const prevShape = document.querySelector(".prev");
+    const nextShape = document.querySelector(".next");
+    const card = document.querySelector(".container");
+    function isMobile(){
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    if (isMobile()) {
+        prevShape.style.display = "none";
+        nextShape.style.display = "none";
+        card.style.marginLeft = "70px";
+        card.style.marginRight = "70px";
+    }
+    else {
+        prevShape.style.display = "flex";
+        nextShape.style.display = "flex";
+        card.style.marginLeft = "170px";
+        card.style.marginRight = "170px";
+    }
 
     // 문항 수 표시
     const counter = document.getElementById("counter");
@@ -43,7 +43,6 @@ window.onload = function(){
     const answer = document.getElementById("card-answer");
     const category = document.getElementById("card-category");
     var check = null;
-    const card = document.querySelector(".container");
     card.addEventListener("click", function () {
         if (check == null){
             card.classList.add("rotate");
@@ -69,10 +68,30 @@ window.onload = function(){
     var max = dto.length - 1;
     var now = 0
 
+    // 슬라이드 관련
+    let start_x, end_x;
+
+    document.addEventListener('touchstart', touch_start);
+    document.addEventListener('touchend', touch_end);
+
+    function touch_start(event) {
+        start_x = event.touches[0].pageX
+    }
+
+    function touch_end(event) {
+        end_x = event.changedTouches[0].pageX;
+        if (start_x > end_x + 100){
+            nextMotion();
+        }
+        else if (start_x < end_x - 100){
+            prevMotion();
+        }
+    }
+
     // 이전 문제 진행 요청
     const prev = document.getElementById("prev");
-    prev.addEventListener("click", function () {
-
+    prev.addEventListener("click", prevMotion);
+    function prevMotion() {
         if (check == null){
             now = (now - 1) - (dto.length * Math.floor((now - 1)/dto.length));
 
@@ -89,12 +108,12 @@ window.onload = function(){
                 check = null;
             }, 1000);
         }
-    });
+    }
 
     // 다음 문제 진행 요청
     const next = document.getElementById("next");
-    next.addEventListener("click", function () {
-
+    next.addEventListener("click", nextMotion);
+    function nextMotion() {
         if (check == null){
             now = (now + 1) % dto.length;
 
@@ -111,7 +130,7 @@ window.onload = function(){
                 check = null;
             }, 1000);
         }
-    });
+    }
 
     // knuth shuffle
     function shuffle(array) {
@@ -123,31 +142,23 @@ window.onload = function(){
         }
     }
     shuffle(dto);
-    console.log(dto);
-
 
     // 초기 로딩
     category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
     text.innerText = dto[now].question;
     question.innerText = dto[now].question;
     answer.innerText = dto[now].answer;
-    console.log(now);
-
 
     // 끝내기 다이얼로그
-    const dialog = document.querySelector('.dialog');
+    const closeModal = document.getElementById("modal-close");
     const finish = document.getElementById("finish");
     finish.addEventListener('click', () => {
-        if (typeof dialog.showModal === 'function') {
-            dialog.showModal();
-        } else {
-            alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
-        }
+        closeModal.style.display = "block";
     });
 
     const cancel = document.querySelector('.cancel');
     cancel.addEventListener('click', () => {
-        dialog.close();
+        closeModal.style.display = "none";
     });
 
     const end = document.querySelector('.end');
@@ -163,7 +174,6 @@ window.onload = function(){
                 max += 1;
                 // 현재 위치 뒤에 무작위 삽입
                 dto.splice(Math.floor(Math.random() * (dto.length - now)) + now + 1, 0, event.detail);
-                console.log(now, dto);
                 counter.innerText = "(문항 수 : " + dto.length + ")";
                 break
             }

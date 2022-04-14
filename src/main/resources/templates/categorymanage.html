@@ -33,13 +33,20 @@
     <div class="save">
         <button class="clickable" type="button" id="save">SAVE</button>
     </div>
-    <dialog class="dialog">
-        <div class="innerDialog">
-            <h2 class="change-caution">변경사항을 저장하시겠습니까?</h2><br><br>
+    <div th:replace="fragment/modal::modalFragment(modalId='modal-change',
+        title=~{::.modal-change-title},
+        buttons=~{::.modal-change-buttons},
+        closeButton=false,
+        escClose=true,
+        outClose=true)">
+        <th:block class="modal-change-title">
+            <h2 class="change-caution">변경사항을 저장하시겠습니까?</h2>
+        </th:block>
+        <th:block class="modal-change-buttons">
             <button class="change clickable" type="reset">저장</button>
             <button class="cancel clickable" type="reset">취소</button>
-        </div>
-    </dialog>
+        </th:block>
+    </div>
     <script th:inline="javascript">
         var dto = [[${categoryDtoList}]];
     </script>

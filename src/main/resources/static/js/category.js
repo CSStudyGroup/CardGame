@@ -5,26 +5,26 @@ window.onload = function(){
         window.location = "/card";
     }
 
-    // // 사이즈에 따른 모양 변화
-    // const prevShape = document.querySelector(".prev");
-    // const nextShape = document.querySelector(".next");
-    // const card = document.querySelector(".container");
-    // function categoryResize(entries) {
-    //     if (entries[0].contentRect.width < 1000) {
-    //         prevShape.style.display = "none";
-    //         nextShape.style.display = "none";
-    //         card.style.marginLeft = "70px";
-    //         card.style.marginRight = "70px";
-    //     }
-    //     else {
-    //         prevShape.style.display = "flex";
-    //         nextShape.style.display = "flex";
-    //         card.style.marginLeft = "170px";
-    //         card.style.marginRight = "170px";
-    //     }
-    // }
-    // const categoryResizeObserver = new ResizeObserver(categoryResize);
-    // categoryResizeObserver.observe(navbar);
+    // 모바일에 따른 변화
+    const prevShape = document.querySelector(".prev");
+    const nextShape = document.querySelector(".next");
+    const card = document.querySelector(".container");
+    function isMobile(){
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    if (isMobile()) {
+        prevShape.style.display = "none";
+        nextShape.style.display = "none";
+        card.style.marginLeft = "70px";
+        card.style.marginRight = "70px";
+    }
+    else {
+        prevShape.style.display = "flex";
+        nextShape.style.display = "flex";
+        card.style.marginLeft = "170px";
+        card.style.marginRight = "170px";
+    }
 
     // 카테고리 해싱
     let categoryMap = new Map();
@@ -44,7 +44,6 @@ window.onload = function(){
 
     // 카드 클릭 애니메이션
     var check = null;
-    const card = document.querySelector(".container");
     card.addEventListener("click", function () {
         if (check == null){
             card.classList.add("rotate")
@@ -57,7 +56,6 @@ window.onload = function(){
                     cardTitle.innerText = "Q.";
                     text.innerText = question.innerText;
                 }
-                check = null;
             }, 500);
             check = setTimeout(function () {
                 card.classList.remove("rotate")
@@ -77,9 +75,30 @@ window.onload = function(){
     question.innerText = dto[now - 1].question;
     answer.innerText = dto[now - 1].answer;
 
+    // 슬라이드 관련
+    let start_x, end_x;
+
+    document.addEventListener('touchstart', touch_start);
+    document.addEventListener('touchend', touch_end);
+
+    function touch_start(event) {
+        start_x = event.touches[0].pageX
+    }
+
+    function touch_end(event) {
+        end_x = event.changedTouches[0].pageX;
+        if (start_x > end_x + 100){
+            nextMotion();
+        }
+        else if (start_x < end_x - 100){
+            prevMotion();
+        }
+    }
+
     // 이전 문제 진행 요청
     const prev = document.getElementById("prev");
-    prev.addEventListener("click", function () {
+    prev.addEventListener("click", prevMotion);
+    function prevMotion() {
         if (check == null) {
             if (now == 1) {
                 alert("첫 카드입니다.")
@@ -101,11 +120,12 @@ window.onload = function(){
                 }, 1000);
             }
         }
-    });
+    }
 
     // 다음 문제 진행 요청
     const next = document.getElementById("next");
-    next.addEventListener("click", function () {
+    next.addEventListener("click", nextMotion);
+    function nextMotion() {
         if (check == null) {
             if (now == total) {
                 alert("마지막 카드입니다.")
@@ -127,7 +147,7 @@ window.onload = function(){
                 }, 1000);
             }
         }
-    });
+    }
 
     // 카드 추가 이벤트
     function newCardHandler(event) {

@@ -55,6 +55,11 @@ function update(id){
 }
 
 function updateModalSubmit(){
+    if (updateQuestion.value == "" || updateAnswer.value == "") {
+        alert("질문이나 답변을 공백으로 할 수 없습니다.");
+        return;
+    }
+
     updateModal.style.display = "none";
 
     // AJAX 수정 요청
@@ -103,7 +108,7 @@ function updateModalClose(){
 }
 
 // 삭제
-const dialog = document.querySelector('.dialog');
+const deleteModal = document.getElementById("modal-delete");
 const deleteCaution = document.querySelector(".delete-caution");
 function del(id){
     for (let i = 0; i < dto.length; i++) {
@@ -112,17 +117,13 @@ function del(id){
             break;
         }
     }
-    deleteCaution.textContent = dto[target].id + "번을 정말로 삭제하시겠습니까?";
-    if (typeof dialog.showModal === 'function') {
-        dialog.showModal();
-    } else {
-        alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
-    }
+    deleteCaution.innerText = dto[target].id + "번을 정말로 삭제하시겠습니까?";
+    deleteModal.style.display = "block";
 }
 
 const cancel = document.querySelector('.cancel');
 cancel.addEventListener('click', () => {
-    dialog.close();
+    deleteModal.style.display = "none";
 });
 
 const remove = document.querySelector('.remove');
@@ -145,7 +146,7 @@ remove.addEventListener('click', () => {
                 } else {
                     alert('Request Error!');
                 }
-                dialog.close();
+                deleteModal.style.display = "none";
                 target = -1;
             }
         }

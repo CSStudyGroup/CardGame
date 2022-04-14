@@ -288,12 +288,6 @@ window.onload = function(){
 
     // 외부 터치 인식
     window.addEventListener("click", function (e) {
-        // dialog 체크
-        if (e.target.classList.contains("dialog")) {
-            const dialog = document.querySelector('.dialog');
-            dialog.close();
-        }
-
         // insert 체크
         if (!e.target.classList.contains("insert")){
             if (insertCheck) {
@@ -331,7 +325,7 @@ window.onload = function(){
     document.addEventListener('newcard', newCardHandler);
 
     // 저장
-    const dialog = document.querySelector('.dialog');
+    const changeModal = document.getElementById("modal-change");
     const save = document.getElementById("save");
     save.addEventListener('click', () => {
         // 추가 도중 저장 버튼을 눌렀을 경우
@@ -344,16 +338,12 @@ window.onload = function(){
             restoreUpdate(updateTarget);
         }
 
-        if (typeof dialog.showModal === 'function') {
-            dialog.showModal();
-        } else {
-            alert("현재 브라우저는 해당 기능을 지원하지 않습니다.")
-        }
+        changeModal.style.display = "block";
     });
 
     const cancel = document.querySelector('.cancel');
     cancel.addEventListener('click', () => {
-        dialog.close();
+        changeModal.style.display = "none";
     });
 
     const change = document.querySelector('.change');
@@ -413,7 +403,7 @@ window.onload = function(){
             saveButton.classList.remove("savepopup");
             changeCheck = true;
 
-            dialog.close();
+            changeModal.style.display = "none";
 
             return;
         }
@@ -456,7 +446,7 @@ window.onload = function(){
                 } else {
                     alert('Request Error!');
                 }
-                dialog.close();
+                changeModal.style.display = "none";
             }
         }
         categoryHttpRequest.open('POST', encodeURI("/card/categoryChange"));

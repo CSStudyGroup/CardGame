@@ -108,11 +108,20 @@
                     onclick="updateModalClose()">닫기</button>
         </th:block>
     </div>
-    <dialog class="dialog">
-        <h2 class="delete-caution"></h2><br><br>
-        <button class="remove clickable" type="reset">삭제</button>
-        <button class="cancel clickable" type="reset">취소</button>
-    </dialog>
+    <div th:replace="fragment/modal::modalFragment(modalId='modal-delete',
+        title=~{::.modal-delete-title},
+        buttons=~{::.modal-delete-buttons},
+        closeButton=false,
+        escClose=true,
+        outClose=true)">
+        <th:block class="modal-delete-title">
+            <h2 class="delete-caution"></h2>
+        </th:block>
+        <th:block class="modal-delete-buttons">
+            <button class="remove clickable" type="reset">삭제</button>
+            <button class="cancel clickable" type="reset">취소</button>
+        </th:block>
+    </div>
     <script th:inline="javascript">
         var dto = [[${cardDtoList}]];
         var tag = [[${tag}]];
