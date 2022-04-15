@@ -52,7 +52,6 @@ function categoryUpdate(cname){
 
     if (updateCheck) {
         const input_box = document.querySelectorAll(".newCategoryName");
-
         // 공백 체크
         if (input_box[updateTarget].value == "") {
             alert("공백은 이름으로 할 수 없습니다.");
@@ -298,7 +297,7 @@ window.onload = function(){
         // update 체크
         if (updateCheck) {
             const containerBody = document.querySelectorAll(".containerBody");
-            if (e.path[e.path.length - 6] != containerBody[updateTarget]) {
+            if (e.path[e.path.length - 7] != containerBody[updateTarget]) {
                 restoreUpdate(updateTarget);
             }
         }
@@ -338,7 +337,7 @@ window.onload = function(){
             restoreUpdate(updateTarget);
         }
 
-        changeModal.style.display = "block";
+        changeModal.style.display = "flex";
     });
 
     const cancel = document.querySelector('.cancel');

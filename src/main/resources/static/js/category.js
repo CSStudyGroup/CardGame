@@ -18,6 +18,7 @@ window.onload = function(){
         nextShape.style.display = "none";
         card.style.marginLeft = "70px";
         card.style.marginRight = "70px";
+        card.style.width = "calc(100vw - 140px)";
     }
     else {
         prevShape.style.display = "flex";
@@ -33,8 +34,8 @@ window.onload = function(){
     }
 
     // 카테고리 표시
-    const categoryname = document.getElementById("directory");
-    categoryname.innerText = "> " + categoryMap.get(dto[0].cid);
+    const categoryname = document.querySelector(".page-title");
+    categoryname.innerText = "Category > " + categoryMap.get(dto[0].cid);
 
     // 각 종 elements
     const cardTitle = document.getElementById("card-title");

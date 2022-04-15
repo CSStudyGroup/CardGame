@@ -5,23 +5,10 @@ html {
     border: 0;
 }
 
-.head-div {
-    position: absolute;
-    padding-top: 85px;
-    left: 40px;
-}
-
-#list {
-    font-size: 30px;
-    margin: 0;
-    font-weight: bold;
-    font-family: Arial;
-}
-
 .container {
-    position: absolute;
-    top: 165px;
-    left: 5%;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    margin-left: 5%;
     width: 90%;
 }
 
@@ -32,17 +19,23 @@ html {
 }
 
 table, th, td {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 13px;
+    padding-bottom: 13px;
     padding-left: 5px;
     padding-right: 5px;
     text-align: center;
+}
+
+.head > th {
+    font-size: 20px;
+    font-weight: bold;
 }
 
 th, td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    vertical-align: middle;
 }
 
 th {
@@ -66,26 +59,25 @@ tr:hover {
     border-bottom: 1px solid lightgray;
 }
 
-.update {
+.update, .delete {
     padding: 0px;
 }
 
-.delete {
-    padding: 0px;
-}
-
-#modal-view .modal-window {
+/* modal css */
+#modal-view .modal-window, #modal-update .modal-window {
+    width: 80%;
+    height: 600px;
     background-color: #fcfcfc;
 }
 
-#modal-view .modal-contents {
+#modal-view .modal-contents, #modal-update .modal-contents {
     height: 52%;
 }
 
-#modal-view-title-text {
+#modal-view-title-text, #modal-update-title-text {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 30px;
+    left: 30px;
     font-size: 40px;
     font-weight: bold;
 }
@@ -96,85 +88,6 @@ tr:hover {
     right: 30px;
     height: 30px;
     font-size: 20px;
-}
-
-#modal-view-content-qtitle {
-    position: absolute;
-    margin-left: 15px;
-    margin-top: 105px;
-    font-size: 30px;
-    font-family: "Ink Free";
-}
-
-#modal-view-content-atitle {
-    position: absolute;
-    margin-left: 15px;
-    margin-top: 5px;
-    font-size: 30px;
-    font-family: "Ink Free";
-}
-
-#modal-view-content-ttitle {
-    position: absolute;
-    margin-left: 15px;
-    margin-top: 5px;
-    font-size: 30px;
-    font-family: "Ink Free";
-}
-
-.modal-view-content-texts {
-    margin-left: 50px;
-    margin-right: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-    height: 50px;
-    width: -webkit-fill-available;
-    font-size: 20px;
-    resize: none;
-    background-color: white;
-}
-
-#modal-view-content-question {
-    margin-top: 100px;
-}
-
-#modal-view-content-answer {
-    height: -webkit-fill-available;
-}
-
-#modal-view-content-tags {
-    margin-bottom: 50px;
-}
-
-#modal-view-buttons-close {
-    position: absolute;
-    width: 50px;
-    height: 30px;
-    bottom: 25px;
-    right: 40px;
-    border-radius: 5px;
-    border: 1px solid rgba(200, 200, 200, 0.3);
-    background-color: var(--main-color);
-}
-
-#modal-view-buttons-close:hover {
-    background-color: var(--point-color);
-}
-
-#modal-update .modal-window {
-    background-color: #fcfcfc;
-}
-
-#modal-update .modal-contents {
-    height: 52%;
-}
-
-#modal-update-title-text {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 40px;
-    font-weight: bold;
 }
 
 #modal-update-content-category {
@@ -189,7 +102,7 @@ tr:hover {
     border-radius: 5px;
 }
 
-#modal-update-content-qtitle {
+.qtitle, .atitle, .ttitle {
     position: absolute;
     margin-left: 15px;
     margin-top: 105px;
@@ -197,23 +110,15 @@ tr:hover {
     font-family: "Ink Free";
 }
 
-#modal-update-content-atitle {
-    position: absolute;
-    margin-left: 15px;
+.atitle, .ttitle {
     margin-top: 5px;
-    font-size: 30px;
-    font-family: "Ink Free";
 }
 
-#modal-update-content-ttitle {
-    position: absolute;
-    margin-left: 15px;
-    margin-top: 5px;
-    font-size: 30px;
-    font-family: "Ink Free";
+.modal-view-content-texts {
+    background-color: white;
 }
 
-.modal-update-content-input {
+.modal-view-content-texts, .modal-update-content-input {
     margin-left: 50px;
     margin-right: 20px;
     padding-left: 10px;
@@ -224,16 +129,27 @@ tr:hover {
     resize: none;
 }
 
-#modal-update-content-question {
+#modal-view-content-question, #modal-update-content-question {
     margin-top: 100px;
 }
 
-#modal-update-content-answer {
+#modal-view-content-answer, #modal-update-content-answer {
     height: -webkit-fill-available;
 }
 
-#modal-update-content-tags {
+#modal-view-content-tags, #modal-update-content-tags {
     margin-bottom: 50px;
+}
+
+#modal-view-buttons-close {
+    position: absolute;
+    width: 50px;
+    height: 30px;
+    bottom: 25px;
+    right: 40px;
+    border-radius: 5px;
+    border: 1px solid rgba(200, 200, 200, 0.3);
+    background-color: var(--main-color);
 }
 
 .modal-update-buttons {
@@ -254,25 +170,26 @@ tr:hover {
     right: 40px;
 }
 
-.modal-update-buttons:hover {
+#modal-view-buttons-close:hover, .modal-update-buttons:hover {
     background-color: var(--point-color);
 }
 
 #modal-delete .modal-window {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(500px, 80%);
-    height: min(300px, 25%);
+    width: 500px;
+    height: 300px;
     text-align: center;
 }
 .delete-caution {
-    margin-top: min(90px, 20%);
+    margin-top: 90px;
+    font-size: 25px;
+    font-weight: bold;
 }
-.remove {
-    margin-top: min(60px, 10%);
-    margin-right: 20px;
+.modal-buttons {
+    justify-content: center;
 }
-.cancel {
+
+.modal-buttons > button {
+    margin-top: 90px;
     margin-left: 20px;
+    margin-right: 20px;
 }

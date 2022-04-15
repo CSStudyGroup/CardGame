@@ -7,39 +7,38 @@
     <script defer th:src="@{/js/list.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
-    <th:block th:replace="fragment/navigator::navigator"></th:block>
-    <div class="head-div">
-        <p id="list">List</p>
-    </div>
-    <div class="container">
-        <table class="table" style="table-layout: fixed">
-            <tr class="head">
-                <th width="10%">ID</th>
-                <th width="30%">Category</th>
-                <th width="60%">Question</th>
-                <th th:width="45px" class="noline"></th>
-                <th th:width="35px" class="noline"></th>
-            </tr>
-            <tr class="tableBody" th:each="cardDto : ${cardDtoList}">
-                <td class="id"
-                    th:text="${cardDto.id}"></td>
-                <td class="category"
-                    th:text="${cardDto.cid}"></td>
-                <td class="question clickable"
-                    th:attr="onclick=|text('${cardDto.id}')|"
-                    th:text="${cardDto.question}"></td>
-                <td class="update">
-                    <img class="clickable" height="30px" width="auto" style="margin-left: 10px"
-                         th:attr="onclick=|update('${cardDto.id}')|"
-                         th:src="@{/img/edit_image.png}">
-                </td>
-                <td class="delete">
-                    <img class="clickable" height="30px" width="auto"
-                         th:attr="onclick=|del('${cardDto.id}')|"
-                         th:src="@{/img/delete_image.png}">
-                </td>
-            </tr>
-        </table>
+    <th:block th:replace="fragment/navigator::navigator(title='List')"></th:block>
+    <div class="main">
+        <div class="container">
+            <table class="table" style="table-layout: fixed">
+                <tr class="head">
+                    <th width="10%">ID</th>
+                    <th width="30%">Category</th>
+                    <th width="60%">Question</th>
+                    <th th:width="45px" class="noline"></th>
+                    <th th:width="35px" class="noline"></th>
+                </tr>
+                <tr class="tableBody" th:each="cardDto : ${cardDtoList}">
+                    <td class="id"
+                        th:text="${cardDto.id}"></td>
+                    <td class="category"
+                        th:text="${cardDto.cid}"></td>
+                    <td class="question clickable"
+                        th:attr="onclick=|text('${cardDto.id}')|"
+                        th:text="${cardDto.question}"></td>
+                    <td class="update">
+                        <img class="clickable" height="30px" width="auto" style="margin-left: 10px"
+                             th:attr="onclick=|update('${cardDto.id}')|"
+                             th:src="@{/img/edit_image.png}">
+                    </td>
+                    <td class="delete">
+                        <img class="clickable" height="30px" width="auto"
+                             th:attr="onclick=|del('${cardDto.id}')|"
+                             th:src="@{/img/delete_image.png}">
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
     <div th:replace="fragment/modal::modalFragment(modalId='modal-view',
         title=~{::.modal-view-title},
@@ -54,13 +53,13 @@
         <th:block class="modal-view-content">
             <a id="modal-view-content-category"></a>
 
-            <a id="modal-view-content-qtitle">Q.</a>
+            <a class="qtitle">Q.</a>
             <textarea disabled="true" class="modal-view-content-texts"
                       id="modal-view-content-question"></textarea>
-            <a id="modal-view-content-atitle">A.</a>
+            <a class="atitle">A.</a>
             <textarea disabled="true" class="modal-view-content-texts"
                       id="modal-view-content-answer"></textarea>
-            <a id="modal-view-content-ttitle">T.</a>
+            <a class="ttitle">T.</a>
             <textarea disabled="true" class="modal-view-content-texts"
                       id="modal-view-content-tags"></textarea>
         </th:block>
@@ -89,13 +88,13 @@
                             th:text="${categoryDto.cname}"></option>
                 </select>
             </form>
-            <a id="modal-update-content-qtitle">Q.</a>
+            <a class="qtitle">Q.</a>
             <textarea maxlength="200" class="modal-update-content-input"
                       id="modal-update-content-question"></textarea>
-            <a id="modal-update-content-atitle">A.</a>
+            <a class="atitle">A.</a>
             <textarea maxlength="800" class="modal-update-content-input"
                       id="modal-update-content-answer"></textarea>
-            <a id="modal-update-content-ttitle">T.</a>
+            <a class="ttitle">T.</a>
             <textarea maxlength="210" class="modal-update-content-input"
                       id="modal-update-content-tags"></textarea>
         </th:block>
