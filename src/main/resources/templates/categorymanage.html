@@ -7,27 +7,26 @@
     <script defer th:src="@{/js/categorymanage.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
-    <th:block th:replace="fragment/navigator::navigator"></th:block>
-    <div class="head-div">
-        <p id="category-manage">Category Manage</p>
-    </div>
-    <div class="container-item">
-        <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
-            <a class="categoryName" th:text="|${categoryDto.cname} (${categoryDto.cnt})|"></a>
-            <input type="hidden" class="newCategoryName" onkeyup="enterEvent(event)">
-            <img class="delete clickable" height="50px" width="auto"
-                 th:attr="onclick=|categoryDelete('${categoryDto.cname}')|"
-                 th:src="@{/img/delete_image.png}">
-            <img class="update clickable" height="50px" width="auto"
-                 th:attr="onclick=|categoryUpdate('${categoryDto.cname}')|"
-                 th:src="@{/img/edit_image.png}">
-        </div>
-        <div class="insert containerLast clickable" onclick="categoryInsert()">
-            <img class="insert" id="plusMark" th:src="@{/img/add_image.png}" height="50px">
-            <input type="hidden" class="insert newCategoryName" id="newCategoryName" onkeyup="enterEvent(event)">
-            <button class="insert clickable" type="button" id="createCategory" onclick="createCategory()">
-                <img class="insert" th:src="@{/img/add_image.png}" height="50px">
-            </button>
+    <th:block th:replace="fragment/navigator::navigator(title='Category Manage')"></th:block>
+    <div class="main">
+        <div class="container-item">
+            <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
+                <a class="categoryName" th:text="|${categoryDto.cname} (${categoryDto.cnt})|"></a>
+                <input type="hidden" class="newCategoryName" onkeyup="enterEvent(event)">
+                <img class="delete clickable" height="50px" width="auto"
+                     th:attr="onclick=|categoryDelete('${categoryDto.cname}')|"
+                     th:src="@{/img/delete_image.png}">
+                <img class="update clickable" height="50px" width="auto"
+                     th:attr="onclick=|categoryUpdate('${categoryDto.cname}')|"
+                     th:src="@{/img/edit_image.png}">
+            </div>
+            <div class="insert containerLast clickable" onclick="categoryInsert()">
+                <img class="insert" id="plusMark" th:src="@{/img/add_image.png}" height="50px">
+                <input type="hidden" class="insert newCategoryName" id="newCategoryName" onkeyup="enterEvent(event)">
+                <button class="insert clickable" type="button" id="createCategory" onclick="createCategory()">
+                    <img class="insert" th:src="@{/img/add_image.png}" height="50px">
+                </button>
+            </div>
         </div>
     </div>
     <div class="save">

@@ -5,45 +5,26 @@ html {
     border: 0;
 }
 
-
-.head-div {
-    position: absolute;
-    padding-top: 85px;
-    left: 40px;
-}
-
-#interview {
-    font-size: 30px;
-    margin: 0;
-    font-weight: bold;
-    font-family: Arial;
-}
-
-#counter {
-    font-size: 18px;
-    margin: 0;
-}
-
 .container {
     display: flex;
-    position: absolute;
-    margin-top: 200px;
-    margin-bottom: 70px;
+    position: fixed;
+    margin-top: 85px;
     margin-left: 170px;
     margin-right: 170px;
-    width: -webkit-fill-available;
-    height: -webkit-fill-available;
+    width: calc(100vw - 340px);
+    height: calc(100vh - 340px);
     border-radius: 40px;
     border: 1px solid rgba(200, 200, 200, 0.7);
-    box-shadow: 0px 0px 5px 2px rgba(173, 174, 174, 0.6);
+    box-shadow: 0 0 5px 2px rgba(173, 174, 174, 0.6);
     justify-content: center;
     align-items: center;
     word-break: break-word;
     text-align: center;
+    overflow: hidden;
 }
 
 #card-title {
-    position: inherit;
+    position: absolute;
     left: 20px;
     top: 10px;
     font-size: 100px;
@@ -52,7 +33,7 @@ html {
 }
 
 #card-category {
-    position: inherit;
+    position: absolute;
     right: 30px;
     top: 30px;
     font-size: 20px;
@@ -79,9 +60,8 @@ html {
 .prev {
     position: absolute;
     display: flex;
-    margin-top: 200px;
-    margin-bottom: 70px;
-    height: -webkit-fill-available;
+    margin-top: 85px;
+    height: calc(100vh - 310px);
     left: 50px;
     align-items: center;
 }
@@ -89,9 +69,8 @@ html {
 .next {
     position: absolute;
     display: flex;
-    margin-top: 200px;
-    margin-bottom: 70px;
-    height: -webkit-fill-available;
+    margin-top: 85px;
+    height: calc(100vh - 310px);
     right: 50px;
     align-items: center;
 }
@@ -101,7 +80,7 @@ html {
     width: 70px;
     height: 70px;
     border-radius: 35px;
-    border: 0px solid black;
+    border: 0 solid black;
     align-items: center;
     justify-content: center;
     background: none;
@@ -145,7 +124,7 @@ html {
 
 .finish {
     position: absolute;
-    top: 90px;
+    top: 130px;
     right: 50px;
 }
 
@@ -154,7 +133,7 @@ html {
     height: 50px;
     border-radius: 10px;
     border: 1px solid rgba(200, 200, 200, 0.3);
-    box-shadow: 0px 4px 7px 2px rgba(200, 200, 200, 0.7);
+    box-shadow: 0 4px 7px 2px rgba(200, 200, 200, 0.7);
     background-color: var(--main-color);
 }
 
@@ -163,18 +142,17 @@ html {
 }
 
 #modal-close .modal-window {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(450px, 80%);
-    height: min(300px, 25%);
+    width: 450px;
+    height: 300px;
     text-align: center;
 }
 .close-caution {
-    margin-top: min(90px, 20%);
+    margin-top: 90px;
+    font-size: 25px;
+    font-weight: bold;
 }
 .end {
-    margin-top: min(60px, 10%);
+    margin-top: 90px;
     margin-right: 20px;
 }
 .cancel {

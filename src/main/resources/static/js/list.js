@@ -21,7 +21,7 @@ function text(id) {
             viewTags.innerText = dto[i].tags;
             viewQuestion.innerText = dto[i].question;
             viewAnswer.innerText = dto[i].answer;
-            viewModal.style.display = "block";
+            viewModal.style.display = "flex";
             break;
         }
     }
@@ -48,15 +48,19 @@ function update(id){
             updateTags.value = dto[i].tags;
             updateQuestion.value = dto[i].question;
             updateAnswer.value = dto[i].answer;
-            updateModal.style.display = "block";
+            updateModal.style.display = "flex";
             break;
         }
     }
 }
 
 function updateModalSubmit(){
-    if (updateQuestion.value == "" || updateAnswer.value == "") {
-        alert("질문이나 답변을 공백으로 할 수 없습니다.");
+    if (updateQuestion.value.trim() == "") {
+        alert("질문을 입력해주세요.");
+        return;
+    }
+    if (updateAnswer.value.trim() == "") {
+        alert("답변을 입력해주세요.");
         return;
     }
 
@@ -118,7 +122,7 @@ function del(id){
         }
     }
     deleteCaution.innerText = dto[target].id + "번을 정말로 삭제하시겠습니까?";
-    deleteModal.style.display = "block";
+    deleteModal.style.display = "flex";
 }
 
 const cancel = document.querySelector('.cancel');

@@ -7,30 +7,28 @@
     <script defer th:src="@{/js/interview.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
-    <th:block th:replace="fragment/navigator::navigator"></th:block>
-    <div class="head-div">
-        <p id="interview">Interview</p>
-        <p id="counter"></p>
-    </div>
-    <div class="card-frame container clickable">
-        <p id="card-title">Q.</p>
-        <p id="card-category">카테고리</p>
-        <p class="text" id="card-text"></p>
-        <p style="display: none" id="card-question"></p>
-        <p style="display: none" id="card-answer"></p>
-    </div>
-    <div class="finish">
-        <button class="clickable" type="button" id="finish">끝내기</button>
-    </div>
-    <div class="prev">
-        <button class="clickable" type="button" id="prev">
-            <img th:src="@{/img/arrow_left_image.png}" height="30px" style="margin-right: 7px">
-        </button>
-    </div>
-    <div class="next">
-        <button class="clickable" type="button" id="next">
-            <img th:src="@{/img/arrow_right_image.png}" height="30px" style="margin-left: 7px">
-        </button>
+    <th:block th:replace="fragment/navigator::navigator(title='Interview')"></th:block>
+    <div class="main">
+        <div class="card-frame container clickable">
+            <p id="card-title">Q.</p>
+            <p id="card-category">카테고리</p>
+            <p class="text" id="card-text"></p>
+            <p style="display: none" id="card-question"></p>
+            <p style="display: none" id="card-answer"></p>
+        </div>
+        <div class="finish">
+            <button class="clickable" type="button" id="finish">끝내기</button>
+        </div>
+        <div class="prev">
+            <button class="clickable" type="button" id="prev">
+                <img th:src="@{/img/arrow_left_image.png}" height="30px" style="margin-right: 7px">
+            </button>
+        </div>
+        <div class="next">
+            <button class="clickable" type="button" id="next">
+                <img th:src="@{/img/arrow_right_image.png}" height="30px" style="margin-left: 7px">
+            </button>
+        </div>
     </div>
     <div th:replace="fragment/modal::modalFragment(modalId='modal-close',
         title=~{::.modal-close-title},

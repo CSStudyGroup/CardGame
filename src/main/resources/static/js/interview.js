@@ -18,6 +18,7 @@ window.onload = function(){
         nextShape.style.display = "none";
         card.style.marginLeft = "70px";
         card.style.marginRight = "70px";
+        card.style.width = "calc(100vw - 140px)";
     }
     else {
         prevShape.style.display = "flex";
@@ -27,8 +28,8 @@ window.onload = function(){
     }
 
     // 문항 수 표시
-    const counter = document.getElementById("counter");
-    counter.innerText = "(문항 수 : " + dto.length + ")";
+    const counter = document.querySelector(".page-title");
+    counter.innerText = "Interview (문항 수 : " + dto.length + ")";
 
     // 카테고리 해싱
     let categoryMap = new Map();
@@ -153,7 +154,7 @@ window.onload = function(){
     const closeModal = document.getElementById("modal-close");
     const finish = document.getElementById("finish");
     finish.addEventListener('click', () => {
-        closeModal.style.display = "block";
+        closeModal.style.display = "flex";
     });
 
     const cancel = document.querySelector('.cancel');
