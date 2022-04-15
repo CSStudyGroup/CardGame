@@ -1,16 +1,14 @@
-body {
-    margin: 0;
-}
 .navbar {
-    display: flex;
     position: fixed;
+    display: flex;
     align-items: stretch;
     background-color: var(--main-color);
     width: 100%;
-    height: 55px;
+    height: calc(var(--navigator-height));
     margin: 0;
     z-index: 100;
 }
+
 .navbar-brand {
     display: inline-block;
     margin: 0;
@@ -89,6 +87,13 @@ body {
     width: 30px;
 }
 
+.navbar-buttons {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 0;
+    margin-left: auto;
+}
+
 .navbar-search-show {
     width: 40px;
     height: 30px;
@@ -96,24 +101,22 @@ body {
     margin-left: auto;
     background: url("/img/search_image.png") no-repeat;
     background-size: contain;
+    background-position: center;
     border: 0;
     display: none;
-    cursor: pointer;
-    align-self: center;
     flex-grow: 0;
 }
 
-.navbar-narrow-show {
+.navbar-search-close {
     width: 40px;
     height: 30px;
     min-width: 40px;
     margin-left: auto;
-    background: url("/img/narrow_nav_show.png") no-repeat;
+    background: url("/img/cross_icon.png") no-repeat;
     background-size: contain;
+    background-position: center;
     border: 0;
     display: none;
-    cursor: pointer;
-    align-self: center;
     flex-grow: 0;
 }
 
@@ -123,20 +126,35 @@ body {
     position: fixed;
     align-items: center;
     background-color: var(--main-color);
-    width: 300px;
-    right: -302px;
+    width: 250px;
+    right: -252px;
     height: 100%;
     margin-right: 0;
     z-index: 102;
     transition: right 0.5s;
 }
 
+.navbar-narrow-show {
+    width: 40px;
+    height: 30px;
+    min-width: 40px;
+    margin-left: auto;
+    background: url("/img/narrow_nav_show.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+    border: 0;
+    display: none;
+    cursor: pointer;
+    flex-grow: 0;
+}
+
 .navbar-narrow-hide {
     width: 40px;
     height: 30px;
     margin-left: auto;
-    background: url("/img/narrow_nav_hide.png") no-repeat;
+    background: url("/img/cross_icon.png") no-repeat;
     background-size: contain;
+    background-position: center;
     border: 0;
     cursor: pointer;
 }
@@ -144,8 +162,9 @@ body {
 .navbar-narrow-top {
     display: flex;
     justify-content: right;
-    align-content: center;
-    border-bottom: 2px solid black;
+    align-items: center;
+    border-bottom: 1px solid var(--point-color);
+    height: calc(var(--navigator-height) - 1px);
 }
 
 .navbar-narrow-brand {
@@ -179,86 +198,89 @@ body {
     z-index: 101;
 }
 
-.navbar-narrow-box ul, li {
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-}
-
-.list-nav-link ul {
-    display: none;
-}
-
-.list-nav-link div {
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    padding: 0px 0px 0px 5px;
-}
-
-.list-nav-link > li {
-    list-style: none;
-    padding: 5px 0px 5px 0px;
-    border-bottom: 1px solid #EAC3E9;
+.list-narrow-link > li {
+    padding-left: 10px;
     font-size: 20px;
     font-weight: bold;
     color: black;
     background-color: var(--main-color);
 }
 
-.list-nav-link > li:hover {
+.list-narrow-link > li > div {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 10px 5px 10px 5px;
+    border-bottom: 1px solid #EAC3E9;
+}
+
+.list-narrow-link > .li:hover {
     color: white;
     background-color: #EAAFFF;
 }
 
-.nav-link-open > ul {
+.narrow-link-sub {
+    display: none;
+    border: 0;
+}
+
+.narrow-link-open {
+
+}
+
+.narrow-link-open + .narrow-link-sub {
     display: block;
-    margin-top: 5px;
+}
+
+.narrow-link-open + .narrow-link-sub span {
     font-size: 16px;
+    font-weight: normal;
 }
 
 .drop-mark {
     background: url('/img/drop_arrow_image.png') no-repeat;
     background-size: contain;
-    width: 25px;
-    height: 25px;
-    min-width: 25px;
+    width: 20px;
+    height: 20px;
     transition: transform 0.5s;
     will-change: transform;
 }
 
-.nav-link-open .drop-mark {
+.narrow-link-open .drop-mark {
     transform: rotate(-180deg);
 }
 
 .navbar-dropdown-sitemap {
     position: fixed;
-    margin-top: 55px;
     padding-left: 10px;
     padding-right: 10px;
-    width: calc(100% - 20px);;
-    height: 350px;
-    top: -360px;
+    border-top: 1px solid var(--point-color);
+    width: calc(100% - 21px);;
+    height: 250px;
+    top: -250px;
     z-index: 99;
     background: white;
     transition: top 0.3s ease-out;
-    border-top: 1px solid var(--point-color);
+}
+.navbar-dropdown-sitemap > h1 {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
 }
 .navbar-dropdown-sitemap > * {
     opacity: 0;
 }
-.dropdown-open {
-    top: 0;
+.navbar-dropdown-open {
+    top: calc(var(--navigator-height));
 }
-.dropdown-open > * {
+.navbar-dropdown-open > * {
     opacity: 1;
     transition: opacity 0.7s;
 }
-.dropdown-overlay {
+.navbar-dropdown-overlay {
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     display: none;
@@ -403,18 +425,26 @@ body {
 .form-interview {
     overflow-y: scroll;
     width: 200px;
-    height: 150px;
+    height: 182px;
     margin-bottom: 10px;
 }
 
 .interview-category-item {
-    display: block;
+    display: flex;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    align-items: center;
     border: 1px solid black;
+    border-radius: 3px;
     margin-top: 3px;
     background: white;
     vertical-align: middle;
     font-size: 15px;
     font-weight: bold;
+}
+
+.interview-category-item > p {
+    margin-left: 5px;
 }
 
 .interview-category-item:hover {
@@ -443,6 +473,22 @@ body {
     background: black;
 }
 
+.page-title {
+    position: fixed;
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid var(--point-color);
+    width: 100%;
+    height: calc(var(--page-title-height) - 21px);
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 55px;
+    border-bottom: 1px solid var(--main-color);
+    background: white;
+    align-items: center;
+    z-index: 98;
+}
+
 @media screen and (max-width: 1000px) {
     .navbar-menu {
         display: none
@@ -456,8 +502,29 @@ body {
 }
 
 @media screen and (max-width: 550px) {
-    .navbar-search {
+    .navbar-search-container {
+        position: fixed;
         display: none;
+        align-items: stretch;
+        justify-content: left;
+        padding: 10px;
+        width: calc(100vw - 20px);
+        top: 0px;
+        background: var(--main-color);
+        margin-right: 0;
+        margin-left: auto;
+        flex-grow: 5;
+        flex-shrink: 1;
+    }
+    .navbar-search {
+        flex-grow: 1;
+    }
+    .navbar-search-close {
+        display: inline;
+    }
+    .navbar-search-open {
+        display: flex;
+        top: var(--navigator-height);
     }
     .navbar-search-show {
         display: inline-block;

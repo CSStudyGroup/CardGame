@@ -9,11 +9,14 @@
     <th:block th:replace="fragment/navigator::navigator(title='cardmain')"></th:block>
     <div class="main">
         <div class="category-container">
-            <div class="card-category-frame" th:each="categoryDto: ${ categoryDtoList }"
+            <div class="card-frame card-category"
+                 th:each="categoryDto: ${ categoryDtoList }"
                  th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.cid }'|">
-                <div class="card-frame card-category">
-                    <p class="category-name" th:text="${ categoryDto.cname }"></p>
-                    <p class="category-count" th:text="${ categoryDto.cnt }"></p>
+                <div class="card-category-name">
+                    <p th:text="${ categoryDto.cname }"></p>
+                </div>
+                <div class="card-category-count">
+                    <p th:text="${ categoryDto.cnt }"></p>
                 </div>
             </div>
         </div>
