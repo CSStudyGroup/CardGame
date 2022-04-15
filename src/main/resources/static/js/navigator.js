@@ -1,28 +1,10 @@
 
-// 내비게이션바 크기변화시 본문 패딩 자동변화
+// 내비게이션바 관련
 const navbar = document.querySelector(".navbar");
-const navbarMenu = navbar.querySelector(".navbar-menu");
-const navbarShow = navbar.querySelector(".navbar-narrow-show");
 const narrowNav = document.querySelector(".navbar-narrow");
 const narrowNavOverlay = document.querySelector(".navbar-narrow-overlay");
-/*
-function resize(entries) {
-    if (entries[0].contentRect.width < 1000) {
-        navbarMenu.style.display = "none";
-        navbarShow.style.display = "inline-block";
-        narrowNav.style.display = "block";
-    }
-    else {
-        navbarMenu.style.display = "flex";
-        navbarShow.style.display = "none";
-        narrowNav.style.display = "none";
-        narrowNavOverlay.style.display = "none";
-        narrowNav.classList.remove("navbar-narrow-appear");
-    }
-}
-const resizeObserver = new ResizeObserver(resize);
-resizeObserver.observe(navbar);
-*/
+const navbarSearchContainer = document.querySelector(".navbar-search-container");
+
 function narrowNavbarShow() {
     narrowNavOverlay.style.display = "flex";
     narrowNav.classList.add('navbar-narrow-appear');
@@ -34,8 +16,23 @@ function narrowNavbarHide() {
 }
 
 function navbarSearchShow() {
-
+    navbarSearchContainer.classList.add('navbar-search-open');
 }
+
+function navbarSearchHide() {
+    navbarSearchContainer.classList.remove('navbar-search-open');
+}
+
+function resize(entries) {
+    if (entries[0].contentRect.width > 500) {
+        navbarSearchHide();
+    }
+    if (entries[0].contentRect.width > 1000) {
+        narrowNavbarHide();
+    }
+}
+const resizeObserver = new ResizeObserver(resize);
+resizeObserver.observe(navbar);
 
 // 카드 추가를 위한 element
 const insertModal = document.querySelector("#modal-insert");
@@ -188,7 +185,7 @@ function searchEnterKey(e) {
 
 /* 사이트맵 드롭다운  */
 const navbarSitemapDropdown = document.querySelector('.navbar-dropdown-sitemap');
-const navbarSitemapDropdownOverlay = document.querySelector('.dropdown-overlay');
+const navbarSitemapDropdownOverlay = document.querySelector('.navbar-dropdown-overlay');
 const sitemapList = document.querySelector('.sitemap-list');
 const sitemapListItems = document.querySelectorAll('.sitemap-list-item');
 const sitemapPreButton = document.querySelector('#btn-sitemap-pre');
@@ -237,7 +234,7 @@ function setTranslate(index) {
 function showNavbarSitemapDropdown() {
     selectedIndex.value = 0;
     navbarSitemapDropdownOverlay.style.display='block';
-    navbarSitemapDropdown.classList.add('dropdown-open');
+    navbarSitemapDropdown.classList.add('navbar-dropdown-open');
     if (navbarSitemapDropdownTimer) {
         navbarSitemapDropdownTimer = clearTimeout(navbarSitemapDropdownTimer);
     }
@@ -246,7 +243,7 @@ function showNavbarSitemapDropdown() {
 function hideNavbarSitemapDropdown() {
     navbarSitemapDropdownTimer = setTimeout(function(e) {
         navbarSitemapDropdownOverlay.style.display='none';
-        navbarSitemapDropdown.classList.remove('dropdown-open');
+        navbarSitemapDropdown.classList.remove('navbar-dropdown-open');
     }, 1);
 }
 
