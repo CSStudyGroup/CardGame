@@ -1,9 +1,6 @@
 spring:
-  datasource:
-    url: jdbc:mariadb://211.187.10.40:3307/sample
-    username: root
-    password: root2357
-    pool-size: 30
+  profiles:
+    active: prod
 
   jpa:
     show-sql: true
