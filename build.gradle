@@ -27,6 +27,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+bootJar {
+	mainClass = 'com.csStudy.CardGame.CardGameApplication'
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

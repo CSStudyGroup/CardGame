@@ -1,9 +1,9 @@
-
 // 내비게이션바 관련
 const navbar = document.querySelector(".navbar");
 const narrowNav = document.querySelector(".navbar-narrow");
 const narrowNavOverlay = document.querySelector(".navbar-narrow-overlay");
 const navbarSearchContainer = document.querySelector(".navbar-search-container");
+const navbarSearchShowButton = document.querySelector(".navbar-search-show");
 
 function narrowNavbarShow() {
     narrowNavOverlay.style.display = "flex";
@@ -11,16 +11,8 @@ function narrowNavbarShow() {
 }
 
 function narrowNavbarHide() {
-    narrowNavOverlay.style.display = "none";
+    narrowNavOverlay.style.display = 'none';
     narrowNav.classList.remove('navbar-narrow-appear');
-}
-
-function navbarSearchShow() {
-    navbarSearchContainer.classList.add('navbar-search-open');
-}
-
-function navbarSearchHide() {
-    navbarSearchContainer.classList.remove('navbar-search-open');
 }
 
 function resize(entries) {
@@ -42,7 +34,7 @@ const insertQuestion = document.querySelector("#modal-insert-content-question");
 const insertAnswer = document.querySelector("#modal-insert-content-answer");
 
 function insert() {
-    insertCategory.value = "none";
+    insertCategory.value = 'none';
     insertQuestion.value = "";
     insertAnswer.value = "";
     insertTags.value = "";
@@ -64,7 +56,7 @@ function insertModalSubmit(){
         return;
     }
 
-    insertModal.style.display = "none";
+    insertModal.style.display = 'none';
     narrowNav.style.display = "block";
 
     // AJAX 수정 요청
@@ -98,7 +90,7 @@ function insertModalSubmit(){
     httpRequest.send();
 }
 function insertModalClose(){
-    insertModal.style.display = "none";
+    insertModal.style.display = 'none';
 }
 
 // 인터뷰 링크
@@ -133,16 +125,16 @@ function interviewSubmit() {
     }
 }
 function interviewCancel() {
-    interviewModal.style.display = "none";
+    interviewModal.style.display = 'none';
 }
 
 // 검색
 const searchCriteria = document.querySelector("#search-criteria");
+const searchKeyword = document.querySelector("#search-keyword");
 const categoryKey = document.querySelector("#categoryKey");
 const tagKey = document.querySelector("#tagKey");
 const questionKey = document.querySelector("#questionKey");
 const searchForm = document.querySelector("#searchForm");
-const searchKeyword = document.querySelector("#search-keyword");
 const keyString = document.querySelector('#keystring');
 
 // 검색 결과 표시 페이지일 경우(list) 키워드 표시
@@ -182,6 +174,28 @@ function searchEnterKey(e) {
         search();
     }
 }
+
+// 드롭다운 검색창
+function navbarSearchShow(e) {
+    searchCriteria.value = 'category';
+    searchKeyword.value = '';
+    navbarSearchContainer.classList.add('navbar-search-open');
+    navbarSearchShowButton.style.visibility = "hidden";
+    e.stopPropagation();
+}
+
+function navbarSearchHide() {
+    navbarSearchContainer.classList.remove('navbar-search-open');
+    navbarSearchShowButton.style.visibility = "visible";
+}
+
+navbarSearchContainer.addEventListener('click', (e) => {
+    e.stopPropagation();
+})
+
+document.querySelector("body").addEventListener("click", (e) => {
+    navbarSearchHide();
+});
 
 /* 사이트맵 드롭다운  */
 const navbarSitemapDropdown = document.querySelector('.navbar-dropdown-sitemap');
