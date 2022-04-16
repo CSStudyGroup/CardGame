@@ -1,3 +1,4 @@
+/* basic CSS */
 html {
     overflow-x: hidden;
     margin: 0;
@@ -5,175 +6,119 @@ html {
     border: 0;
 }
 
+/* content frame CSS */
 .container {
-    margin-top: 100px;
-    margin-bottom: 50px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     margin-left: 5%;
     width: 90%;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;;
-    word-break: break-all;
-}
-
-table, th, td {
-    padding-top: 13px;
-    padding-bottom: 13px;
-    padding-left: 5px;
-    padding-right: 5px;
     text-align: center;
 }
 
-.head > th {
-    font-size: 20px;
-    font-weight: bold;
+/* table CSS */
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;;
+    word-break: break-all;
 }
-
 th, td {
+    padding: 13px 5px;
+    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: middle;
 }
-
 th {
+    font-size: 20px;
+    font-weight: bold;
     border-top: 3px solid lightgray;
     border-bottom: 2px solid lightgray;
 }
-
-.noline {
-    border-top: 0px;
-    border-bottom: 0px;
+.no-line {
+    border-top: 0;
+    border-bottom: 0;
 }
-
-tr:hover {
+.tableBody:hover {
     background-color: lightgray;
 }
-.head:hover{
-    background-color: white;
-}
-
-.id, .category, .question {
+.underline {
     border-bottom: 1px solid lightgray;
 }
-
 .update, .delete {
-    padding: 0px;
+    padding: 0;
 }
 
-/* modal css */
+/* modal view and update CSS */
 #modal-view .modal-window, #modal-update .modal-window {
     width: 80%;
     height: 600px;
     background-color: #fcfcfc;
 }
-
-#modal-view .modal-contents, #modal-update .modal-contents {
-    height: 52%;
-}
-
-#modal-view-title-text, #modal-update-title-text {
+.modal-title-text {
     position: absolute;
-    top: 30px;
-    left: 30px;
-    font-size: 40px;
+    top: 40px;
+    left: 40px;
+    font-size: 35px;
     font-weight: bold;
 }
-
-#modal-view-content-category {
+.modal-content-category {
     position: absolute;
-    top: 30px;
+    top: 50px;
     right: 30px;
     height: 30px;
     font-size: 20px;
 }
-
-#modal-update-content-category {
-    position: absolute;
-    top: 30px;
-    right: 20px;
-}
-
 #modal-update-content-category-select {
     width: 150px;
     height: 30px;
     border-radius: 5px;
+    font-size: 20px;
 }
-
-.qtitle, .atitle, .ttitle {
+.modal-content-title {
     position: absolute;
     margin-left: 15px;
-    margin-top: 105px;
+    margin-top: 95px;
     font-size: 30px;
     font-family: "Ink Free";
 }
-
-.atitle, .ttitle {
+.modal-title-answer, .modal-title-tags {
     margin-top: 5px;
 }
-
-.modal-view-content-texts {
-    background-color: white;
-}
-
-.modal-view-content-texts, .modal-update-content-input {
+.modal-content-textarea {
     margin-left: 50px;
     margin-right: 20px;
     padding-left: 10px;
     padding-right: 10px;
     height: 50px;
-    width: -webkit-fill-available;
+    width: calc(100% - 90px);
     font-size: 20px;
     resize: none;
+    background-color: white;
 }
-
-#modal-view-content-question, #modal-update-content-question {
-    margin-top: 100px;
+.modal-title-question + textarea {
+    margin-top: 90px;
 }
-
-#modal-view-content-answer, #modal-update-content-answer {
-    height: -webkit-fill-available;
+.modal-title-answer + textarea {
+    height: 310px;
 }
-
-#modal-view-content-tags, #modal-update-content-tags {
-    margin-bottom: 50px;
+#modal-view .modal-buttons, #modal-update .modal-buttons {
+    margin-top: 20px;
 }
-
-#modal-view-buttons-close {
-    position: absolute;
-    width: 50px;
+#modal-view .modal-buttons > button, #modal-update .modal-buttons > button {
     height: 30px;
-    bottom: 25px;
-    right: 40px;
+    width: 50px;
+    margin-right: 30px;
     border-radius: 5px;
     border: 1px solid rgba(200, 200, 200, 0.3);
-    background-color: var(--main-color);
+    background: var(--main-color);
+}
+#modal-view .modal-buttons > button:hover, #modal-update .modal-buttons > button:hover {
+    background: var(--point-color);
 }
 
-.modal-update-buttons {
-    position: absolute;
-    width: 50px;
-    height: 30px;
-    bottom: 25px;
-    border-radius: 5px;
-    border: 1px solid rgba(200, 200, 200, 0.3);
-    background-color: var(--main-color);
-}
-
-#modal-update-buttons-update {
-    right: 110px;
-}
-
-#modal-update-buttons-delete {
-    right: 40px;
-}
-
-#modal-view-buttons-close:hover, .modal-update-buttons:hover {
-    background-color: var(--point-color);
-}
-
+/* modal delete CSS */
 #modal-delete .modal-window {
     width: 500px;
     height: 300px;
@@ -184,11 +129,10 @@ tr:hover {
     font-size: 25px;
     font-weight: bold;
 }
-.modal-buttons {
+#modal-delete .modal-buttons {
     justify-content: center;
 }
-
-.modal-buttons > button {
+#modal-delete .modal-buttons > button {
     margin-top: 90px;
     margin-left: 20px;
     margin-right: 20px;

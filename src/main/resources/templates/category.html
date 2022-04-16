@@ -9,21 +9,23 @@
 <body>
     <th:block th:replace="fragment/navigator::navigator(title='Category')"></th:block>
     <div class="main">
-        <div class="card-frame container clickable">
-            <p id="card-title">Q.</p>
-            <p class="text" id="card-text"></p>
-            <p style="display: none" id="card-question"></p>
-            <p style="display: none" id="card-answer"></p>
-        </div>
-        <div class="prev">
-            <button class="clickable" type="button" id="prev">
-                <img th:src="@{/img/arrow_left_image.png}" height="30px" style="margin-right: 7px">
-            </button>
-        </div>
-        <div class="next">
-            <button class="clickable" type="button" id="next">
-                <img th:src="@{/img/arrow_right_image.png}" height="30px" style="margin-left: 7px">
-            </button>
+        <div class="flex-content">
+            <div class="prev">
+                <button class="clickable" type="button" id="prev">
+                    <img th:src="@{/img/arrow_left_image.png}" height="30px" style="margin-right: 7px">
+                </button>
+            </div>
+            <div class="card-frame container clickable">
+                <p class="card-title">Q.</p>
+                <p class="card-text"></p>
+                <p style="display: none" class="card-question"></p>
+                <p style="display: none" class="card-answer"></p>
+            </div>
+            <div class="next">
+                <button class="clickable" type="button" id="next">
+                    <img th:src="@{/img/arrow_right_image.png}" height="30px" style="margin-left: 7px">
+                </button>
+            </div>
         </div>
         <div class="indicator">
             <text id="now">1</text>/<text id="total"></text>

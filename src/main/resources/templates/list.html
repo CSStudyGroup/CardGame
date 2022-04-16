@@ -10,20 +10,20 @@
     <th:block th:replace="fragment/navigator::navigator(title='List')"></th:block>
     <div class="main">
         <div class="container">
-            <table class="table" style="table-layout: fixed">
+            <table>
                 <tr class="head">
                     <th width="10%">ID</th>
                     <th width="30%">Category</th>
                     <th width="60%">Question</th>
-                    <th th:width="45px" class="noline"></th>
-                    <th th:width="35px" class="noline"></th>
+                    <th th:width="45px" class="no-line"></th>
+                    <th th:width="35px" class="no-line"></th>
                 </tr>
                 <tr class="tableBody" th:each="cardDto : ${cardDtoList}">
-                    <td class="id"
+                    <td class="underline id"
                         th:text="${cardDto.id}"></td>
-                    <td class="category"
+                    <td class="underline category"
                         th:text="${cardDto.cid}"></td>
-                    <td class="question clickable"
+                    <td class="underline question clickable"
                         th:attr="onclick=|text('${cardDto.id}')|"
                         th:text="${cardDto.question}"></td>
                     <td class="update">
@@ -48,24 +48,23 @@
         escClose=true,
         outClose=true)">
         <th:block class="modal-view-title">
-            <a id="modal-view-title-text"></a>
+            <a class="modal-title-text" id="modal-view-title-text"></a>
         </th:block>
         <th:block class="modal-view-content">
-            <a id="modal-view-content-category"></a>
+            <a class="modal-content-category" id="modal-view-content-category"></a>
 
-            <a class="qtitle">Q.</a>
-            <textarea disabled="true" class="modal-view-content-texts"
+            <a class="modal-content-title modal-title-question">Q.</a>
+            <textarea disabled="true" class="modal-content-textarea"
                       id="modal-view-content-question"></textarea>
-            <a class="atitle">A.</a>
-            <textarea disabled="true" class="modal-view-content-texts"
+            <a class="modal-content-title modal-title-answer">A.</a>
+            <textarea disabled="true" class="modal-content-textarea"
                       id="modal-view-content-answer"></textarea>
-            <a class="ttitle">T.</a>
-            <textarea disabled="true" class="modal-view-content-texts"
+            <a class="modal-content-title modal-title-tags">T.</a>
+            <textarea disabled="true" class="modal-content-textarea"
                       id="modal-view-content-tags"></textarea>
         </th:block>
         <th:block class="modal-view-buttons">
             <button class="clickable" type="button"
-                    id="modal-view-buttons-close"
                     onclick="viewModalClose()">닫기</button>
         </th:block>
     </div>
@@ -77,10 +76,10 @@
         escClose=true,
         outClose=true)">
         <th:block class="modal-update-title">
-            <a id="modal-update-title-text"></a>
+            <a class="modal-title-text" id="modal-update-title-text"></a>
         </th:block>
         <th:block class="modal-update-content">
-            <form id="modal-update-content-category">
+            <form class="modal-content-category" id="modal-update-content-category">
                 <select id="modal-update-content-category-select">
                     <option value="none" selected disabled hidden>===선택===</option>
                     <option th:each="categoryDto : ${categoryDtoList}"
@@ -88,22 +87,20 @@
                             th:text="${categoryDto.cname}"></option>
                 </select>
             </form>
-            <a class="qtitle">Q.</a>
-            <textarea maxlength="200" class="modal-update-content-input"
+            <a class="modal-content-title modal-title-question">Q.</a>
+            <textarea maxlength="200" class="modal-content-textarea"
                       id="modal-update-content-question"></textarea>
-            <a class="atitle">A.</a>
-            <textarea maxlength="800" class="modal-update-content-input"
+            <a class="modal-content-title modal-title-answer">A.</a>
+            <textarea maxlength="800" class="modal-content-textarea"
                       id="modal-update-content-answer"></textarea>
-            <a class="ttitle">T.</a>
-            <textarea maxlength="210" class="modal-update-content-input"
+            <a class="modal-content-title modal-title-tags">T.</a>
+            <textarea maxlength="210" class="modal-content-textarea"
                       id="modal-update-content-tags"></textarea>
         </th:block>
         <th:block class="modal-update-buttons">
-            <button class="clickable modal-update-buttons" type="button"
-                    id="modal-update-buttons-update"
+            <button class="clickable" type="button"
                     onclick="updateModalSubmit()">수정</button>
-            <button class="clickable modal-update-buttons" type="button"
-                    id="modal-update-buttons-delete"
+            <button class="clickable" type="button"
                     onclick="updateModalClose()">닫기</button>
         </th:block>
     </div>
@@ -114,7 +111,7 @@
         escClose=true,
         outClose=true)">
         <th:block class="modal-delete-title">
-            <h2 class="delete-caution"></h2>
+            <p class="delete-caution"></p>
         </th:block>
         <th:block class="modal-delete-buttons">
             <button class="remove clickable" type="reset">삭제</button>
@@ -122,11 +119,11 @@
         </th:block>
     </div>
     <script th:inline="javascript">
-        var dto = [[${cardDtoList}]];
-        var tag = [[${tag}]];
-        var question = [[${question}]];
-        var cid = [[${cid}]]
-        var keystring = [[${keystring}]];
+        let dto = [[${cardDtoList}]];
+        let tag = [[${tag}]];
+        let question = [[${question}]];
+        let cid = [[${cid}]]
+        let keystring = [[${keystring}]];
     </script>
 </body>
 </html>
