@@ -1,11 +1,11 @@
 // AJAX용 request
-var listHttpRequest;
+let listHttpRequest;
 
 // 해싱용 맵
 let categoryMap;
 
 // 본문 보기
-var target = -1;
+let target = -1;
 const viewModal = document.getElementById("modal-view");
 const modalViewTitleText = document.getElementById("modal-view-title-text");
 const viewCategory = document.getElementById("modal-view-content-category");
@@ -168,7 +168,7 @@ remove.addEventListener('click', () => {
 window.onload = function(){
     // 0개 대응
     if (dto.length == 0) {
-        const main = document.querySelector(".table");
+        const main = document.querySelector(".container");
         main.innerHTML = "<br><br><br><br><br><br><br><br>검색 결과가 없습니다.<br><br>다른 검색어로 검색해주세요";
     }
 
@@ -187,7 +187,7 @@ window.onload = function(){
     // 카드 추가 이벤트
     function newCardHandler(event) {
         // 현재 리스트 조건에 맞는지 체크 후 추가
-        var flag = false;
+        let flag = false;
 
         if (tag != "") {
             // 검색어 포함 태그 탐색

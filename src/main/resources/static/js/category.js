@@ -9,22 +9,16 @@ window.onload = function(){
     const prevShape = document.querySelector(".prev");
     const nextShape = document.querySelector(".next");
     const card = document.querySelector(".container");
+    const flexContent = document.querySelector(".flex-content");
     function isMobile(){
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
     if (isMobile()) {
+        flexContent.style.justifyContent = "center";
         prevShape.style.display = "none";
         nextShape.style.display = "none";
-        card.style.marginLeft = "70px";
-        card.style.marginRight = "70px";
         card.style.width = "calc(100vw - 140px)";
-    }
-    else {
-        prevShape.style.display = "flex";
-        nextShape.style.display = "flex";
-        card.style.marginLeft = "170px";
-        card.style.marginRight = "170px";
     }
 
     // 카테고리 해싱
@@ -34,17 +28,17 @@ window.onload = function(){
     }
 
     // 카테고리 표시
-    const categoryname = document.querySelector(".page-title");
-    categoryname.innerText = "Category > " + categoryMap.get(dto[0].cid);
+    const pageTitle = document.querySelector(".page-title");
+    pageTitle.innerText = "Category > " + categoryMap.get(dto[0].cid);
 
     // 각 종 elements
-    const cardTitle = document.getElementById("card-title");
-    const text = document.getElementById("card-text");
-    const question = document.getElementById("card-question");
-    const answer = document.getElementById("card-answer");
+    const cardTitle = document.querySelector(".card-title");
+    const text = document.querySelector(".card-text");
+    const question = document.querySelector(".card-question");
+    const answer = document.querySelector(".card-answer");
 
     // 카드 클릭 애니메이션
-    var check = null;
+    let check = null;
     card.addEventListener("click", function () {
         if (check == null){
             card.classList.add("rotate")
@@ -66,10 +60,10 @@ window.onload = function(){
     })
 
     // 현재 문제 및 전체문제 수 체크
-    const nowele = document.getElementById("now");
-    var now = 1;
+    const nowElement = document.getElementById("now");
+    let now = 1;
     document.getElementById("total").innerText = String(dto.length);
-    var total = dto.length;
+    let total = dto.length;
 
     // 처음 로딩
     text.innerText = dto[now -1].question;
@@ -106,8 +100,8 @@ window.onload = function(){
             }
             else {
                 now -= 1;
-                nowele.innerText = now;
-                card.classList.add("left2right");
+                nowElement.innerText = now;
+                card.classList.add("prev-show");
                 setTimeout(function () {
                     //텍스트 변환
                     cardTitle.innerText = "Q.";
@@ -116,7 +110,7 @@ window.onload = function(){
                     answer.innerText = dto[now - 1].answer;
                 }, 500);
                 check = setTimeout(function () {
-                    card.classList.remove("left2right")
+                    card.classList.remove("prev-show")
                     check = null;
                 }, 1000);
             }
@@ -133,8 +127,8 @@ window.onload = function(){
             }
             else {
                 now += 1;
-                nowele.innerText = now;
-                card.classList.add("right2left");
+                nowElement.innerText = now;
+                card.classList.add("next-show");
                 setTimeout(function () {
                     //텍스트 변환
                     cardTitle.innerText = "Q.";
@@ -143,7 +137,7 @@ window.onload = function(){
                     answer.innerText = dto[now - 1].answer;
                 }, 500);
                 check = setTimeout(function () {
-                    card.classList.remove("right2left")
+                    card.classList.remove("next-show")
                     check = null;
                 }, 1000);
             }

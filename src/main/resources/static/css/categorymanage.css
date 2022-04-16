@@ -1,3 +1,4 @@
+/* basic CSS */
 html {
     overflow-x: hidden;
     margin: 0;
@@ -5,14 +6,17 @@ html {
     border: 0;
 }
 
+/* content frame CSS */
 .container-item {
-    margin-top: 100px;
-    margin-bottom: 50px;
-    margin-left: 10%;
-    width: 80%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    --width: min(80%, 930px);
+    width: var(--width);
+    margin-left: calc((100vw - var(--width)) / 2);
 }
 
-.containerBody {
+/* category frame CSS */
+.container-body {
     margin: 15px;
     --height: 100px;
     height: var(--height);
@@ -21,8 +25,7 @@ html {
     background-size: calc(100% + 300px) 100%;
     background-image: linear-gradient(135deg, white, white calc(100% - 240px), var(--point-color) calc(100% - 200px), var(--point-color) 100%);
 }
-
-.containerLast {
+.container-last {
     margin: 10px;
     --height: 100px;
     height: var(--height);
@@ -34,7 +37,41 @@ html {
     justify-content: center;
     align-items: center;
 }
+.update, .delete {
+    opacity: 0;
+    float: right;
+    margin-top: 25px;
+    margin-right: 25px;
+    transition: opacity 500ms;
+}
+.category-name{
+    font-size: 30px;
+    float: left;
+    height: 40px;
+    margin-top: 28px;
+    margin-left: 50px;
+}
+.new-category-name {
+    font-size: 30px;
+    margin-top: 30px;
+    height: 36px;
+    width: min(calc(100% - 240px), 700px);
+}
+#create-category-name {
+    float: left;
+    margin-left: 50px;
+}
+#create-category-button {
+    display: none;
+    float: right;
+    margin-right: 65px;
+    margin-top: 25px;
+    padding: 0;
+    border: 0;
+    background: none;
+}
 
+/* category hover and button pop animation CSS */
 @keyframes pop-down {
     0% {
         background-position: -230px 0;
@@ -51,73 +88,20 @@ html {
         background-position: -230px 0;
     }
 }
-
 .buttons-pop-down {
     animation: pop-down 0.5s ease forwards;
 }
-
-.containerBody:hover {
+.container-body.hover, .container-body:hover {
     animation: pop-up 0.5s ease forwards;
 }
-
-.containerBody.hover {
-    animation: pop-up 0.5s ease forwards;
-}
-
-.containerLast:hover {
+.container-last.hover, .container-last:hover {
     background-color: var(--point-color);
 }
-
-.containerLast.hover {
-    background-color: var(--point-color);
-}
-
-.containerBody:hover .update, .containerBody:hover .delete {
+.container-body:hover .update, .container-body:hover .delete, .target {
     opacity: 1;
 }
 
-.update, .delete {
-    opacity: 0;
-    float: right;
-    margin-top: 25px;
-    margin-right: 25px;
-    transition: opacity 500ms;
-}
-
-.target {
-    opacity: 1;
-}
-
-.categoryName{
-    font-size: 30px;
-    float: left;
-    height: 40px;
-    margin-top: 28px;
-    margin-left: 50px;
-}
-
-.newCategoryName {
-    font-size: 30px;
-    margin-top: 30px;
-    height: 36px;
-    width: min(calc(100% - 240px), 700px);
-}
-
-#newCategoryName {
-    float: left;
-    margin-left: 50px;
-}
-
-#createCategory {
-    display: none;
-    float: right;
-    margin-right: 65px;
-    margin-top: 25px;
-    padding: 0;
-    border: 0;
-    background: none;
-}
-
+/* save button CSS */
 .save {
     position: fixed;
     bottom: -150px;
@@ -125,27 +109,24 @@ html {
     padding: 10px;
     transition: bottom 1s;
 }
-
 #save {
     width: 80px;
     --height: 50px;
     height: var(--height);
     border-radius: calc(var(--height) * 0.2);
-    border: 0 solid black;
     font-weight: bold;
     background-color: var(--main-color);
     border: 1px solid rgba(200, 200, 200, 0.3);
-    box-shadow: 0px 4px 7px 2px rgba(200, 200, 200, 0.7);
+    box-shadow: 0 4px 7px 2px rgba(200, 200, 200, 0.7);
 }
-
 #save:hover {
     background-color: var(--point-color);
 }
-
-.savepopup {
+.save-pop-up {
     bottom: 50px;
 }
 
+/* modal change CSS */
 #modal-change .modal-window {
     width: 450px;
     height: 300px;
@@ -156,10 +137,11 @@ html {
     font-size: 25px;
     font-weight: bold;
 }
-.change {
-    margin-top: 90px;
-    margin-right: 20px;
+#modal-change .modal-buttons {
+    justify-content: center;
 }
-.cancel {
+#modal-change .modal-buttons > button {
+    margin-top: 90px;
     margin-left: 20px;
+    margin-right: 20px;
 }

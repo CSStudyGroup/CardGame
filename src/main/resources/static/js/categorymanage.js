@@ -1,5 +1,5 @@
 // 삭제 처리
-var deleteTarget = -1;
+let deleteTarget = -1;
 function categoryDelete(cname){
     // 수정 도중 삭제 버튼을 눌렀을 경우
     if (updateCheck) {
@@ -24,7 +24,7 @@ function categoryDelete(cname){
     }
     else {
         // 해당 줄 삭제
-        document.querySelectorAll(".containerBody")[deleteTarget].remove();
+        document.querySelectorAll(".container-body")[deleteTarget].remove();
 
         // dto 삭제
         dto.splice(deleteTarget, 1);
@@ -36,8 +36,8 @@ function categoryDelete(cname){
 }
 
 // 카테고리 수정
-var updateCheck = false;
-var updateTarget = -1;
+let updateCheck = false;
+let updateTarget = -1;
 function categoryUpdate(cname){
 
     // 추가 도중 수정 버튼을 눌렀을 경우
@@ -51,7 +51,7 @@ function categoryUpdate(cname){
     }
 
     if (updateCheck) {
-        const input_box = document.querySelectorAll(".newCategoryName");
+        const input_box = document.querySelectorAll(".new-category-name");
         // 공백 체크
         if (input_box[updateTarget].value == "") {
             alert("공백은 이름으로 할 수 없습니다.");
@@ -92,8 +92,8 @@ function categoryUpdate(cname){
             }
         }
 
-        const original_name = document.querySelectorAll(".categoryName");
-        const input_box = document.querySelectorAll(".newCategoryName");
+        const original_name = document.querySelectorAll(".category-name");
+        const input_box = document.querySelectorAll(".new-category-name");
         const updateButton = document.querySelectorAll(".update");
         const deleteButton = document.querySelectorAll(".delete");
 
@@ -108,11 +108,11 @@ function categoryUpdate(cname){
 }
 
 // 카테고리 추가
-var insertCheck = false;
-const inputText = document.getElementById("newCategoryName");
-const plusMark = document.getElementById("plusMark");
-const createButton = document.getElementById("createCategory");
-const containerLast = document.querySelector(".containerLast");
+let insertCheck = false;
+const inputText = document.getElementById("create-category-name");
+const plusMark = document.getElementById("plus-mark");
+const createButton = document.getElementById("create-category-button");
+const containerLast = document.querySelector(".container-last");
 
 function categoryInsert() {
     // 수정 도중 추가 버튼을 눌렀을 경우
@@ -147,18 +147,18 @@ function createCategory() {
 
     // 새로운 컨테이너 바디
     let new_container = document.createElement("div");
-    new_container.setAttribute("class", "containerBody");
+    new_container.setAttribute("class", "container-body");
 
     // a추가
     let new_a = document.createElement("a");
     new_a.text = inputText.value + " (0)";
-    new_a.setAttribute("class", "categoryName");
+    new_a.setAttribute("class", "category-name");
     new_container.append(new_a);
 
     // input 추가
     let new_input = document.createElement("input");
     new_input.setAttribute("type", "hidden");
-    new_input.setAttribute("class", "newCategoryName");
+    new_input.setAttribute("class", "new-category-name");
     new_input.setAttribute("onkeyup", "enterEvent(event)");
     new_container.append(new_input);
 
@@ -193,11 +193,11 @@ function createCategory() {
 
     // 새로운 줄 추가
     const container_item = document.querySelector(".container-item");
-    const last_item = document.querySelector(".containerLast");
+    const last_item = document.querySelector(".container-last");
     container_item.insertBefore(new_container, last_item);
 
     // dto 추가
-    var new_dto = new Object();
+    let new_dto = {};
     new_dto.cid = null;
     new_dto.cname = inputText.value;
     new_dto.cnt = 0;
@@ -231,9 +231,9 @@ function restoreInsert(check) {
 
 // 수정 원상 복구
 function restoreUpdate(target) {
-    const containerBody = document.querySelectorAll(".containerBody");
-    const original_name = document.querySelectorAll(".categoryName");
-    const input_box = document.querySelectorAll(".newCategoryName");
+    const containerBody = document.querySelectorAll(".container-body");
+    const original_name = document.querySelectorAll(".category-name");
+    const input_box = document.querySelectorAll(".new-category-name");
     const updateButton = document.querySelectorAll(".update");
     const deleteButton = document.querySelectorAll(".delete");
     containerBody[target].classList.remove("hover");
@@ -247,11 +247,11 @@ function restoreUpdate(target) {
 }
 
 // change check
-var changeCheck = true;
+let changeCheck = true;
 function changeSomething() {
     if (changeCheck) {
         const saveButton = document.querySelector(".save");
-        saveButton.classList.add("savepopup");
+        saveButton.classList.add("save-pop-up");
         changeCheck = false;
     }
 }
@@ -272,12 +272,12 @@ function enterEvent (e) {
 window.onload = function(){
 
     // 컨테이너 호버 이벤트
-    const containerbodies = document.querySelectorAll(".containerBody");
-    for (let i = 0; i < containerbodies.length; i++) {
-        containerbodies[i].addEventListener("mouseenter", function (e) {
+    const containerBodies = document.querySelectorAll(".container-body");
+    for (let i = 0; i < containerBodies.length; i++) {
+        containerBodies[i].addEventListener("mouseenter", function (e) {
             e.target.classList.add("hover");
         });
-        containerbodies[i].addEventListener("mouseleave", function (e) {
+        containerBodies[i].addEventListener("mouseleave", function (e) {
             if (!e.target.children[2].classList.contains("target")) {
                 e.target.classList.remove("hover");
                 e.target.classList.add("buttons-pop-down");
@@ -296,7 +296,7 @@ window.onload = function(){
 
         // update 체크
         if (updateCheck) {
-            const containerBody = document.querySelectorAll(".containerBody");
+            const containerBody = document.querySelectorAll(".container-body");
             if (e.path[e.path.length - 7] != containerBody[updateTarget]) {
                 restoreUpdate(updateTarget);
             }
@@ -312,7 +312,7 @@ window.onload = function(){
                 for (let j = 0; j < dto.length; j++) {
                     if (dto[j].cname == categoryDtoList[i].cname) {
                         dto[j].cnt += 1
-                        const original_name = document.querySelectorAll(".categoryName");
+                        const original_name = document.querySelectorAll(".category-name");
                         original_name[j].innerText = dto[j].cname + " (" + dto[j].cnt + ")";
                         break;
                     }
@@ -348,9 +348,9 @@ window.onload = function(){
     const change = document.querySelector('.change');
     change.addEventListener('click', () => {
         // 쿼리 분류
-        var insertCategory = [];
-        var updateCategory = [];
-        var deleteCategory = [];
+        let insertCategory = [];
+        let updateCategory = [];
+        let deleteCategory = [];
 
         for (let i = 0; i < dto.length; i++) {
             // insert check
@@ -373,7 +373,7 @@ window.onload = function(){
 
         // delete check
         for (let i = categoryDtoList.length - 1; i >= 0; i--) {
-            var flag = true;
+            let flag = true;
 
             for (let j = 0; j < dto.length; j++) {
                 if (categoryDtoList[i].cid == dto[j].cid) {
@@ -399,7 +399,7 @@ window.onload = function(){
             alert("변경사항이 없습니다.");
 
             const saveButton = document.querySelector(".save");
-            saveButton.classList.remove("savepopup");
+            saveButton.classList.remove("save-pop-up");
             changeCheck = true;
 
             changeModal.style.display = "none";
@@ -408,10 +408,10 @@ window.onload = function(){
         }
 
         // categoryURL 작성
-        var categoryJSON = JSON.stringify({ insert : insertCategory, update : updateCategory, delete : deleteCategory});
+        let categoryJSON = JSON.stringify({ insert : insertCategory, update : updateCategory, delete : deleteCategory});
 
         // AJAX 요청
-        var categoryHttpRequest = new XMLHttpRequest();
+        let categoryHttpRequest = new XMLHttpRequest();
         categoryHttpRequest.onreadystatechange = postCategories;
 
         function postCategories(){
@@ -436,7 +436,7 @@ window.onload = function(){
 
                         // 버튼 숨김
                         const saveButton = document.querySelector(".save");
-                        saveButton.classList.remove("savepopup");
+                        saveButton.classList.remove("save-pop-up");
                         changeCheck = true;
                     }
                     else {

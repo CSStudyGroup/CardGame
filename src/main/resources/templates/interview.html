@@ -9,25 +9,27 @@
 <body>
     <th:block th:replace="fragment/navigator::navigator(title='Interview')"></th:block>
     <div class="main">
-        <div class="card-frame container clickable">
-            <p id="card-title">Q.</p>
-            <p id="card-category">카테고리</p>
-            <p class="text" id="card-text"></p>
-            <p style="display: none" id="card-question"></p>
-            <p style="display: none" id="card-answer"></p>
+        <div class="flex-content">
+            <div class="prev">
+                <button class="clickable" type="button" id="prev">
+                    <img th:src="@{/img/arrow_left_image.png}" height="30px" style="margin-right: 7px">
+                </button>
+            </div>
+            <div class="card-frame container clickable">
+                <a class="card-title">Q.</a>
+                <a class="card-category"></a>
+                <a class="card-text"></a>
+                <a style="display: none" class="card-question"></a>
+                <a style="display: none" class="card-answer"></a>
+            </div>
+            <div class="next">
+                <button class="clickable" type="button" id="next">
+                    <img th:src="@{/img/arrow_right_image.png}" height="30px" style="margin-left: 7px">
+                </button>
+            </div>
         </div>
         <div class="finish">
             <button class="clickable" type="button" id="finish">끝내기</button>
-        </div>
-        <div class="prev">
-            <button class="clickable" type="button" id="prev">
-                <img th:src="@{/img/arrow_left_image.png}" height="30px" style="margin-right: 7px">
-            </button>
-        </div>
-        <div class="next">
-            <button class="clickable" type="button" id="next">
-                <img th:src="@{/img/arrow_right_image.png}" height="30px" style="margin-left: 7px">
-            </button>
         </div>
     </div>
     <div th:replace="fragment/modal::modalFragment(modalId='modal-close',
@@ -37,7 +39,7 @@
         escClose=true,
         outClose=true)">
         <th:block class="modal-close-title">
-            <h2 class="close-caution">정말로 끝내시겠습니까?</h2>
+            <p class="close-caution">정말로 끝내시겠습니까?</p>
         </th:block>
         <th:block class="modal-close-buttons">
             <button class="end clickable" type="reset">끝내기</button>
@@ -45,8 +47,8 @@
         </th:block>
     </div>
     <script th:inline="javascript">
-        var dto = [[${cardDtoList}]];
-        var keywords = [[${keywords}]];
+        let dto = [[${cardDtoList}]];
+        let keywords = [[${keywords}]];
     </script>
 </body>
 </html>

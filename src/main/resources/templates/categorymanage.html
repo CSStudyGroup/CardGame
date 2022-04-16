@@ -10,9 +10,9 @@
     <th:block th:replace="fragment/navigator::navigator(title='Category Manage')"></th:block>
     <div class="main">
         <div class="container-item">
-            <div class="containerBody" th:each="categoryDto : ${categoryDtoList}">
-                <a class="categoryName" th:text="|${categoryDto.cname} (${categoryDto.cnt})|"></a>
-                <input type="hidden" class="newCategoryName" onkeyup="enterEvent(event)">
+            <div class="container-body" th:each="categoryDto : ${categoryDtoList}">
+                <a class="category-name" th:text="|${categoryDto.cname} (${categoryDto.cnt})|"></a>
+                <input type="hidden" class="new-category-name" onkeyup="enterEvent(event)">
                 <img class="delete clickable" height="50px" width="auto"
                      th:attr="onclick=|categoryDelete('${categoryDto.cname}')|"
                      th:src="@{/img/delete_image.png}">
@@ -20,10 +20,10 @@
                      th:attr="onclick=|categoryUpdate('${categoryDto.cname}')|"
                      th:src="@{/img/edit_image.png}">
             </div>
-            <div class="insert containerLast clickable" onclick="categoryInsert()">
-                <img class="insert" id="plusMark" th:src="@{/img/add_image.png}" height="50px">
-                <input type="hidden" class="insert newCategoryName" id="newCategoryName" onkeyup="enterEvent(event)">
-                <button class="insert clickable" type="button" id="createCategory" onclick="createCategory()">
+            <div class="insert container-last clickable" onclick="categoryInsert()">
+                <img class="insert" id="plus-mark" th:src="@{/img/add_image.png}" height="50px">
+                <input type="hidden" class="insert new-category-name" id="create-category-name" onkeyup="enterEvent(event)">
+                <button class="insert clickable" type="button" id="create-category-button" onclick="createCategory()">
                     <img class="insert" th:src="@{/img/add_image.png}" height="50px">
                 </button>
             </div>
@@ -39,7 +39,7 @@
         escClose=true,
         outClose=true)">
         <th:block class="modal-change-title">
-            <h2 class="change-caution">변경사항을 저장하시겠습니까?</h2>
+            <p class="change-caution">변경사항을 저장하시겠습니까?</p>
         </th:block>
         <th:block class="modal-change-buttons">
             <button class="change clickable" type="reset">저장</button>
@@ -47,7 +47,7 @@
         </th:block>
     </div>
     <script th:inline="javascript">
-        var dto = [[${categoryDtoList}]];
+        let dto = [[${categoryDtoList}]];
     </script>
 </body>
 </html>

@@ -9,22 +9,16 @@ window.onload = function(){
     const prevShape = document.querySelector(".prev");
     const nextShape = document.querySelector(".next");
     const card = document.querySelector(".container");
+    const flexContent = document.querySelector(".flex-content");
     function isMobile(){
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
     if (isMobile()) {
+        flexContent.style.justifyContent = "center";
         prevShape.style.display = "none";
         nextShape.style.display = "none";
-        card.style.marginLeft = "70px";
-        card.style.marginRight = "70px";
         card.style.width = "calc(100vw - 140px)";
-    }
-    else {
-        prevShape.style.display = "flex";
-        nextShape.style.display = "flex";
-        card.style.marginLeft = "170px";
-        card.style.marginRight = "170px";
     }
 
     // 문항 수 표시
@@ -38,12 +32,12 @@ window.onload = function(){
     }
 
     // 카드 클릭 애니메이션
-    const cardTitle = document.getElementById("card-title");
-    const text = document.getElementById("card-text");
-    const question = document.getElementById("card-question");
-    const answer = document.getElementById("card-answer");
-    const category = document.getElementById("card-category");
-    var check = null;
+    const cardTitle = document.querySelector(".card-title");
+    const text = document.querySelector(".card-text");
+    const question = document.querySelector(".card-question");
+    const answer = document.querySelector(".card-answer");
+    const category = document.querySelector(".card-category");
+    let check = null;
     card.addEventListener("click", function () {
         if (check == null){
             card.classList.add("rotate");
@@ -66,8 +60,8 @@ window.onload = function(){
 
     // 문항 수 관련 변수
     const min = 0
-    var max = dto.length - 1;
-    var now = 0
+    let max = dto.length - 1;
+    let now = 0
 
     // 슬라이드 관련
     let start_x, end_x;
@@ -96,7 +90,7 @@ window.onload = function(){
         if (check == null){
             now = (now - 1) - (dto.length * Math.floor((now - 1)/dto.length));
 
-            card.classList.add("prevshow");
+            card.classList.add("prev-show");
             setTimeout(function () {
                 cardTitle.innerText = "Q.";
                 category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
@@ -105,7 +99,7 @@ window.onload = function(){
                 answer.innerText = dto[now].answer;
             }, 500);
             check = setTimeout(function () {
-                card.classList.remove("prevshow");
+                card.classList.remove("prev-show");
                 check = null;
             }, 1000);
         }
@@ -118,7 +112,7 @@ window.onload = function(){
         if (check == null){
             now = (now + 1) % dto.length;
 
-            card.classList.add("nextshow");
+            card.classList.add("next-show");
             setTimeout(function () {
                 cardTitle.innerText = "Q.";
                 category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
@@ -127,7 +121,7 @@ window.onload = function(){
                 answer.innerText = dto[now].answer;
             }, 500);
             check = setTimeout(function () {
-                card.classList.remove("nextshow");
+                card.classList.remove("next-show");
                 check = null;
             }, 1000);
         }

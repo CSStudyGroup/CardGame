@@ -1,3 +1,4 @@
+/* basic CSS */
 html {
     overflow: hidden;
     margin: 0;
@@ -5,12 +6,19 @@ html {
     border: 0;
 }
 
+/* content frame CSS */
+.flex-content {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* card frame CSS */
 .container {
     display: flex;
-    position: fixed;
-    margin-top: 85px;
-    margin-left: 170px;
-    margin-right: 170px;
+    position: relative;
     width: calc(100vw - 340px);
     height: calc(100vh - 340px);
     border-radius: 40px;
@@ -20,61 +28,44 @@ html {
     align-items: center;
     word-break: break-word;
     text-align: center;
-    overflow: hidden;
 }
-
-#card-title {
+.card-title {
     position: absolute;
     left: 20px;
-    top: 10px;
+    top: 20px;
     font-size: 100px;
     font-family: "Ink Free";
     margin: 0;
 }
-
-#card-category {
+.card-category {
     position: absolute;
     right: 30px;
-    top: 30px;
+    top: 40px;
     font-size: 20px;
     margin: 0;
 }
+.card-text {
+    font-size: min(6vw, 50px);
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
+/* card rotate animation CSS */
 .rotate {
     animation-name: rotate;
     animation-duration: 1s;
 }
-
 @keyframes rotate {
     50% {
         transform: rotateY(90deg);
     }
 }
 
-.text {
-    font-size: min(6vw, 50px);
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-.prev {
-    position: absolute;
-    display: flex;
-    margin-top: 85px;
-    height: calc(100vh - 310px);
-    left: 50px;
+/* card button CSS */
+.prev, .next {
     align-items: center;
+    margin: 50px;
 }
-
-.next {
-    position: absolute;
-    display: flex;
-    margin-top: 85px;
-    height: calc(100vh - 310px);
-    right: 50px;
-    align-items: center;
-}
-
 #prev, #next {
     display: flex;
     width: 70px;
@@ -85,12 +76,16 @@ html {
     justify-content: center;
     background: none;
 }
-
 #prev:hover, #next:hover {
     background-color: var(--point-color);
 }
 
-@keyframes prevshow {
+/* card slide animation CSS */
+.prev-show {
+    animation-name: prev-show;
+    animation-duration: 1s;
+}
+@keyframes prev-show {
     49% {
         opacity: 0;
         transform: translateX(60%);
@@ -100,13 +95,11 @@ html {
         transform: translateX(-60%);
     }
 }
-
-.prevshow {
-    animation-name: prevshow;
+.next-show {
+    animation-name: next-show;
     animation-duration: 1s;
 }
-
-@keyframes nextshow {
+@keyframes next-show {
     49% {
         opacity: 0;
         transform: translateX(-60%);
@@ -117,17 +110,12 @@ html {
     }
 }
 
-.nextshow {
-    animation-name: nextshow;
-    animation-duration: 1s;
-}
-
+/* finish button CSS */
 .finish {
     position: absolute;
     top: 130px;
     right: 50px;
 }
-
 #finish {
     width: 80px;
     height: 50px;
@@ -136,11 +124,11 @@ html {
     box-shadow: 0 4px 7px 2px rgba(200, 200, 200, 0.7);
     background-color: var(--main-color);
 }
-
 #finish:hover {
     background-color: var(--point-color);
 }
 
+/* modal close CSS */
 #modal-close .modal-window {
     width: 450px;
     height: 300px;
@@ -151,10 +139,11 @@ html {
     font-size: 25px;
     font-weight: bold;
 }
-.end {
-    margin-top: 90px;
-    margin-right: 20px;
+#modal-close .modal-buttons {
+    justify-content: center;
 }
-.cancel {
+#modal-close .modal-buttons > button {
+    margin-top: 90px;
     margin-left: 20px;
+    margin-right: 20px;
 }

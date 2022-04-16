@@ -1,3 +1,4 @@
+/* basic CSS */
 html {
     overflow: hidden;
     margin: 0;
@@ -5,24 +6,30 @@ html {
     border: 0;
 }
 
+/* content frame CSS */
+.flex-content {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* card frame CSS */
 .container {
     display: flex;
-    position: fixed;
-    margin-top: 145px;
-    margin-left: 170px;
-    margin-right: 170px;
+    position: relative;
     width: calc(100vw - 340px);
-    height: calc(100vh - 310px);
+    height: calc(100vh - 340px);
     border-radius: 40px;
     border: 1px solid rgba(200, 200, 200, 0.7);
-    box-shadow: 0px 0px 5px 2px rgba(173, 174, 174, 0.6);
+    box-shadow: 0 0 5px 2px rgba(173, 174, 174, 0.6);
     justify-content: center;
     align-items: center;
     word-break: break-word;
     text-align: center;
 }
-
-#card-title {
+.card-title {
     position: absolute;
     left: 20px;
     top: 10px;
@@ -30,96 +37,79 @@ html {
     font-family: "Ink Free";
     margin: 0;
 }
+.card-text {
+    font-size: min(6vw, 50px);
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
+/* card rotate animation CSS */
 .rotate {
     animation-name: rotate;
     animation-duration: 1s;
 }
-
 @keyframes rotate {
     50% {
         transform: rotateY(90deg);
     }
 }
 
-.left2right {
-    animation-name: left2right;
-    animation-duration: 1s;
-}
-
-@keyframes left2right {
-    49% {
-        opacity: 0;
-        transform: translateX(60%);
-    }
-    50% {
-        opacity: 0;
-        transform: translateX(-60%);
-    }
-}
-
-.right2left {
-    animation-name: right2left;
-    animation-duration: 1s;
-}
-
-@keyframes right2left {
-    49% {
-        opacity: 0;
-        transform: translateX(-60%);
-    }
-    50% {
-        opacity: 0;
-        transform: translateX(60%);
-    }
-}
-
-.text {
-    font-size: min(6vw, 50px);
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-.prev {
-    position: absolute;
-    display: flex;
-    margin-top: 145px;
-    height: calc(100vh - 310px);
-    left: 50px;
+/* card button CSS */
+.prev, .next {
     align-items: center;
+    margin: 50px;
 }
-
-.next {
-    position: absolute;
-    display: flex;
-    margin-top: 145px;
-    height: calc(100vh - 310px);
-    right: 50px;
-    align-items: center;
-}
-
 #prev, #next {
     display: flex;
     width: 70px;
     height: 70px;
     border-radius: 35px;
-    border: 0px solid black;
+    border: 0 solid black;
     align-items: center;
     justify-content: center;
     background: none;
 }
-
 #prev:hover, #next:hover {
     background-color: var(--point-color);
 }
 
+/* card slide animation CSS */
+.prev-show {
+    animation-name: prev-show;
+    animation-duration: 1s;
+}
+@keyframes prev-show {
+    49% {
+        opacity: 0;
+        transform: translateX(60%);
+    }
+    50% {
+        opacity: 0;
+        transform: translateX(-60%);
+    }
+}
+.next-show {
+    animation-name: next-show;
+    animation-duration: 1s;
+}
+@keyframes next-show {
+    49% {
+        opacity: 0;
+        transform: translateX(-60%);
+    }
+    50% {
+        opacity: 0;
+        transform: translateX(60%);
+    }
+}
+
+/* page indicator CSS */
 .indicator {
     position: absolute;
     bottom: 30px;
     left: 50%;
     transform: translate(-50%, 0);
 }
-
 .indicator text {
     font-size: 18px;
 }
