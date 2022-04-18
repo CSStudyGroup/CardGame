@@ -14,7 +14,7 @@
                 <a class="category-name" th:text="|${categoryDto.cname} (${categoryDto.cnt})|"></a>
                 <input type="hidden" class="new-category-name" onkeyup="enterEvent(event)">
                 <img class="delete clickable" height="50px" width="auto"
-                     th:attr="onclick=|categoryDelete('${categoryDto.cname}')|"
+                     th:attr="onclick=|categoryDeleteCheck('${categoryDto.cname}')|"
                      th:src="@{/img/delete_image.png}">
                 <img class="update clickable" height="50px" width="auto"
                      th:attr="onclick=|categoryUpdate('${categoryDto.cname}')|"
@@ -31,6 +31,23 @@
     </div>
     <div class="save">
         <button class="clickable" type="button" id="save">SAVE</button>
+    </div>
+    <div th:replace="fragment/modal::modalFragment(modalId='modal-delete',
+        title=~{::.modal-delete-title},
+        buttons=~{::.modal-delete-buttons},
+        closeButton=false,
+        escClose=true,
+        outClose=true)">
+        <th:block class="modal-delete-title">
+            <p class="delete-caution"></p>
+            <p hidden id="modal-delete-cname"></p>
+        </th:block>
+        <th:block class="modal-delete-buttons">
+            <button class="clickable" type="reset"
+                    onclick="deleteConfirm()">삭제</button>
+            <button class="clickable" type="reset"
+                    onclick="deleteCancel()">취소</button>
+        </th:block>
     </div>
     <div th:replace="fragment/modal::modalFragment(modalId='modal-change',
         title=~{::.modal-change-title},

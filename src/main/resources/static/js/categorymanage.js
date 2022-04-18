@@ -1,5 +1,24 @@
 // 삭제 처리
 let deleteTarget = -1;
+const deleteModal = document.getElementById("modal-delete");
+const deleteCaution = document.querySelector(".delete-caution");
+const deleteCname = document.getElementById("modal-delete-cname");
+
+function categoryDeleteCheck(cname){
+    deleteCaution.innerText = cname + "을\n정말로 삭제하시겠습니까?";
+    deleteCname.innerText = cname;
+    deleteModal.style.display = "flex";
+}
+
+function deleteCancel(){
+    deleteModal.style.display = "none";
+}
+
+function deleteConfirm(){
+    categoryDelete(deleteCname.innerText);
+    deleteModal.style.display = "none";
+}
+
 function categoryDelete(cname){
     // 수정 도중 삭제 버튼을 눌렀을 경우
     if (updateCheck) {
@@ -168,7 +187,7 @@ function createCategory() {
     new_delete.setAttribute("height", "50px");
     new_delete.setAttribute("width", "auto");
     new_delete.setAttribute("src", "/img/delete_image.png");
-    new_delete.setAttribute("onclick", "categoryDelete('" + inputText.value + "')")
+    new_delete.setAttribute("onclick", "categoryDeleteCheck('" + inputText.value + "')")
     new_container.append(new_delete);
 
     // update 추가
@@ -266,6 +285,13 @@ function enterEvent (e) {
         else if (insertCheck) {
             createCategory();
         }
+    }
+}
+
+// 저장하지 않은 후 나갈 경우 체크
+window.onbeforeunload = function() {
+    if (!changeCheck) {
+        return true;
     }
 }
 

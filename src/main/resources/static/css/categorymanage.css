@@ -126,21 +126,21 @@ html {
     bottom: 50px;
 }
 
-/* modal change CSS */
-#modal-change .modal-window {
+/* modal change and delete CSS */
+#modal-change .modal-window, #modal-delete .modal-window {
     width: 450px;
     height: 300px;
     text-align: center;
 }
-.change-caution {
+.change-caution, .delete-caution {
     margin-top: 90px;
     font-size: 25px;
     font-weight: bold;
 }
-#modal-change .modal-buttons {
+#modal-change .modal-buttons, #modal-delete .modal-buttons {
     justify-content: center;
 }
-#modal-change .modal-buttons > button {
+#modal-change .modal-buttons > button, #modal-delete .modal-buttons > button {
     margin-top: 90px;
     margin-left: 20px;
     margin-right: 20px;
