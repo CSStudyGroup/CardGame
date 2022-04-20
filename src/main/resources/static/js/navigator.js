@@ -4,7 +4,6 @@ const narrowNav = document.querySelector(".navbar-narrow");
 const narrowNavOverlay = document.querySelector(".navbar-narrow-overlay");
 const navbarSearchContainer = document.querySelector(".navbar-search-container");
 const navbarSearchShowButton = document.querySelector(".navbar-search-show");
-
 function narrowNavbarShow() {
     narrowNavOverlay.style.display = "flex";
     narrowNav.classList.add('navbar-narrow-appear');
@@ -15,23 +14,20 @@ function narrowNavbarHide() {
     narrowNav.classList.remove('navbar-narrow-appear');
 }
 
-function resize(entries) {
-    if (entries[0].contentRect.width > 500) {
-        navbarSearchHide();
-    }
-    if (entries[0].contentRect.width > 1000) {
-        narrowNavbarHide();
-    }
-}
-const resizeObserver = new ResizeObserver(resize);
-resizeObserver.observe(navbar);
-
 // 카드 추가를 위한 element
 const insertModal = document.querySelector("#modal-insert");
 const insertCategory = document.querySelector("#modal-insert-content-category-select");
 const insertTags = document.querySelector("#modal-insert-content-tags");
 const insertQuestion = document.querySelector("#modal-insert-content-question");
 const insertAnswer = document.querySelector("#modal-insert-content-answer");
+
+insertCategory.addEventListener('click', (e) => {
+    e.stopPropagation();
+})
+
+insertModal.addEventListener('click', (e) => {
+    insertCategory.classList.remove('sb-option-open');
+});
 
 function insert() {
     insertCategory.value = 'none';
@@ -43,7 +39,7 @@ function insert() {
 
 function insertModalSubmit(){
     // 필수내용 작성 확인
-    if (insertCategory.value == 'none') {
+    if (insertCategory.dataset.value == 'none') {
         alert('카테고리를 선택해주세요.');
         return;
     }
@@ -83,7 +79,7 @@ function insertModalSubmit(){
     }
     httpRequest.open('POST',
         '/card/cardInsert'
-        + "?cid=" + insertCategory.value
+        + "?cid=" + insertCategory.dataset.value
         + "&question=" + insertQuestion.value
         + "&answer=" + insertAnswer.value
         + "&tags=" + insertTags.value );
@@ -129,24 +125,25 @@ function interviewCancel() {
 }
 
 // 검색
-const searchCriteria = document.querySelector("#search-criteria");
-const searchKeyword = document.querySelector("#search-keyword");
-const categoryKey = document.querySelector("#categoryKey");
-const tagKey = document.querySelector("#tagKey");
-const questionKey = document.querySelector("#questionKey");
-const searchForm = document.querySelector("#searchForm");
-const keyString = document.querySelector('#keystring');
+const navbarSearchCriteria = document.querySelector("#navbar-search-criteria");
+const navbarSearchKeyword = document.querySelector("#navbar-search-keyword");
+const categoryKey = document.querySelector("#category-key");
+const tagKey = document.querySelector("#tag-key");
+const questionKey = document.querySelector("#question-key");
+const searchForm = document.querySelector("#navbar-search-form");
+const keyString = document.querySelector('#input-key');
+const searchOptionSelected = navbarSearchCriteria.querySelector('.sb-option-selected');
 
 // 검색 결과 표시 페이지일 경우(list) 키워드 표시
 if (window.location.pathname === "/card/list") {
     if (keystring != "") {
-        searchKeyword.value = keystring;
+        navbarSearchKeyword.value = keystring;
     }
 }
 
 function search() {
-    let kw = searchKeyword.value;
-    switch(searchCriteria.value) {
+    let kw = navbarSearchKeyword.value;
+    switch(navbarSearchCriteria.dataset.value) {
         case 'category':
             let cid = null;
             for(let i=0; i<categoryDtoList.length; i++) {
@@ -177,8 +174,7 @@ function searchEnterKey(e) {
 
 // 드롭다운 검색창
 function navbarSearchShow(e) {
-    searchCriteria.value = 'category';
-    searchKeyword.value = '';
+    navbarSearchKeyword.value = '';
     navbarSearchContainer.classList.add('navbar-search-open');
     navbarSearchShowButton.style.visibility = "hidden";
     e.stopPropagation();
@@ -187,13 +183,14 @@ function navbarSearchShow(e) {
 function navbarSearchHide() {
     navbarSearchContainer.classList.remove('navbar-search-open');
     navbarSearchShowButton.style.visibility = "visible";
+    navbarSearchCriteria.classList.remove('sb-option-open');
 }
 
 navbarSearchContainer.addEventListener('click', (e) => {
     e.stopPropagation();
 })
 
-document.querySelector("body").addEventListener("click", (e) => {
+document.addEventListener("click", (e) => {
     navbarSearchHide();
 });
 
@@ -269,3 +266,17 @@ function preItem() {
 function nxtItem() {
     selectedIndex.value += 1;
 }
+
+
+/* resize observer */
+function resize(entries) {
+    if (entries[0].contentRect.width > 500) {
+        navbarSearchHide();
+    }
+
+    if (entries[0].contentRect.width > 1000) {
+        narrowNavbarHide();
+    }
+}
+const resizeObserver = new ResizeObserver(resize);
+resizeObserver.observe(navbar);

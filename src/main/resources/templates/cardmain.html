@@ -9,7 +9,7 @@
     <th:block th:replace="fragment/navigator::navigator(title='cardmain')"></th:block>
     <div class="main">
         <div class="category-container">
-            <div class="card-frame card-category"
+            <div class="card-frame card-category clickable"
                  th:each="categoryDto: ${ categoryDtoList }"
                  th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.cid }'|">
                 <div class="card-category-name">
