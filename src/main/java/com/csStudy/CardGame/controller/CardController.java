@@ -75,19 +75,19 @@ public class CardController {
     }
 
     @GetMapping("/card/list")
-    public String list(@RequestParam("keyword") String keyword,
-                       @RequestParam("keystring") String keystring, Model model) {
+    public String list(@RequestParam("criteria") String criteria,
+                       @RequestParam("keyword") String keyword, Model model) {
         // 빈 배열 선언
         List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
 
-        if (keyword.equals("tag")) {
-            cardDtoList = cardService.filterCardsByTag(keystring);
+        if (criteria.equals("tag")) {
+            cardDtoList = cardService.filterCardsByTag(keyword);
         }
-        else if (keyword.equals("question")) {
-            cardDtoList = cardService.filterCardsByQuestion(keystring);
+        else if (criteria.equals("question")) {
+            cardDtoList = cardService.filterCardsByQuestion(keyword);
         }
-        else if (keyword.equals("cid")) {
-            cardDtoList = cardService.filterCardsByCategory(parseInt(keystring));
+        else if (criteria.equals("cid")) {
+            cardDtoList = cardService.filterCardsByCategory(parseInt(keyword));
         }
 
         // 모델 추가
@@ -98,8 +98,8 @@ public class CardController {
         model.addAttribute("categoryDtoList", categoryDtoList);
 
         // 검색 키워드를 알기위한 키워드 전송
+        model.addAttribute("criteria", criteria);
         model.addAttribute("keyword", keyword);
-        model.addAttribute("keystring", keystring);
 
         return "list";
     }
