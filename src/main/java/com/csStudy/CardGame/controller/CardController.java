@@ -76,7 +76,8 @@ public class CardController {
 
     @GetMapping("/card/list")
     public String list(@RequestParam("criteria") String criteria,
-                       @RequestParam("keyword") String keyword, Model model) {
+                       @RequestParam("keyword") String keyword,
+                       @RequestParam("original") String original, Model model) {
         // 빈 배열 선언
         List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
 
@@ -100,6 +101,7 @@ public class CardController {
         // 검색 키워드를 알기위한 키워드 전송
         model.addAttribute("criteria", criteria);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("original", original);
 
         return "list";
     }
