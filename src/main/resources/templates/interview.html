@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <th:block th:replace="fragment/head::headFragment"></th:block>
     <link rel="stylesheet" th:href="@{/css/interview.css(ver=${#calendars.createNow()})}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script defer th:src="@{/js/interview.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
@@ -16,11 +17,10 @@
                 </button>
             </div>
             <div class="card-frame container clickable">
-                <a class="card-title">Q.</a>
-                <a class="card-category"></a>
-                <a class="card-text"></a>
-                <a style="display: none" class="card-question"></a>
-                <a style="display: none" class="card-answer"></a>
+                <p class="card-title">Q.</p>
+                <p class="card-category"></p>
+                <p class="card-question"></p>
+                <div class="card-answer"></div>
             </div>
             <div class="next">
                 <button class="clickable" type="button" id="next">

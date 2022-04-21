@@ -80,18 +80,18 @@
         </th:block>
         <th:block class="modal-update-content">
             <form class="modal-content-category" id="modal-update-content-category">
-                <select id="modal-update-content-category-select">
-                    <option value="none" selected disabled hidden>===선택===</option>
-                    <option th:each="categoryDto : ${categoryDtoList}"
-                            th:value="${categoryDto.cid}"
-                            th:text="${categoryDto.cname}"></option>
-                </select>
+                <form id="modal-insert-content-category">
+                    <div th:replace="fragment/selectbox::selectBoxFragment(selectBoxId='modal-update-content-category-select',
+                    optionList=${ categoryDtoList },
+                    optionText='cname',
+                    optionValue='cid')"></div>
+                </form>
             </form>
             <a class="modal-content-title modal-title-question">Q.</a>
             <textarea maxlength="200" class="modal-content-textarea"
                       id="modal-update-content-question"></textarea>
             <a class="modal-content-title modal-title-answer">A.</a>
-            <textarea maxlength="800" class="modal-content-textarea"
+            <textarea maxlength="1000" class="modal-content-textarea"
                       id="modal-update-content-answer"></textarea>
             <a class="modal-content-title modal-title-tags">T.</a>
             <textarea maxlength="210" class="modal-content-textarea"

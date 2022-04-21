@@ -75,21 +75,19 @@ public class CardController {
     }
 
     @GetMapping("/card/list")
-    public String list(@RequestParam("tag") String tag,
-                       @RequestParam("question") String question,
-                       @RequestParam("cid") String cid,
+    public String list(@RequestParam("keyword") String keyword,
                        @RequestParam("keystring") String keystring, Model model) {
         // 빈 배열 선언
         List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
 
-        if (tag != "") {
-            cardDtoList = cardService.filterCardsByTag(tag);
+        if (keyword.equals("tag")) {
+            cardDtoList = cardService.filterCardsByTag(keystring);
         }
-        else if (question != "") {
-            cardDtoList = cardService.filterCardsByQuestion(question);
+        else if (keyword.equals("question")) {
+            cardDtoList = cardService.filterCardsByQuestion(keystring);
         }
-        else if (cid != "") {
-            cardDtoList = cardService.filterCardsByCategory(parseInt(cid));
+        else if (keyword.equals("cid")) {
+            cardDtoList = cardService.filterCardsByCategory(parseInt(keystring));
         }
 
         // 모델 추가
@@ -100,9 +98,7 @@ public class CardController {
         model.addAttribute("categoryDtoList", categoryDtoList);
 
         // 검색 키워드를 알기위한 키워드 전송
-        model.addAttribute("tag", tag);
-        model.addAttribute("question", question);
-        model.addAttribute("cid", cid);
+        model.addAttribute("keyword", keyword);
         model.addAttribute("keystring", keystring);
 
         return "list";
@@ -122,21 +118,21 @@ public class CardController {
     // 카드 추가
     @ResponseBody
     @PostMapping("card/cardInsert")
-    public CardDto cardInsert(CardDto cardDto) {
+    public CardDto cardInsert(@RequestBody CardDto cardDto) {
         return cardService.addCard(cardDto);
     }
 
     // 카드 수정
     @ResponseBody
     @PostMapping("card/cardUpdate")
-    public int cardUpdate(CardDto cardDto) {
+    public int cardUpdate(@RequestBody CardDto cardDto) {
         return cardService.updateCard(cardDto);
     }
 
     // 카드 삭제
     @ResponseBody
     @PostMapping("card/cardDelete")
-    public int cardDelete(CardDto cardDto) {
+    public int cardDelete(@RequestBody CardDto cardDto) {
         return cardService.deleteCard(cardDto);
     }
 

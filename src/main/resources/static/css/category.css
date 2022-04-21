@@ -26,8 +26,6 @@ html {
     box-shadow: 0 0 5px 2px rgba(173, 174, 174, 0.6);
     justify-content: center;
     align-items: center;
-    word-break: break-word;
-    text-align: center;
 }
 .card-title {
     position: absolute;
@@ -37,10 +35,27 @@ html {
     font-family: "Ink Free";
     margin: 0;
 }
-.card-text {
-    font-size: min(6vw, 50px);
+.card-question {
     padding-left: 20px;
     padding-right: 20px;
+    text-align: center;
+    font-size: min(5vw, min(5vh, 40px));
+    font-weight: bold;
+}
+.card-answer {
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    width: calc(100% - 60px);
+    height: calc(100% - 160px);
+    margin: 130px 30px 30px 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: min(3vw, min(3vh, 30px));
+    color: black;
+    resize: none;
+    background: transparent;
+    border: 0px;
 }
 
 /* card rotate animation CSS */
