@@ -18,9 +18,9 @@ function text(id) {
         if (dto[i].id == id) {
             modalViewTitleText.innerText = dto[i].id + "번 카드 내용";
             viewCategory.innerText = "(" + categoryMap.get(dto[i].cid) + ")";
-            viewTags.innerText = dto[i].tags;
-            viewQuestion.innerText = dto[i].question;
-            viewAnswer.innerText = dto[i].answer;
+            viewTags.value = dto[i].tags;
+            viewQuestion.value = dto[i].question;
+            viewAnswer.value = dto[i].answer;
             viewModal.style.display = "flex";
             break;
         }
@@ -39,12 +39,20 @@ const updateTags = document.getElementById("modal-update-content-tags");
 const updateQuestion = document.getElementById("modal-update-content-question");
 const updateAnswer = document.getElementById("modal-update-content-answer");
 
+updateCategory.addEventListener('click', (e) => {
+    e.stopPropagation();
+})
+
+updateModal.addEventListener('click', (e) => {
+    updateCategory.classList.remove('sb-option-open');
+});
+
 function update(id){
     for (let i = 0; i < dto.length; i++) {
         if (dto[i].id == id) {
             target = i;
             modalUpdateTitleText.innerText = dto[i].id + "번 카드 수정";
-            updateCategory.value = dto[i].cid;
+            selectOption("modal-update-content-category-select", categoryMap.get(dto[i].cid), dto[i].cid)
             updateTags.value = dto[i].tags;
             updateQuestion.value = dto[i].question;
             updateAnswer.value = dto[i].answer;
@@ -79,14 +87,14 @@ function updateModalSubmit(){
                     const temp = document.querySelectorAll(".tableBody")[target];
 
                     // dto 수정
-                    dto[target].cid = parseInt(updateCategory.value);
+                    dto[target].cid = parseInt(updateCategory.dataset.value);
                     dto[target].tags = updateTags.value;
                     dto[target].question = updateQuestion.value;
                     dto[target].answer = updateAnswer.value;
 
                     // 테이블 수정
-                    temp.children[1].innerText = categoryMap.get(parseInt(updateCategory.value));
-                    temp.children[2].innerText = updateQuestion.value;
+                    temp.children[1].innerText = categoryMap.get(parseInt(updateCategory.dataset.value));
+                    temp.children[2].innerHTML = updateQuestion.value;
                 }
                 else {
                     alert("수정 실패");
@@ -98,13 +106,14 @@ function updateModalSubmit(){
         }
     }
     listHttpRequest.open('POST',
-        '/card/cardUpdate'
-        + "?id=" + dto[target].id
-        + "&cid=" + updateCategory.value
-        + "&question=" + updateQuestion.value
-        + "&answer=" + updateAnswer.value
-        + "&tags=" + updateTags.value );
-    listHttpRequest.send();
+        '/card/cardUpdate');
+    listHttpRequest.setRequestHeader('Content-type', 'application/json');
+    let updateJSON = JSON.stringify({ id : dto[target].id,
+        cid : updateCategory.dataset.value,
+        question : updateQuestion.value,
+        answer : updateAnswer.value,
+        tags : updateTags.value});
+    listHttpRequest.send(updateJSON);
 }
 
 function updateModalClose(){
@@ -155,13 +164,14 @@ remove.addEventListener('click', () => {
             }
         }
         listHttpRequest.open('POST',
-            '/card/cardDelete'
-            + "?id=" + dto[target].id
-            + "&cid=" + dto[target].cid
-            + "&question=" + dto[target].question
-            + "&answer=" + dto[target].answer
-            + "&tags=" + dto[target].tags);
-        listHttpRequest.send()
+            '/card/cardDelete');
+        listHttpRequest.setRequestHeader('Content-type', 'application/json');
+        let deleteJSON = JSON.stringify({ id : dto[target].id,
+            cid : dto[target].cid,
+            question : dto[target].question,
+            answer : dto[target].answer,
+            tags : dto[target].tags});
+        listHttpRequest.send(deleteJSON);
     }
 });
 

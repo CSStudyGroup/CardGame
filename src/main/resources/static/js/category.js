@@ -33,7 +33,6 @@ window.onload = function(){
 
     // 각 종 elements
     const cardTitle = document.querySelector(".card-title");
-    const text = document.querySelector(".card-text");
     const question = document.querySelector(".card-question");
     const answer = document.querySelector(".card-answer");
 
@@ -43,13 +42,16 @@ window.onload = function(){
         if (check == null){
             card.classList.add("rotate")
             setTimeout(function () {
-                if (text.innerText == question.innerText) {
+                if (cardTitle.innerText == "Q.") {
                     cardTitle.innerText = "A.";
-                    text.innerText = answer.innerText;
+                    question.style.display = "none";
+                    answer.style.display = "block";
+                    answer.scrollTo(0,0);
                 }
                 else {
                     cardTitle.innerText = "Q.";
-                    text.innerText = question.innerText;
+                    question.style.display = "block";
+                    answer.style.display = "none";
                 }
             }, 500);
             check = setTimeout(function () {
@@ -66,9 +68,8 @@ window.onload = function(){
     let total = dto.length;
 
     // 처음 로딩
-    text.innerText = dto[now -1].question;
     question.innerText = dto[now - 1].question;
-    answer.innerText = dto[now - 1].answer;
+    answer.innerHTML = marked.parse(dto[now - 1].answer);
 
     // 슬라이드 관련
     let start_x, end_x;
@@ -105,9 +106,11 @@ window.onload = function(){
                 setTimeout(function () {
                     //텍스트 변환
                     cardTitle.innerText = "Q.";
-                    text.innerText = dto[now -1].question;
+                    question.style.display = "block";
+                    answer.style.display = "none";
+                    answer.scrollTo(0,0);
                     question.innerText = dto[now - 1].question;
-                    answer.innerText = dto[now - 1].answer;
+                    answer.innerHTML = marked.parse(dto[now - 1].answer);
                 }, 500);
                 check = setTimeout(function () {
                     card.classList.remove("prev-show")
@@ -132,9 +135,11 @@ window.onload = function(){
                 setTimeout(function () {
                     //텍스트 변환
                     cardTitle.innerText = "Q.";
-                    text.innerText = dto[now -1].question;
+                    question.style.display = "block";
+                    answer.style.display = "none";
+                    answer.scrollTo(0,0);
                     question.innerText = dto[now - 1].question;
-                    answer.innerText = dto[now - 1].answer;
+                    answer.innerHTML = marked.parse(dto[now - 1].answer);
                 }, 500);
                 check = setTimeout(function () {
                     card.classList.remove("next-show")

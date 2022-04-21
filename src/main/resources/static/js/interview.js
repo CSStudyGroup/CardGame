@@ -33,7 +33,6 @@ window.onload = function(){
 
     // 카드 클릭 애니메이션
     const cardTitle = document.querySelector(".card-title");
-    const text = document.querySelector(".card-text");
     const question = document.querySelector(".card-question");
     const answer = document.querySelector(".card-answer");
     const category = document.querySelector(".card-category");
@@ -42,13 +41,16 @@ window.onload = function(){
         if (check == null){
             card.classList.add("rotate");
             setTimeout(function () {
-                if (text.innerText == question.innerText) {
+                if (cardTitle.innerText == "Q.") {
                     cardTitle.innerText = "A.";
-                    text.innerText = answer.innerText;
+                    question.style.display = "none";
+                    answer.style.display = "block";
+                    answer.scrollTo(0,0);
                 }
                 else {
                     cardTitle.innerText = "Q.";
-                    text.innerText = question.innerText;
+                    question.style.display = "block";
+                    answer.style.display = "none";
                 }
             }, 500);
             check = setTimeout(function () {
@@ -94,9 +96,11 @@ window.onload = function(){
             setTimeout(function () {
                 cardTitle.innerText = "Q.";
                 category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
-                text.innerText = dto[now].question;
+                question.style.display = "block";
+                answer.style.display = "none";
+                answer.scrollTo(0,0);
                 question.innerText = dto[now].question;
-                answer.innerText = dto[now].answer;
+                answer.innerHTML = marked.parse(dto[now].answer);
             }, 500);
             check = setTimeout(function () {
                 card.classList.remove("prev-show");
@@ -116,9 +120,11 @@ window.onload = function(){
             setTimeout(function () {
                 cardTitle.innerText = "Q.";
                 category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
-                text.innerText = dto[now].question;
+                question.style.display = "block";
+                answer.style.display = "none";
+                answer.scrollTo(0,0);
                 question.innerText = dto[now].question;
-                answer.innerText = dto[now].answer;
+                answer.innerHTML = marked.parse(dto[now].answer);
             }, 500);
             check = setTimeout(function () {
                 card.classList.remove("next-show");
@@ -140,9 +146,8 @@ window.onload = function(){
 
     // 초기 로딩
     category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
-    text.innerText = dto[now].question;
     question.innerText = dto[now].question;
-    answer.innerText = dto[now].answer;
+    answer.innerHTML = marked.parse(dto[now].answer);
 
     // 끝내기 다이얼로그
     const closeModal = document.getElementById("modal-close");
