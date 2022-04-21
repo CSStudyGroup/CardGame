@@ -18,17 +18,16 @@
         <div class="navbar-search-container">
             <div class="navbar-search">
                 <div th:replace="fragment/selectbox::selectBoxFragment(selectBoxId='navbar-search-criteria',
-                optionList=${ {{'카테고리', 'category'}, {'태그', 'tag'}, {'질문', 'question'}} },
+                optionList=${ {{'카테고리', 'cid'}, {'태그', 'tag'}, {'질문', 'question'}} },
                 optionText=0,
                 optionValue=1)"></div>
                 <input type="text" id="navbar-search-keyword" onkeyup="searchEnterKey(event)"/>
                 <button class="clickable" id="btn-navbar-search" onclick="search()"></button>
             </div>
             <form id="navbar-search-form" method="get" action="/card/list" style="display: none;">
-                <input type="hidden" name="tag" id="tag-key">
-                <input type="hidden" name="question" id="question-key">
-                <input type="hidden" name="cid" id="category-key">
-                <input type="hidden" name="keystring" id="input-key">
+                <input class="search-criteria" type="hidden" name="criteria">
+                <input class="search-keyword" type="hidden" name="keyword">
+                <input class="search-original" type="hidden" name="original">
             </form>
         </div>
         <div class="navbar-buttons">
@@ -42,7 +41,7 @@
     <div class="navbar-dropdown-overlay"></div>
     <div class="navbar-dropdown-sitemap"
          onmouseenter="showNavbarSitemapDropdown()" onmouseleave="hideNavbarSitemapDropdown()">
-        <h1>Site Map</h1>
+        <p>Site Map</p>
         <div class="slick-slider-sitemap">
             <div class="btn-container-sitemap">
                 <button id="btn-sitemap-pre" class="clickable" onclick="preItem()"></button>
@@ -67,7 +66,7 @@
         escClose=true,
         outClose=true)">
         <th:block class="modal-interview-title">
-            <h1 class="caution">카테고리 선택</h1>
+            <p class="caution">카테고리 선택</p>
         </th:block>
         <th:block class="modal-interview-content">
             <form th:method="get" th:action="@{/card/interview}" class="form-interview">
