@@ -9,6 +9,9 @@ import com.csStudy.CardGame.repository.CardRepository;
 import com.csStudy.CardGame.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -140,6 +143,7 @@ public class CardGameService {
     }
 
     // 카테고리 전부 가져오기
+    @Cacheable("categoryList")
     @Transactional
     public List<CategoryDto> findAllCategories() {
         return categoryRepository.findAll().stream()
@@ -148,12 +152,14 @@ public class CardGameService {
     }
 
     // 카테고리 추가
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public CategoryDto addCategory(CategoryDto categoryDto) {
         return categoryMapper.toDto(categoryRepository.insert(categoryMapper.toEntity(categoryDto)));
     }
 
     // 카테고리 여러개 추가
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public List<CategoryDto> addCategories(List<CategoryDto> categoryDtoList) {
         if (categoryDtoList == null) {
@@ -167,12 +173,14 @@ public class CardGameService {
     }
 
     // 카테고리 수정
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public int updateCategory(CategoryDto categoryDto) {
         return categoryRepository.update(categoryMapper.toEntity(categoryDto));
     }
 
     // 카테고리 여러개 수정
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public List<Integer> updateCategories(List<CategoryDto> categoryDtoList) {
         if (categoryDtoList == null) {
@@ -186,12 +194,14 @@ public class CardGameService {
     }
 
     // 카테고리 삭제
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public int deleteCategory(CategoryDto categoryDto) {
         return categoryRepository.delete(categoryMapper.toEntity(categoryDto));
     }
 
     // 카테고리 여러개 삭제
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public List<Integer> deleteCategories(List<CategoryDto> categoryDtoList) {
         if (categoryDtoList == null) {
@@ -203,8 +213,8 @@ public class CardGameService {
         }
         return result;
     }
-
     // 카테고리 변경사항 전체반영
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public ChangeCategoryResultDto changeCategories(List<CategoryDto> insertList, List<CategoryDto> updateList, List<CategoryDto> deleteList) {
         ChangeCategoryResultDto changeCategoryResultDto = new ChangeCategoryResultDto();
