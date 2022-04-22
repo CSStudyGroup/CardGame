@@ -124,7 +124,7 @@ th {
     height: 300px;
     text-align: center;
 }
-.delete-caution {
+#modal-delete .delete-caution {
     margin-top: 90px;
     font-size: 25px;
     font-weight: bold;

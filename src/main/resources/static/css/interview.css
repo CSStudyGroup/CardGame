@@ -149,7 +149,7 @@ html {
     height: 300px;
     text-align: center;
 }
-.close-caution {
+#modal-close .close-caution {
     margin-top: 90px;
     font-size: 25px;
     font-weight: bold;

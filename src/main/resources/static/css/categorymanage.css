@@ -132,7 +132,7 @@ html {
     height: 300px;
     text-align: center;
 }
-.change-caution, .delete-caution {
+#modal-change .change-caution, #modal-delete .delete-caution {
     margin-top: 90px;
     font-size: 25px;
     font-weight: bold;
