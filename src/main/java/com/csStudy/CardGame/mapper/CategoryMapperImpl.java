@@ -12,9 +12,9 @@ public class CategoryMapperImpl implements CategoryMapper{
         }
         else {
             Category category = new Category();
-            category.setCid(categoryDto.getCid());
-            category.setCname(categoryDto.getCname());
-            category.setCnt(categoryDto.getCnt());
+            category.setId(categoryDto.getId());
+            category.setName(categoryDto.getName());
+            category.setCardCount(categoryDto.getCardCount());
             return category;
         }
     }
@@ -26,9 +26,9 @@ public class CategoryMapperImpl implements CategoryMapper{
         }
         else {
             CategoryDto categoryDto = new CategoryDto();
-            categoryDto.setCid(category.getCid());
-            categoryDto.setCname(category.getCname());
-            categoryDto.setCnt(category.getCnt());
+            categoryDto.setId(category.getId());
+            categoryDto.setName(category.getName());
+            categoryDto.setCardCount(category.getCardCount());
             return categoryDto;
         }
     }

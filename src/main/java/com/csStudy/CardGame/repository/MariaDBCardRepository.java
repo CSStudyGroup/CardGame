@@ -20,18 +20,42 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public Card insert(Card card) {
+    public void save(Card card) {
         try {
             em.persist(card);
-            return card;
         }
         catch(Exception e) {
-            return null;
+            e.printStackTrace();
         }
     }
 
     @Override
-    public Optional<Card> findById(Long id) {
+    public int delete(Card card) {
+        try {
+            em.remove(card);
+            return 1;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public int deleteById(Long id) {
+        // 예외처리 필요
+        try {
+            em.createQuery("delete from Card c where c.id = :id", Card.class)
+                    .setParameter("id", id);
+            return 1;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public Optional<Card> findOne(Long id) {
         return Optional.ofNullable(em.find(Card.class, id));
     }
 
@@ -42,63 +66,31 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public List<Card> filterByCategory(int cid) {
-        return em.createQuery("select c from Card c where c.cid = :cid", Card.class)
-                .setParameter("cid", cid)
+    public List<Card> findByCategoryName(String categoryName) {
+        return em.createQuery("select c from Card c where c.category.name = :categoryName", Card.class)
+                .setParameter("categoryName", categoryName)
                 .getResultList();
     }
 
     @Override
-    public List<Card> filterByCategories(List<Integer> cidList) {
-        return em.createQuery("select c from Card c where c.cid in (:cidList)", Card.class)
-                .setParameter("cidList", cidList)
+    public List<Card> findByCategoryNameIn(List<String> categoryNameList) {
+        return em.createQuery("select c from Card c where c.category.name in :categoryNameList", Card.class)
+                .setParameter("categoryNameList", categoryNameList)
                 .getResultList();
     }
 
     @Override
-    public List<Card> filterByQuestionContaining(String keyword) {
+    public List<Card> findByQuestionContaining(String keyword) {
         return em.createQuery("select c from Card c where c.question like :keyword", Card.class)
                 .setParameter("keyword", String.format("%%%s%%", keyword))
                 .getResultList();
     }
 
     @Override
-    public List<Card> filterByTag(String tag) {
+    public List<Card> findByTagContaining(String tag) {
         return em.createQuery("select c from Card c where c.tags like :tag", Card.class)
                 .setParameter("tag", String.format("%%%s%%", tag))
                 .getResultList();
     }
 
-    @Override
-    public int update(Card card) {
-        try {
-            findById(card.getId())
-                    .ifPresentOrElse(target -> {
-                        target.setCid(card.getCid());
-                        target.setQuestion(card.getQuestion());
-                        target.setAnswer(card.getAnswer());
-                        target.setTags(card.getTags());
-                    }, () -> {
-                        throw new NoSuchElementException();
-                    });
-            return 1;
-        }
-        catch (NoSuchElementException e) {
-            return 0;
-        }
-    }
-
-    @Override
-    public int delete(Card card) {
-        try {
-            findById(card.getId())
-                    .ifPresentOrElse(em::remove, () -> {
-                        throw new NoSuchElementException();
-                    });
-            return 1;
-        }
-        catch (NoSuchElementException e) {
-            return 0;
-        }
-    }
 }

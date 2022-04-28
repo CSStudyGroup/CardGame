@@ -11,9 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CategoryDto {
 
-    private int cid;
+    private Long id;
 
-    private String cname;
+    private String name;
 
-    private int cnt;
+    private int cardCount;
 }

@@ -8,29 +8,29 @@ import java.util.Optional;
 
 public interface CardRepository {
     // 카드 추가
-    Card insert(Card card);
+    void save(Card card);
+
+    // 카드 삭제
+    int delete(Card card);
+
+    int deleteById(Long id);
 
     // id로 카드 검색
-    Optional<Card> findById(Long id);
+    Optional<Card> findOne(Long id);
 
     // 모든 카드
     List<Card> findAll();
 
     // 특정 category 에 해당하는 카드 리스트 검색
-    List<Card> filterByCategory(int cid);
+    List<Card> findByCategoryName(String categoryName);
 
     // 특정 category 리스트중 하나에 해당하는 카드 리스트 검색
-    List<Card> filterByCategories(List<Integer> cidList);
+    List<Card> findByCategoryNameIn(List<String> categoryNameList);
 
     // 질문이 특정 keyword 를 포함하는 카드 리스트 검색
-    List<Card> filterByQuestionContaining(String keyword);
+    List<Card> findByQuestionContaining(String keyword);
 
     // 특정 tag 를 포함하는 카드 리스트 검색
-    List<Card> filterByTag(String tag);
+    List<Card> findByTagContaining(String keyword);
 
-    // 카드 수정
-    int update(Card card);
-
-    // 카드 삭제
-    int delete(Card card);
 }

@@ -8,7 +8,7 @@ class CardGameApplicationTests {
 
 	@Test
 	void contextLoads() {
-		System.out.println(org.springframework.core.SpringVersion.getVersion());
+
 	}
 
 }

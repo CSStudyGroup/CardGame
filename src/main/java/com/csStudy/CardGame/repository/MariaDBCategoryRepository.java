@@ -1,5 +1,6 @@
 package com.csStudy.CardGame.repository;
 
+import com.csStudy.CardGame.domain.Card;
 import com.csStudy.CardGame.domain.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,43 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public Optional<Category> findById(int id) {
+    public void save(Category category) {
+        // 예외처리 필요
+        try {
+            em.persist(category);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public int delete(Category category) {
+        try {
+            em.remove(category);
+            return 1;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public int deleteById(Long id) {
+        // 예외처리 필요
+        try {
+            em.createQuery("delete from Category c where c.id = :id", Category.class)
+                    .setParameter("id", id);
+            return 1;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public Optional<Category> findOne(Long id) {
         return Optional.ofNullable(em.find(Category.class, id));
     }
 
@@ -35,45 +72,6 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     public List<Category> findAll() {
         return em.createQuery("select c from Category c", Category.class)
                 .getResultList();
-    }
-
-    @Override
-    public Category insert(Category category) {
-        try {
-            em.persist(category);
-            return category;
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-
-    @Override
-    public int delete(Category category) {
-        try {
-            findById(category.getCid())
-                    .ifPresentOrElse(em::remove, () -> {
-                        throw new NoSuchElementException();
-                    });
-            return 1;
-        }
-        catch (NoSuchElementException e) {
-            return 0;
-        }
-    }
-
-    @Override
-    public int update(Category category) {
-        try {
-            findById(category.getCid())
-                    .ifPresentOrElse(target -> target.setCname(category.getCname()), () -> {
-                        throw new NoSuchElementException();
-                    });
-            return 1;
-        }
-        catch (NoSuchElementException e) {
-            return 0;
-        }
     }
 
 }

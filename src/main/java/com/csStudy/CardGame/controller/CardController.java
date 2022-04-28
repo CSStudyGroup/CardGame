@@ -32,7 +32,7 @@ public class CardController {
     @GetMapping("/card")
     public String card(Model model) {
         // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
         return "cardmain";
     }
@@ -41,11 +41,11 @@ public class CardController {
     @GetMapping("/card/category")
     public String category(@RequestParam(value="keyword") int keyword, Model model) {
         // 해당되는 키워드의 카드리스트를 받아와 반환
-        List<CardDto> cardDtoList = cardService.filterCardsByCategory(keyword);
+        List<CardDto> cardDtoList = cardService.findCardByCategory(keyword);
         model.addAttribute("cardDtoList", cardDtoList);
 
         // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
         return "category";
     }
@@ -53,11 +53,11 @@ public class CardController {
     // navi bar interview checkbox submit
     @GetMapping("/card/interview")
     public String interview(@RequestParam("keyword") List<Integer> keywords, Model model) {
-        List<CardDto> cardDtoList = cardService.filterCardsByCategories(keywords);
+        List<CardDto> cardDtoList = cardService.findCardByCategoryIn(keywords);
         model.addAttribute("cardDtoList", cardDtoList);
 
         // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
 
         // 키워드 모델에 추가
@@ -69,7 +69,7 @@ public class CardController {
     @GetMapping("/card/management")
     public String categoryManagement(Model model) {
         // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
         return "categorymanage";
     }
@@ -82,20 +82,20 @@ public class CardController {
         List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
 
         if (criteria.equals("tag")) {
-            cardDtoList = cardService.filterCardsByTag(keyword);
+            cardDtoList = cardService.findCardByTag(keyword);
         }
         else if (criteria.equals("question")) {
-            cardDtoList = cardService.filterCardsByQuestion(keyword);
+            cardDtoList = cardService.findCardByQuestion(keyword);
         }
         else if (criteria.equals("cid")) {
-            cardDtoList = cardService.filterCardsByCategory(parseInt(keyword));
+            cardDtoList = cardService.findCardByCategory(parseInt(keyword));
         }
 
         // 모델 추가
         model.addAttribute("cardDtoList", cardDtoList);
 
         // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
 
         // 검색 키워드를 알기위한 키워드 전송
@@ -113,7 +113,7 @@ public class CardController {
     @ResponseBody
     @PostMapping("card/categoryList")
     public List<CategoryDto> categoryList() {
-        List<CategoryDto> categoryDtoList = cardService.findAllCategories();
+        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         return categoryDtoList;
     }
 
