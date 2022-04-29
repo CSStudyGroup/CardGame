@@ -9,6 +9,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        cache:
+          use_second_level_cache: true
+          region:
+            factory_class: org.hibernate.cache.ehcache.internal.EhcacheRegionFactory
+      javax:
+        persistence:
+          sharedCache:
+            mode: ENABLE_SELECTIVE
 
   devtools:
     restart:
