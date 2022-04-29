@@ -3,12 +3,12 @@
 <div th:fragment="selectBoxFragment(selectBoxId, optionList, optionText, optionValue)"
      th:with="defaultLabel=(${ defaultLabel } ?: null)"
      th:id="${ selectBoxId }"
-     th:attr="data-value=(${ defaultLabel } ? 'none' : ${ optionList[0][optionValue] })"
+     th:attr="data-value=(${ defaultLabel } ? 'none' : (${not #lists.isEmpty(optionList)} ? ${ optionList[0][optionValue] } : 'none'))"
      class="select-box-customized"
      >
     <div class="sb-option-selected"
          th:attr="onclick=|document.querySelector(`#${ selectBoxId }`).classList.toggle('sb-option-open')|">
-        <span class="sb-option-text" th:text="(${ defaultLabel } ?: ${ optionList[0][optionText] })"></span>
+        <span class="sb-option-text" th:text="(${ defaultLabel } ?: (${not #lists.isEmpty(optionList)} ? ${ optionList[0][optionText] } : 'none'))"></span>
         <span class="drop-mark"></span>
     </div>
     <div class="sb-option-container">

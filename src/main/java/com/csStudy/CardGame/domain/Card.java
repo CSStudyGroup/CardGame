@@ -28,8 +28,7 @@ public class Card {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "cname",
-            referencedColumnName = "name",
+            name = "cid",
             nullable = false
     )
     private Category category;
