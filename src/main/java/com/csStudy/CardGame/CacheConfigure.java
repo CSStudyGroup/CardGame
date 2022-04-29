@@ -7,7 +7,6 @@ import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.util.Objects;
 
 @EnableCaching
@@ -31,4 +30,6 @@ public class CacheConfigure {
         Objects.requireNonNull(ehCacheManagerFactoryBean().getObject()).addCache(categoryListCache);
         return new EhCacheCacheManager(Objects.requireNonNull(ehCacheManagerFactoryBean().getObject()));
     }
+
+
 }
