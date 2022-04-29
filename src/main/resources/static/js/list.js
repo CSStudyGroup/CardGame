@@ -1,9 +1,6 @@
 // AJAX용 request
 let listHttpRequest;
 
-// 해싱용 맵
-let categoryMap;
-
 // 본문 보기
 let target = -1;
 const viewModal = document.getElementById("modal-view");
@@ -15,9 +12,9 @@ const viewAnswer = document.getElementById("modal-view-content-answer");
 
 function text(id) {
     for (let i = 0; i < dto.length; i++) {
-        if (dto[i].id == id) {
+        if (dto[i].id === parseInt(id)) {
             modalViewTitleText.innerText = dto[i].id + "번 카드 내용";
-            viewCategory.innerText = "(" + categoryMap.get(dto[i].cid) + ")";
+            viewCategory.innerText = "(" + dto[i].categoryName + ")";
             viewTags.value = dto[i].tags;
             viewQuestion.value = dto[i].question;
             viewAnswer.value = dto[i].answer;
@@ -43,16 +40,16 @@ updateCategory.addEventListener('click', (e) => {
     e.stopPropagation();
 })
 
-updateModal.addEventListener('click', (e) => {
+updateModal.addEventListener('click', () => {
     updateCategory.classList.remove('sb-option-open');
 });
 
 function update(id){
     for (let i = 0; i < dto.length; i++) {
-        if (dto[i].id == id) {
+        if (dto[i].id === parseInt(id)) {
             target = i;
             modalUpdateTitleText.innerText = dto[i].id + "번 카드 수정";
-            selectOption("modal-update-content-category-select", categoryMap.get(dto[i].cid), dto[i].cid)
+            selectOption("modal-update-content-category-select", dto[i].categoryName, dto[i].categoryName)
             updateTags.value = dto[i].tags;
             updateQuestion.value = dto[i].question;
             updateAnswer.value = dto[i].answer;
@@ -63,11 +60,11 @@ function update(id){
 }
 
 function updateModalSubmit(){
-    if (updateQuestion.value.trim() == "") {
+    if (updateQuestion.value.trim() === "") {
         alert("질문을 입력해주세요.");
         return;
     }
-    if (updateAnswer.value.trim() == "") {
+    if (updateAnswer.value.trim() === "") {
         alert("답변을 입력해주세요.");
         return;
     }
@@ -81,19 +78,19 @@ function updateModalSubmit(){
     function postUpdateCard(){
         if (listHttpRequest.readyState === XMLHttpRequest.DONE) {
             if (listHttpRequest.status === 200) {
-                if (listHttpRequest.response == 1) {
+                if (parseInt(listHttpRequest.response) == 1) {
                     alert("수정 성공");
                     // dto 및 테이블 내용 수정
                     const temp = document.querySelectorAll(".tableBody")[target];
 
                     // dto 수정
-                    dto[target].cid = parseInt(updateCategory.dataset.value);
+                    dto[target].categoryName = updateCategory.dataset.value;
                     dto[target].tags = updateTags.value;
                     dto[target].question = updateQuestion.value;
                     dto[target].answer = updateAnswer.value;
 
                     // 테이블 수정
-                    temp.children[1].innerText = categoryMap.get(parseInt(updateCategory.dataset.value));
+                    temp.children[1].innerText = updateCategory.dataset.value;
                     temp.children[2].innerHTML = updateQuestion.value;
                 }
                 else {
@@ -109,7 +106,7 @@ function updateModalSubmit(){
         '/card/cardUpdate');
     listHttpRequest.setRequestHeader('Content-type', 'application/json');
     let updateJSON = JSON.stringify({ id : dto[target].id,
-        cid : updateCategory.dataset.value,
+        categoryName : updateCategory.dataset.value,
         question : updateQuestion.value,
         answer : updateAnswer.value,
         tags : updateTags.value});
@@ -125,7 +122,7 @@ const deleteModal = document.getElementById("modal-delete");
 const deleteCaution = document.querySelector(".delete-caution");
 function del(id){
     for (let i = 0; i < dto.length; i++) {
-        if (dto[i].id == id) {
+        if (dto[i].id === parseInt(id)) {
             target = i;
             break;
         }
@@ -142,14 +139,14 @@ cancel.addEventListener('click', () => {
 const remove = document.querySelector('.remove');
 remove.addEventListener('click', () => {
     // AJAX 삭제 요청
-    if (target != -1) {
+    if (target !== -1) {
         listHttpRequest = new XMLHttpRequest();
         listHttpRequest.onreadystatechange = postUpdateCard;
 
         function postUpdateCard(){
             if (listHttpRequest.readyState === XMLHttpRequest.DONE) {
                 if (listHttpRequest.status === 200) {
-                    if (listHttpRequest.response == 1) {
+                    if (parseInt(listHttpRequest.response) === 1) {
                         alert("삭제 성공");
                         window.location.reload();
                     }
@@ -167,7 +164,7 @@ remove.addEventListener('click', () => {
             '/card/cardDelete');
         listHttpRequest.setRequestHeader('Content-type', 'application/json');
         let deleteJSON = JSON.stringify({ id : dto[target].id,
-            cid : dto[target].cid,
+            categoryName : dto[target].categoryName,
             question : dto[target].question,
             answer : dto[target].answer,
             tags : dto[target].tags});
@@ -177,21 +174,9 @@ remove.addEventListener('click', () => {
 
 window.onload = function(){
     // 0개 대응
-    if (dto.length == 0) {
+    if (dto.length === 0) {
         const main = document.querySelector(".container");
         main.innerHTML = "<br><br><br><br><br><br><br><br>검색 결과가 없습니다.<br><br>다른 검색어로 검색해주세요";
-    }
-
-    // 카테고리 해싱
-    categoryMap = new Map();
-    for (let i = 0; i < categoryDtoList.length; i++) {
-        categoryMap.set(categoryDtoList[i].cid, categoryDtoList[i].cname);
-    }
-
-    // 카테고리 변환
-    const categoryCids = document.querySelectorAll(".category");
-    for (let i = 0; i < categoryCids.length; i++) {
-        categoryCids[i].innerText = categoryMap.get(parseInt(categoryCids[i].innerText));
     }
 
     // 카드 추가 이벤트
@@ -199,20 +184,20 @@ window.onload = function(){
         // 현재 리스트 조건에 맞는지 체크 후 추가
         let flag = false;
 
-        if (tag != "") {
+        if (criteria !== "tag") {
             // 검색어 포함 태그 탐색
-            if (event.detail.tags.includes(tag)) {
+            if (event.detail.tags.includes(keyword)) {
                 flag = true;
             }
         }
-        else if (question != "") {
+        else if (criteria !== "question") {
             // 검색어 포함 질문 탐색
-            if (event.detail.question.includes(question)) {
+            if (event.detail.question.includes(keyword)) {
                 flag = true;
             }
         }
-        else if (cid != "") {
-            if (event.detail.cid == cid) {
+        else if (criteria !== "category") {
+            if (event.detail.categoryName === keyword) {
                 flag = true;
             }
         }
@@ -230,7 +215,7 @@ window.onload = function(){
 
             // category
             let new_category = document.createElement("td");
-            new_category.textContent = categoryMap.get(event.detail.cid);
+            new_category.textContent = event.detail.categoryName;
             new_category.setAttribute("class", "category");
             new_tr.append(new_category);
 

@@ -11,12 +11,12 @@
         <div class="category-container">
             <div class="card-frame card-category clickable"
                  th:each="categoryDto: ${ categoryDtoList }"
-                 th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.cid }'|">
+                 th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.name }'|">
                 <div class="card-category-name">
-                    <p th:text="${ categoryDto.cname }"></p>
+                    <p th:text="${ categoryDto.name }"></p>
                 </div>
                 <div class="card-category-count">
-                    <p th:text="${ categoryDto.cnt }"></p>
+                    <p th:text="${ categoryDto.cardCount }"></p>
                 </div>
             </div>
         </div>

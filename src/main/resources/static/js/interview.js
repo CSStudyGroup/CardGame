@@ -1,6 +1,6 @@
 window.onload = function(){
     // 카드가 0개 일 경우 예외 처리
-    if (dto.length == 0) {
+    if (dto.length === 0) {
         alert("선택 된 카테고리의 카드가 없습니다.\n메인으로 돌아갑니다.");
         window.location = "/card";
     }
@@ -25,12 +25,6 @@ window.onload = function(){
     const counter = document.querySelector(".page-title");
     counter.innerText = "Interview (문항 수 : " + dto.length + ")";
 
-    // 카테고리 해싱
-    let categoryMap = new Map();
-    for (let i = 0; i < categoryDtoList.length; i++) {
-        categoryMap.set(categoryDtoList[i].cid, categoryDtoList[i].cname);
-    }
-
     // 카드 클릭 애니메이션
     const cardTitle = document.querySelector(".card-title");
     const question = document.querySelector(".card-question");
@@ -41,7 +35,7 @@ window.onload = function(){
         if (check == null){
             card.classList.add("rotate");
             setTimeout(function () {
-                if (cardTitle.innerText == "Q.") {
+                if (cardTitle.innerText === "Q.") {
                     cardTitle.innerText = "A.";
                     question.style.display = "none";
                     answer.style.display = "block";
@@ -60,9 +54,7 @@ window.onload = function(){
         }
     })
 
-    // 문항 수 관련 변수
-    const min = 0
-    let max = dto.length - 1;
+    // 문항 수 관련 변수==
     let now = 0
 
     // 슬라이드 관련
@@ -95,7 +87,7 @@ window.onload = function(){
             card.classList.add("prev-show");
             setTimeout(function () {
                 cardTitle.innerText = "Q.";
-                category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
+                category.innerText = "(" + dto[now].categoryName + ")";
                 question.style.display = "block";
                 answer.style.display = "none";
                 answer.scrollTo(0,0);
@@ -119,7 +111,7 @@ window.onload = function(){
             card.classList.add("next-show");
             setTimeout(function () {
                 cardTitle.innerText = "Q.";
-                category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
+                category.innerText = "(" + dto[now].categoryName + ")";
                 question.style.display = "block";
                 answer.style.display = "none";
                 answer.scrollTo(0,0);
@@ -145,7 +137,7 @@ window.onload = function(){
     shuffle(dto);
 
     // 초기 로딩
-    category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
+    category.innerText = "(" + dto[now].categoryName + ")";
     question.innerText = dto[now].question;
     answer.innerHTML = marked.parse(dto[now].answer);
 
@@ -170,11 +162,10 @@ window.onload = function(){
     function newCardHandler(event) {
         // 현재 리스트 조건에 맞는지 체크 후 추가
         for (let i = 0; i < keywords.length; i++) {
-            if (keywords[i] == event.detail.cid) {
-                max += 1;
+            if (keywords[i] == event.detail.categoryName) {
                 // 현재 위치 뒤에 무작위 삽입
                 dto.splice(Math.floor(Math.random() * (dto.length - now)) + now + 1, 0, event.detail);
-                counter.innerText = "(문항 수 : " + dto.length + ")";
+                counter.innerText = "Interview (문항 수 : " + dto.length + ")";
                 break
             }
         }

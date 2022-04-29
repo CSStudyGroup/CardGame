@@ -1,6 +1,6 @@
 window.onload = function(){
     // 카드가 0개 일 경우 예외 처리
-    if (dto.length == 0) {
+    if (dto.length === 0) {
         alert("선택 된 카테고리의 카드가 없습니다.\n메인으로 돌아갑니다.");
         window.location = "/card";
     }
@@ -21,15 +21,9 @@ window.onload = function(){
         card.style.width = "calc(100vw - 140px)";
     }
 
-    // 카테고리 해싱
-    let categoryMap = new Map();
-    for (let i = 0; i < categoryDto.length; i++) {
-        categoryMap.set(categoryDto[i].cid, categoryDto[i].cname);
-    }
-
     // 카테고리 표시
     const pageTitle = document.querySelector(".page-title");
-    pageTitle.innerText = "Category > " + categoryMap.get(dto[0].cid);
+    pageTitle.innerText = "Category > " + dto[0].categoryName;
 
     // 각 종 elements
     const cardTitle = document.querySelector(".card-title");
@@ -42,7 +36,7 @@ window.onload = function(){
         if (check == null){
             card.classList.add("rotate")
             setTimeout(function () {
-                if (cardTitle.innerText == "Q.") {
+                if (cardTitle.innerText === "Q.") {
                     cardTitle.innerText = "A.";
                     question.style.display = "none";
                     answer.style.display = "block";
@@ -96,7 +90,7 @@ window.onload = function(){
     prev.addEventListener("click", prevMotion);
     function prevMotion() {
         if (check == null) {
-            if (now == 1) {
+            if (now === 1) {
                 alert("첫 카드입니다.")
             }
             else {
@@ -125,7 +119,7 @@ window.onload = function(){
     next.addEventListener("click", nextMotion);
     function nextMotion() {
         if (check == null) {
-            if (now == total) {
+            if (now === total) {
                 alert("마지막 카드입니다.")
             }
             else {
@@ -151,7 +145,7 @@ window.onload = function(){
 
     // 카드 추가 이벤트
     function newCardHandler(event) {
-        if (dto[0].cid == event.detail.cid) {
+        if (dto[0].categoryName === event.detail.categoryName) {
             total += 1
             document.getElementById("total").innerText = String(total);
             dto.push(event.detail);

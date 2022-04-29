@@ -37,7 +37,10 @@ public class CardGameService {
         this.categoryMapper = categoryMapper;
     }
 
+    // 카드 관련 서비스 메소드
+
     // 카드 추가
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public CardDto addCard(CardDto cardDto) {
         Card newCard = Card.createCard(cardDto);
@@ -102,6 +105,7 @@ public class CardGameService {
     }
 
     // 카드 수정
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public int updateCard(CardDto cardDto) {
         // 비즈니스 로직으로 구현
@@ -119,13 +123,18 @@ public class CardGameService {
     }
 
     // 카드 삭제
+    @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public int deleteCard(CardDto cardDto) {
+        // 예외처리 필요
+        Card target = Objects.requireNonNull(cardRepository.findOne(cardDto.getId()).orElse(null));
+        Category changedCategory = Objects.requireNonNull(categoryRepository.findByName(cardDto.getCategoryName()).orElse(null));
+        changedCategory.removeCard(target);
         return cardRepository.deleteById(cardDto.getId());
     }
 
-    //////////////////////////////////////////////////////////////////
 
+    // 카테고리 관련 서비스 메소드
 
     // 카테고리 전부 가져오기
     @Cacheable("categoryList")

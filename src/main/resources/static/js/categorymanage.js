@@ -4,9 +4,9 @@ const deleteModal = document.getElementById("modal-delete");
 const deleteCaution = document.querySelector(".delete-caution");
 const deleteCname = document.getElementById("modal-delete-cname");
 
-function categoryDeleteCheck(cname){
-    deleteCaution.innerText = cname + "을\n정말로 삭제하시겠습니까?";
-    deleteCname.innerText = cname;
+function categoryDeleteCheck(name){
+    deleteCaution.innerText = name + "을(를)\n정말로 삭제하시겠습니까?";
+    deleteCname.innerText = name;
     deleteModal.style.display = "flex";
 }
 
@@ -19,7 +19,7 @@ function deleteConfirm(){
     deleteModal.style.display = "none";
 }
 
-function categoryDelete(cname){
+function categoryDelete(name){
     // 수정 도중 삭제 버튼을 눌렀을 경우
     if (updateCheck) {
         restoreUpdate(updateTarget);
@@ -32,13 +32,13 @@ function categoryDelete(cname){
 
     // 탐색
     for (let i = 0; i < dto.length; i++) {
-        if (dto[i].cname == cname) {
+        if (dto[i].name === name) {
             deleteTarget = i;
             break;
         }
     }
 
-    if (dto[deleteTarget].cnt != 0) {
+    if (dto[deleteTarget].cardCount !== 0) {
         alert("해당 카테고리의 카드 수가 0개가 아니기에 삭제할 수 없습니다.");
     }
     else {
@@ -57,7 +57,7 @@ function categoryDelete(cname){
 // 카테고리 수정
 let updateCheck = false;
 let updateTarget = -1;
-function categoryUpdate(cname){
+function categoryUpdate(name){
 
     // 추가 도중 수정 버튼을 눌렀을 경우
     if (insertCheck) {
@@ -65,14 +65,14 @@ function categoryUpdate(cname){
     }
 
     // 수정 도중 다른 수정 버튼을 눌렀을 경우
-    if (updateCheck && dto[updateTarget].cname != cname) {
+    if (updateCheck && dto[updateTarget].name !== name) {
         restoreUpdate(updateTarget);
     }
 
     if (updateCheck) {
         const input_box = document.querySelectorAll(".new-category-name");
         // 공백 체크
-        if (input_box[updateTarget].value == "") {
+        if (input_box[updateTarget].value === "") {
             alert("공백은 이름으로 할 수 없습니다.");
             restoreUpdate(updateTarget);
             return;
@@ -80,7 +80,7 @@ function categoryUpdate(cname){
 
         // 중복체크
         for (let i = 0; i < dto.length; i++) {
-            if (dto[i].cname == input_box[updateTarget].value && i != updateTarget) {
+            if (dto[i].name === input_box[updateTarget].value && i !== updateTarget) {
                 alert("동일한 이름의 카테고리가 이미 존재합니다.");
                 restoreUpdate(updateTarget);
                 return;
@@ -91,7 +91,7 @@ function categoryUpdate(cname){
         const deleteButton = document.querySelectorAll(".delete");
 
         // 내용 수정 반영
-        dto[updateTarget].cname = input_box[updateTarget].value;
+        dto[updateTarget].name = input_box[updateTarget].value;
         updateButton[updateTarget].setAttribute("onclick",
             "categoryUpdate('" + input_box[updateTarget].value + "')")
         deleteButton[updateTarget].setAttribute("onclick",
@@ -105,7 +105,7 @@ function categoryUpdate(cname){
     }
     else {
         for (let i = 0; i < dto.length; i++) {
-            if (dto[i].cname == cname) {
+            if (dto[i].name === name) {
                 updateTarget = i;
                 break;
             }
@@ -119,7 +119,7 @@ function categoryUpdate(cname){
         updateButton[updateTarget].classList.add("target");
         deleteButton[updateTarget].classList.add("target");
         input_box[updateTarget].setAttribute("type", "text");
-        input_box[updateTarget].value = dto[updateTarget].cname;
+        input_box[updateTarget].value = dto[updateTarget].name;
         input_box[updateTarget].focus();
         original_name[updateTarget].innerText = "";
         updateCheck = true;
@@ -152,13 +152,13 @@ function categoryInsert() {
 }
 
 function createCategory() {
-    if (inputText.value == "") {
+    if (inputText.value === "") {
         alert("공백은 이름으로 할 수 없습니다.");
         return;
     }
     // 중복체크
     for (let i = 0; i < dto.length; i++) {
-        if (dto[i].cname == inputText.value) {
+        if (dto[i].name === inputText.value) {
             alert("동일한 이름의 카테고리가 이미 존재합니다.");
             return;
         }
@@ -217,9 +217,9 @@ function createCategory() {
 
     // dto 추가
     let new_dto = {};
-    new_dto.cid = null;
-    new_dto.cname = inputText.value;
-    new_dto.cnt = 0;
+    new_dto.id = null;
+    new_dto.name = inputText.value;
+    new_dto.cardCount = 0;
     dto.push(new_dto);
 
     // 원상 복구
@@ -256,7 +256,7 @@ function restoreUpdate(target) {
     const updateButton = document.querySelectorAll(".update");
     const deleteButton = document.querySelectorAll(".delete");
     containerBody[target].classList.remove("hover");
-    original_name[target].innerText = dto[target].cname + " (" + dto[target].cnt + ")";
+    original_name[target].innerText = dto[target].name + " (" + dto[target].cardCount + ")";
     updateButton[target].classList.remove("target");
     deleteButton[target].classList.remove("target");
     input_box[target].setAttribute("type", "hidden");
@@ -277,10 +277,10 @@ function changeSomething() {
 
 // 키보드 인식
 function enterEvent (e) {
-    if (e.key == "Enter") {
+    if (e.key === "Enter") {
         e.preventDefault();
         if (updateCheck) {
-            categoryUpdate(dto[updateTarget].cname);
+            categoryUpdate(dto[updateTarget].name);
         }
         else if (insertCheck) {
             createCategory();
@@ -323,7 +323,7 @@ window.onload = function(){
         // update 체크
         if (updateCheck) {
             const containerBody = document.querySelectorAll(".container-body");
-            if (e.path[e.path.length - 7] != containerBody[updateTarget]) {
+            if (e.path[e.path.length - 7] !== containerBody[updateTarget]) {
                 restoreUpdate(updateTarget);
             }
         }
@@ -332,14 +332,14 @@ window.onload = function(){
     // 카드 추가 이벤트
     function newCardHandler(event) {
         for (let i = 0; i < categoryDtoList.length; i++) {
-            if (categoryDtoList[i].cid == event.detail.cid) {
-                categoryDtoList[i].cnt += 1;
+            if (categoryDtoList[i].name === event.detail.categoryName) {
+                categoryDtoList[i].cardCount += 1;
                 // 존재할 경우 숫자 올리기
                 for (let j = 0; j < dto.length; j++) {
-                    if (dto[j].cname == categoryDtoList[i].cname) {
-                        dto[j].cnt += 1
+                    if (dto[j].name === categoryDtoList[i].name) {
+                        dto[j].cardCount += 1
                         const original_name = document.querySelectorAll(".category-name");
-                        original_name[j].innerText = dto[j].cname + " (" + dto[j].cnt + ")";
+                        original_name[j].innerText = dto[j].name + " (" + dto[j].cardCount + ")";
                         break;
                     }
                 }
@@ -380,17 +380,17 @@ window.onload = function(){
 
         for (let i = 0; i < dto.length; i++) {
             // insert check
-            if (dto[i].cid == null) {
+            if (dto[i].id == null) {
                 insertCategory.push(dto[i]);
                 continue;
             }
 
             // update check
             for (let j = 0; j < categoryDtoList.length; j++) {
-                if (dto[i].cid == categoryDtoList[j].cid) {
-                    if (dto[i].cname != categoryDtoList[j].cname) {
+                if (dto[i].id === categoryDtoList[j].id) {
+                    if (dto[i].name !== categoryDtoList[j].name) {
                         updateCategory.push(dto[i]);
-                        categoryDtoList[j].cname = dto[i].cname;
+                        categoryDtoList[j].name = dto[i].name;
                     }
                     break
                 }
@@ -402,14 +402,14 @@ window.onload = function(){
             let flag = true;
 
             for (let j = 0; j < dto.length; j++) {
-                if (categoryDtoList[i].cid == dto[j].cid) {
+                if (categoryDtoList[i].id === dto[j].id) {
                     flag = false;
                     break
                 }
             }
 
             if (flag) {
-                if (categoryDtoList[i].cnt == 0) {
+                if (categoryDtoList[i].cardCount === 0) {
                     deleteCategory.push(categoryDtoList[i]);
                     categoryDtoList.splice(i, 1);
                 }
@@ -421,7 +421,7 @@ window.onload = function(){
         }
 
         // 변경사항 체크
-        if (insertCategory.length == 0 && updateCategory.length == 0 && deleteCategory.length == 0) {
+        if (insertCategory.length === 0 && updateCategory.length === 0 && deleteCategory.length === 0) {
             alert("변경사항이 없습니다.");
 
             const saveButton = document.querySelector(".save");
@@ -450,10 +450,10 @@ window.onload = function(){
 
                         // dto 수정
                         for (let i = 0; i < dto.length; i++) {
-                            if (dto[i].cid == null) {
+                            if (dto[i].id == null) {
                                 for (let j = 0; j < categoryHttpRequest.response.insertResult.length; j++) {
-                                    if (dto[i].cname == categoryHttpRequest.response.insertResult[j].cname) {
-                                        dto[i].cid = categoryHttpRequest.response.insertResult[j].cid;
+                                    if (dto[i].name === categoryHttpRequest.response.insertResult[j].name) {
+                                        dto[i].id = categoryHttpRequest.response.insertResult[j].id;
                                         break
                                     }
                                 }

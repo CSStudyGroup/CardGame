@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
-
 @Controller
 public class CardController {
 
@@ -39,7 +37,7 @@ public class CardController {
 
     // 선택된 카테고리에 맞게 표시
     @GetMapping("/card/category")
-    public String category(@RequestParam(value="keyword") int keyword, Model model) {
+    public String category(@RequestParam(value="keyword") String keyword, Model model) {
         // 해당되는 키워드의 카드리스트를 받아와 반환
         List<CardDto> cardDtoList = cardService.findCardByCategory(keyword);
         model.addAttribute("cardDtoList", cardDtoList);
@@ -52,7 +50,7 @@ public class CardController {
 
     // navi bar interview checkbox submit
     @GetMapping("/card/interview")
-    public String interview(@RequestParam("keyword") List<Integer> keywords, Model model) {
+    public String interview(@RequestParam("keyword") List<String> keywords, Model model) {
         List<CardDto> cardDtoList = cardService.findCardByCategoryIn(keywords);
         model.addAttribute("cardDtoList", cardDtoList);
 
@@ -76,19 +74,20 @@ public class CardController {
 
     @GetMapping("/card/list")
     public String list(@RequestParam("criteria") String criteria,
-                       @RequestParam("keyword") String keyword,
-                       @RequestParam("original") String original, Model model) {
+                       @RequestParam("keyword") String keyword, Model model) {
         // 빈 배열 선언
-        List<CardDto> cardDtoList = Collections.<CardDto>emptyList();
+        List<CardDto> cardDtoList = Collections.emptyList();
 
-        if (criteria.equals("tag")) {
-            cardDtoList = cardService.findCardByTag(keyword);
-        }
-        else if (criteria.equals("question")) {
-            cardDtoList = cardService.findCardByQuestion(keyword);
-        }
-        else if (criteria.equals("cid")) {
-            cardDtoList = cardService.findCardByCategory(parseInt(keyword));
+        switch (criteria) {
+            case "tag":
+                cardDtoList = cardService.findCardByTag(keyword);
+                break;
+            case "question":
+                cardDtoList = cardService.findCardByQuestion(keyword);
+                break;
+            case "category":
+                cardDtoList = cardService.findCardByCategory(keyword);
+                break;
         }
 
         // 모델 추가
@@ -101,7 +100,6 @@ public class CardController {
         // 검색 키워드를 알기위한 키워드 전송
         model.addAttribute("criteria", criteria);
         model.addAttribute("keyword", keyword);
-        model.addAttribute("original", original);
 
         return "list";
     }
@@ -113,8 +111,7 @@ public class CardController {
     @ResponseBody
     @PostMapping("card/categoryList")
     public List<CategoryDto> categoryList() {
-        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-        return categoryDtoList;
+        return cardService.findCategoryAll();
     }
 
     // 카드 추가

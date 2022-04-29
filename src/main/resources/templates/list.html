@@ -22,7 +22,7 @@
                     <td class="underline id"
                         th:text="${cardDto.id}"></td>
                     <td class="underline category"
-                        th:text="${cardDto.cid}"></td>
+                        th:text="${cardDto.categoryName}"></td>
                     <td class="underline question clickable"
                         th:attr="onclick=|text('${cardDto.id}')|"
                         th:text="${cardDto.question}"></td>
@@ -83,8 +83,8 @@
                 <form id="modal-insert-content-category">
                     <div th:replace="fragment/selectbox::selectBoxFragment(selectBoxId='modal-update-content-category-select',
                     optionList=${ categoryDtoList },
-                    optionText='cname',
-                    optionValue='cid')"></div>
+                    optionText='name',
+                    optionValue='name')"></div>
                 </form>
             </form>
             <a class="modal-content-title modal-title-question">Q.</a>
@@ -121,7 +121,7 @@
     <script th:inline="javascript">
         let dto = [[${cardDtoList}]];
         let criteria = [[${criteria}]];
-        let original = [[${original}]];
+        let keyword = [[${keyword}]];
     </script>
 </body>
 </html>

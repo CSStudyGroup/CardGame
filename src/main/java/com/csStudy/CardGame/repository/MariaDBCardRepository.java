@@ -45,8 +45,9 @@ public class MariaDBCardRepository implements CardRepository {
     public int deleteById(Long id) {
         // 예외처리 필요
         try {
-            em.createQuery("delete from Card c where c.id = :id", Card.class)
-                    .setParameter("id", id);
+            em.createQuery("delete from Card c where c.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
             return 1;
         } catch(Exception e) {
             e.printStackTrace();

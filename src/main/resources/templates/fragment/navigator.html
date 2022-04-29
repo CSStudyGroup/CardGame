@@ -18,7 +18,7 @@
         <div class="navbar-search-container">
             <div class="navbar-search">
                 <div th:replace="fragment/selectbox::selectBoxFragment(selectBoxId='navbar-search-criteria',
-                optionList=${ {{'카테고리', 'cid'}, {'태그', 'tag'}, {'질문', 'question'}} },
+                optionList=${ {{'카테고리', 'category'}, {'태그', 'tag'}, {'질문', 'question'}} },
                 optionText=0,
                 optionValue=1)"></div>
                 <input type="text" id="navbar-search-keyword" onkeyup="searchEnterKey(event)"/>
@@ -27,7 +27,6 @@
             <form id="navbar-search-form" method="get" action="/card/list" style="display: none;">
                 <input class="search-criteria" type="hidden" name="criteria">
                 <input class="search-keyword" type="hidden" name="keyword">
-                <input class="search-original" type="hidden" name="original">
             </form>
         </div>
         <div class="navbar-buttons">
@@ -75,11 +74,11 @@
                            th:id="${ #ids.seq('interview-category-checkbox-') }"
                            type="checkbox"
                            name="keyword"
-                           th:value="${ categoryDto.cid }">
+                           th:value="${ categoryDto.name }">
                     <label class="interview-category-item clickable"
                            th:for="${ #ids.prev('interview-category-checkbox-') }">
                         <span class="interview-category-checkview"></span>
-                        <p th:text="${ categoryDto.cname }"></p>
+                        <p th:text="${ categoryDto.name }"></p>
                     </label>
                 </th:block>
             </form>
@@ -103,8 +102,8 @@
             <form id="modal-insert-content-category">
                 <div th:replace="fragment/selectbox::selectBoxFragment(selectBoxId='modal-insert-content-category-select',
                 optionList=${ categoryDtoList },
-                optionText='cname',
-                optionValue='cid')"></div>
+                optionText='name',
+                optionValue='name')"></div>
             </form>
             <a id="modal-insert-content-qtitle">Q.</a>
             <textarea maxlength="200" class="modal-insert-content-input"
