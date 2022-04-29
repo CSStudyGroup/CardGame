@@ -7,7 +7,7 @@ const selectOption = function(selectBoxId, selectedOptionText, selectedOptionVal
 }
 
 const loadingPage = document.querySelector('.loading-page');
-window.addEventListener('load', (e) => {
+window.addEventListener('load', () => {
     loadingPage.style.visibility = "hidden";
     loadingPage.style.opacity = "0";
 })

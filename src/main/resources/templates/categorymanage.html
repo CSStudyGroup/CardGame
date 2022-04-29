@@ -11,13 +11,13 @@
     <div class="main">
         <div class="container-item">
             <div class="container-body" th:each="categoryDto : ${categoryDtoList}">
-                <a class="category-name" th:text="|${categoryDto.cname} (${categoryDto.cnt})|"></a>
+                <a class="category-name" th:text="|${categoryDto.name} (${categoryDto.cardCount})|"></a>
                 <input type="hidden" class="new-category-name" onkeyup="enterEvent(event)">
                 <img class="delete clickable" height="50px" width="auto"
-                     th:attr="onclick=|categoryDeleteCheck('${categoryDto.cname}')|"
+                     th:attr="onclick=|categoryDeleteCheck('${categoryDto.name}')|"
                      th:src="@{/img/delete_image.png}">
                 <img class="update clickable" height="50px" width="auto"
-                     th:attr="onclick=|categoryUpdate('${categoryDto.cname}')|"
+                     th:attr="onclick=|categoryUpdate('${categoryDto.name}')|"
                      th:src="@{/img/edit_image.png}">
             </div>
             <div class="insert container-last clickable" onclick="categoryInsert()">

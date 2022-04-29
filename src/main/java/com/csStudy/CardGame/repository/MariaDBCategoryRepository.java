@@ -47,8 +47,9 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     public int deleteById(Long id) {
         // 예외처리 필요
         try {
-            em.createQuery("delete from Category c where c.id = :id", Category.class)
-                    .setParameter("id", id);
+            em.createQuery("delete from Category c where c.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
             return 1;
         } catch(Exception e) {
             e.printStackTrace();
@@ -63,7 +64,7 @@ public class MariaDBCategoryRepository implements CategoryRepository {
 
     @Override
     public Optional<Category> findByName(String name) {
-        return Optional.ofNullable(em.createQuery("select c from Category c where c.cname = :name", Category.class)
+        return Optional.ofNullable(em.createQuery("select c from Category c where c.name = :name", Category.class)
                 .setParameter("name", name)
                 .getSingleResult());
     }

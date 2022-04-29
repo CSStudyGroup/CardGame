@@ -26,7 +26,7 @@ insertCategory.addEventListener('click', (e) => {
     e.stopPropagation();
 })
 
-insertModal.addEventListener('click', (e) => {
+insertModal.addEventListener('click', () => {
     insertCategory.classList.remove('sb-option-open');
 });
 
@@ -40,15 +40,15 @@ function insert() {
 
 function insertModalSubmit(){
     // 필수내용 작성 확인
-    if (insertCategory.dataset.value == 'none') {
+    if (insertCategory.dataset.value === 'none') {
         alert('카테고리를 선택해주세요.');
         return;
     }
-    if (insertQuestion.value.trim() == '') {
+    if (insertQuestion.value.trim() === '') {
         alert('질문을 입력해주세요.');
         return;
     }
-    if (insertAnswer.value.trim() == '') {
+    if (insertAnswer.value.trim() === '') {
         alert('답변을 입력해주세요.');
         return;
     }
@@ -81,7 +81,7 @@ function insertModalSubmit(){
     cardHttpRequest.open('POST', '/card/cardInsert')
     cardHttpRequest.setRequestHeader('Content-type', 'application/json');
     cardHttpRequest.send(JSON.stringify({
-        cid: insertCategory.dataset.value,
+        categoryName: insertCategory.dataset.value,
         question: insertQuestion.value,
         answer: insertAnswer.value,
         tags: insertTags.value
@@ -109,13 +109,13 @@ function interviewSubmit() {
     for(let i=0; i<checkList.length; i++) {
         if (checkList[i].checked) {
             check = true;
-            count += categoryDtoList[i].cnt;
+            count += categoryDtoList[i].cardCount;
         }
     }
     if (!check) {
         alert("카테고리를 하나 이상 선택해주세요.");
     }
-    else if (count == 0) {
+    else if (count === 0) {
         alert("선택하신 카테고리에 해당하는 질문이 없습니다.");
     }
     else {
@@ -132,44 +132,30 @@ const navbarSearchKeyword = document.querySelector("#navbar-search-keyword");
 const searchForm = document.querySelector("#navbar-search-form");
 const searchCriteria = searchForm.querySelector('.search-criteria');
 const searchKeyword = searchForm.querySelector('.search-keyword');
-const searchOriginal = searchForm.querySelector('.search-original');
-const searchOptionSelected = navbarSearchCriteria.querySelector('.sb-option-selected');
 
 // 검색 결과 표시 페이지일 경우(list) 키워드 표시
 if (window.location.pathname === "/card/list") {
-    if (original != "") {
+    if (keyword !== "") {
         let criteria_text = '카테고리';
-        if (criteria == 'tag') {
+        if (criteria === 'tag') {
             criteria_text = '태그';
         }
-        else if (criteria == 'question') {
+        else if (criteria === 'question') {
             criteria_text = '질문';
         }
         selectOption('navbar-search-criteria', criteria_text, criteria);
-        navbarSearchKeyword.value = original;
+        navbarSearchKeyword.value = keyword;
     }
 }
 
 function search() {
-    let kw = navbarSearchKeyword.value;
     searchCriteria.value = navbarSearchCriteria.dataset.value;
-    if (searchCriteria.value == 'cid') {
-        let cid = -1;
-        for (let i=0; i<categoryDtoList.length; i++) {
-            if (categoryDtoList[i].cname == kw) {
-                cid = categoryDtoList[i].cid;
-                break;
-            }
-        }
-        kw = cid;
-    }
-    searchKeyword.value = kw;
-    searchOriginal.value = navbarSearchKeyword.value;
+    searchKeyword.value = navbarSearchKeyword.value;
     searchForm.submit();
 }
 
 function searchEnterKey(e) {
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
         search();
     }
 }
@@ -192,7 +178,7 @@ navbarSearch.addEventListener('click', (e) => {
     e.stopPropagation();
 })
 
-document.addEventListener("click", (e) => {
+document.addEventListener("click", () => {
     navbarSearchHide();
 });
 
@@ -221,13 +207,13 @@ let selectedIndex = {
         this._value = v;
         setTransition('transform 0.3s linear');
         setTranslate(this._value);
-        if (this._value == this._minBound) {
+        if (this._value === this._minBound) {
             sitemapPreButton.style.visibility = 'hidden';
         }
         else {
             sitemapPreButton.style.visibility = 'visible';
         }
-        if (this._value == this._maxBound) {
+        if (this._value === this._maxBound) {
             sitemapNxtButton.style.visibility = 'hidden';
         }
         else {
@@ -254,7 +240,7 @@ function showNavbarSitemapDropdown() {
 }
 
 function hideNavbarSitemapDropdown() {
-    navbarSitemapDropdownTimer = setTimeout(function(e) {
+    navbarSitemapDropdownTimer = setTimeout(function() {
         navbarSitemapDropdownOverlay.style.display='none';
         navbarSitemapDropdown.classList.remove('navbar-dropdown-open');
     }, 1);

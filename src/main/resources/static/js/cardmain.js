@@ -2,8 +2,8 @@
 const categoryList = document.querySelectorAll(".card-category")
 function newCardHandler(event) {
     for(let i=0; i<categoryDtoList.length; i++) {
-        if(categoryDtoList[i].cid == event.detail.cid) {
-            categoryDtoList[i].cnt += 1;
+        if(categoryDtoList[i].name === event.detail.categoryName) {
+            categoryDtoList[i].cardCount += 1;
             categoryList[i].children[1].textContent = parseInt(categoryList[i].children[1].textContent) + 1;
             break;
         }

@@ -4,7 +4,7 @@ alter table card
     modify answer text not null;
 
 alter table category
-    change cid id bigint,
+    change cid id bigint auto_increment,
     change cname name varchar(255) not null,
     modify cnt int default 0;
 
