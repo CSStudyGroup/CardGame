@@ -39,7 +39,7 @@ public class CardController {
     @GetMapping("/card/category")
     public String category(@RequestParam(value="keyword") String keyword, Model model) {
         // 해당되는 키워드의 카드리스트를 받아와 반환
-        List<CardDto> cardDtoList = cardService.findCardByCategory(keyword);
+        List<CardDto> cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
         model.addAttribute("cardDtoList", cardDtoList);
 
         // 카테고리 리스트를 받아오는 부분
@@ -86,7 +86,7 @@ public class CardController {
                 cardDtoList = cardService.findCardByQuestion(keyword);
                 break;
             case "category":
-                cardDtoList = cardService.findCardByCategory(keyword);
+                cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
                 break;
         }
 

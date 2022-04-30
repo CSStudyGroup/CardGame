@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardDto {
+public class CardDto implements Comparable<CardDto> {
     private Long id;
 
     private String question;
@@ -16,4 +16,14 @@ public class CardDto {
     private String tags;
 
     private String categoryName;
+
+    @Override
+    public int compareTo(CardDto o) {
+        if (this.id > o.getId()) {
+            return 1;
+        }
+        else {
+            return -1;
+        }
+    }
 }

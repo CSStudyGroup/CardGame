@@ -2,6 +2,7 @@ package com.csStudy.CardGame.domain;
 
 
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ public class Category {
     private int cardCount;
 
     @OneToMany(mappedBy = "category")
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Card> cards = new HashSet<>();
 
     public static Category createCategory(String name) {

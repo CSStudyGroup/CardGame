@@ -3,6 +3,7 @@ package com.csStudy.CardGame.domain;
 
 import com.csStudy.CardGame.dto.CardDto;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Cacheable
 public class Card {
 
     @Id

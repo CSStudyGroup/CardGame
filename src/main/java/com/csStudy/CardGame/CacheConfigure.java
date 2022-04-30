@@ -1,35 +1,28 @@
 package com.csStudy.CardGame;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.config.CacheConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.springframework.cache.jcache.JCacheCacheManager;
+import org.springframework.cache.jcache.JCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.cache.configuration.MutableConfiguration;
 import java.util.Objects;
 
 @EnableCaching
 @Configuration
 public class CacheConfigure {
     @Bean
-    public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
-        return new EhCacheManagerFactoryBean();
+    public JCacheManagerFactoryBean jCacheManagerFactoryBean() {
+        return new JCacheManagerFactoryBean();
     }
 
     @Bean
-    public EhCacheCacheManager ehCacheCacheManager() {
-        Cache categoryListCache = new Cache(new CacheConfiguration()
-                .eternal(false)
-                .timeToLiveSeconds(0)
-                .timeToIdleSeconds(0)
-                .maxEntriesLocalHeap(0)
-                .memoryStoreEvictionPolicy("LRU")
-                .name("categoryList"));
-
-        Objects.requireNonNull(ehCacheManagerFactoryBean().getObject()).addCache(categoryListCache);
-        return new EhCacheCacheManager(Objects.requireNonNull(ehCacheManagerFactoryBean().getObject()));
+    public JCacheCacheManager jCacheCacheManager() {
+        MutableConfiguration<Object, Object> config = new MutableConfiguration<>();
+        config.setStoreByValue(false);
+        Objects.requireNonNull(jCacheManagerFactoryBean().getObject()).createCache("categoryList", config);
+        return new JCacheCacheManager(Objects.requireNonNull(jCacheManagerFactoryBean().getObject()));
     }
-
 
 }
