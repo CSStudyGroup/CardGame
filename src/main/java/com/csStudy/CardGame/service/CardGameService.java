@@ -4,6 +4,7 @@ import com.csStudy.CardGame.domain.Card;
 import com.csStudy.CardGame.domain.Category;
 import com.csStudy.CardGame.dto.CardDto;
 import com.csStudy.CardGame.dto.CategoryDto;
+import com.csStudy.CardGame.dto.CategoryIncludeCategoryDto;
 import com.csStudy.CardGame.dto.ChangeCategoryResultDto;
 import com.csStudy.CardGame.mapper.CardMapper;
 import com.csStudy.CardGame.mapper.CategoryMapper;
@@ -74,10 +75,15 @@ public class CardGameService {
 
     // 카테고리로 카드 필터링
     @Transactional
-    public List<CardDto> findCardByCategory(String categoryName) {
-        return cardRepository.findByCategoryName(categoryName).stream()
-                .map(cardMapper::toDto)
-                .collect(Collectors.toList());
+    public CategoryIncludeCategoryDto findCardByCategory(String categoryName) {
+        CategoryIncludeCategoryDto categoryIncludeCategoryDto = new CategoryIncludeCategoryDto();
+        Category category = Objects.requireNonNull(categoryRepository.findByName(categoryName).orElse(null));
+        categoryIncludeCategoryDto.setId(category.getId());
+        categoryIncludeCategoryDto.setName(category.getName());
+        categoryIncludeCategoryDto.setCardCount(category.getCardCount());
+        categoryIncludeCategoryDto.setCardDtoList(category.getCards().stream()
+                .map(cardMapper::toDto).sorted().collect(Collectors.toList()));
+        return categoryIncludeCategoryDto;
     }
 
     // 여러개의 카테고리로 카드 필터링
@@ -127,15 +133,16 @@ public class CardGameService {
     @Transactional
     public int deleteCard(CardDto cardDto) {
         // 예외처리 필요
+        System.out.println("============================================================================");
         Card target = Objects.requireNonNull(cardRepository.findOne(cardDto.getId()).orElse(null));
         Category changedCategory = Objects.requireNonNull(categoryRepository.findByName(cardDto.getCategoryName()).orElse(null));
         changedCategory.removeCard(target);
+        System.out.println("============================================================================");
         return cardRepository.deleteById(cardDto.getId());
     }
 
 
     // 카테고리 관련 서비스 메소드
-
     // 카테고리 전부 가져오기
     @Cacheable("categoryList")
     @Transactional
