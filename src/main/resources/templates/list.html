@@ -10,7 +10,7 @@
     <th:block th:replace="fragment/navigator::navigator(title='List')"></th:block>
     <div class="main">
         <div class="container">
-            <table>
+            <table class="table">
                 <tr class="head">
                     <th width="10%">ID</th>
                     <th width="30%">Category</th>
@@ -22,7 +22,7 @@
                     <td class="underline id"
                         th:text="${cardDto.id}"></td>
                     <td class="underline category"
-                        th:text="${cardDto.categoryName}"></td>
+                        th:text="${cardDto.cid}"></td>
                     <td class="underline question clickable"
                         th:attr="onclick=|text('${cardDto.id}')|"
                         th:text="${cardDto.question}"></td>
@@ -84,7 +84,7 @@
                     <div th:replace="fragment/selectbox::selectBoxFragment(selectBoxId='modal-update-content-category-select',
                     optionList=${ categoryDtoList },
                     optionText='name',
-                    optionValue='name')"></div>
+                    optionValue='id')"></div>
                 </form>
             </form>
             <a class="modal-content-title modal-title-question">Q.</a>
@@ -122,6 +122,7 @@
         let dto = [[${cardDtoList}]];
         let criteria = [[${criteria}]];
         let keyword = [[${keyword}]];
+        let original = [[${original}]];
     </script>
 </body>
 </html>

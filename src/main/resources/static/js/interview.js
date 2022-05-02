@@ -21,6 +21,12 @@ window.onload = function(){
         card.style.width = "calc(100vw - 140px)";
     }
 
+    // 카테고리 해싱
+    let categoryMap = new Map();
+    for (let i = 0; i < categoryDtoList.length; i++) {
+        categoryMap.set(categoryDtoList[i].id, categoryDtoList[i].name);
+    }
+
     // 문항 수 표시
     const counter = document.querySelector(".page-title");
     counter.innerText = "Interview (문항 수 : " + dto.length + ")";
@@ -87,7 +93,7 @@ window.onload = function(){
             card.classList.add("prev-show");
             setTimeout(function () {
                 cardTitle.innerText = "Q.";
-                category.innerText = "(" + dto[now].categoryName + ")";
+                category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
                 question.style.display = "block";
                 answer.style.display = "none";
                 answer.scrollTo(0,0);
@@ -111,7 +117,7 @@ window.onload = function(){
             card.classList.add("next-show");
             setTimeout(function () {
                 cardTitle.innerText = "Q.";
-                category.innerText = "(" + dto[now].categoryName + ")";
+                category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
                 question.style.display = "block";
                 answer.style.display = "none";
                 answer.scrollTo(0,0);
@@ -137,7 +143,7 @@ window.onload = function(){
     shuffle(dto);
 
     // 초기 로딩
-    category.innerText = "(" + dto[now].categoryName + ")";
+    category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
     question.innerText = dto[now].question;
     answer.innerHTML = marked.parse(dto[now].answer);
 
@@ -162,7 +168,7 @@ window.onload = function(){
     function newCardHandler(event) {
         // 현재 리스트 조건에 맞는지 체크 후 추가
         for (let i = 0; i < keywords.length; i++) {
-            if (keywords[i] == event.detail.categoryName) {
+            if (keywords[i] == event.detail.cid) {
                 // 현재 위치 뒤에 무작위 삽입
                 dto.splice(Math.floor(Math.random() * (dto.length - now)) + now + 1, 0, event.detail);
                 counter.innerText = "Interview (문항 수 : " + dto.length + ")";

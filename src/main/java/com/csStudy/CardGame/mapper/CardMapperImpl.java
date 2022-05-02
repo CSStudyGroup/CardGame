@@ -16,7 +16,7 @@ public class CardMapperImpl implements CardMapper{
             cardDto.setQuestion(card.getQuestion());
             cardDto.setAnswer(card.getAnswer());
             cardDto.setTags(card.getTags());
-            cardDto.setCategoryName(card.getCategory().getName());
+            cardDto.setCid(card.getCategory().getId());
             return cardDto;
         }
     }

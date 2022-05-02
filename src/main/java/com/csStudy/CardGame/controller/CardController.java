@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.Long.parseLong;
+
 @Controller
 public class CardController {
 
@@ -37,7 +39,7 @@ public class CardController {
 
     // 선택된 카테고리에 맞게 표시
     @GetMapping("/card/category")
-    public String category(@RequestParam(value="keyword") String keyword, Model model) {
+    public String category(@RequestParam(value="keyword") Long keyword, Model model) {
         // 해당되는 키워드의 카드리스트를 받아와 반환
         List<CardDto> cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
         model.addAttribute("cardDtoList", cardDtoList);
@@ -50,7 +52,7 @@ public class CardController {
 
     // navi bar interview checkbox submit
     @GetMapping("/card/interview")
-    public String interview(@RequestParam("keyword") List<String> keywords, Model model) {
+    public String interview(@RequestParam("keyword") List<Long> keywords, Model model) {
         List<CardDto> cardDtoList = cardService.findCardByCategoryIn(keywords);
         model.addAttribute("cardDtoList", cardDtoList);
 
@@ -74,7 +76,8 @@ public class CardController {
 
     @GetMapping("/card/list")
     public String list(@RequestParam("criteria") String criteria,
-                       @RequestParam("keyword") String keyword, Model model) {
+                       @RequestParam("keyword") String keyword,
+                       @RequestParam("original") String original, Model model) {
         // 빈 배열 선언
         List<CardDto> cardDtoList = Collections.emptyList();
 
@@ -86,7 +89,7 @@ public class CardController {
                 cardDtoList = cardService.findCardByQuestion(keyword);
                 break;
             case "category":
-                cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
+                cardDtoList = cardService.findCardByCategory(parseLong(keyword)).getCardDtoList();
                 break;
         }
 
@@ -100,6 +103,7 @@ public class CardController {
         // 검색 키워드를 알기위한 키워드 전송
         model.addAttribute("criteria", criteria);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("original", original);
 
         return "list";
     }

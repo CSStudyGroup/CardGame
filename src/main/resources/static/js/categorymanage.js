@@ -332,7 +332,7 @@ window.onload = function(){
     // 카드 추가 이벤트
     function newCardHandler(event) {
         for (let i = 0; i < categoryDtoList.length; i++) {
-            if (categoryDtoList[i].name === event.detail.categoryName) {
+            if (categoryDtoList[i].id === event.detail.cid) {
                 categoryDtoList[i].cardCount += 1;
                 // 존재할 경우 숫자 올리기
                 for (let j = 0; j < dto.length; j++) {

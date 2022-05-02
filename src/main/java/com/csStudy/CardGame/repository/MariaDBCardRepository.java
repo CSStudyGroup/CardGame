@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository("mariadb_card")
 public class MariaDBCardRepository implements CardRepository {
@@ -67,16 +68,16 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public List<Card> findByCategoryName(String categoryName) {
-        return em.createQuery("select c from Card c where c.category.name = :categoryName", Card.class)
-                .setParameter("categoryName", categoryName)
+    public List<Card> findByCategory(Long cid) {
+        return em.createQuery("select c from Card c where c.category.id = :cid", Card.class)
+                .setParameter("cid", cid)
                 .getResultList();
     }
 
     @Override
-    public List<Card> findByCategoryNameIn(List<String> categoryNameList) {
-        return em.createQuery("select c from Card c where c.category.name in :categoryNameList", Card.class)
-                .setParameter("categoryNameList", categoryNameList)
+    public List<Card> findByCategoryIn(List<Long> cidList) {
+        return em.createQuery("select c from Card c where c.category.id in :cidList", Card.class)
+                .setParameter("cidList", cidList)
                 .getResultList();
     }
 

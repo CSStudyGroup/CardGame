@@ -21,9 +21,15 @@ window.onload = function(){
         card.style.width = "calc(100vw - 140px)";
     }
 
+    // 카테고리 해싱
+    let categoryMap = new Map();
+    for (let i = 0; i < categoryDto.length; i++) {
+        categoryMap.set(categoryDto[i].id, categoryDto[i].name);
+    }
+
     // 카테고리 표시
     const pageTitle = document.querySelector(".page-title");
-    pageTitle.innerText = "Category > " + dto[0].categoryName;
+    pageTitle.innerText = "Category > " + categoryMap.get(dto[0].cid);
 
     // 각 종 elements
     const cardTitle = document.querySelector(".card-title");
@@ -145,7 +151,7 @@ window.onload = function(){
 
     // 카드 추가 이벤트
     function newCardHandler(event) {
-        if (dto[0].categoryName === event.detail.categoryName) {
+        if (dto[0].cid === event.detail.cid) {
             total += 1
             document.getElementById("total").innerText = String(total);
             dto.push(event.detail);

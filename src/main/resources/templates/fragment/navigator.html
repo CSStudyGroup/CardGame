@@ -27,6 +27,7 @@
             <form id="navbar-search-form" method="get" action="/card/list" style="display: none;">
                 <input class="search-criteria" type="hidden" name="criteria">
                 <input class="search-keyword" type="hidden" name="keyword">
+                <input class="search-original" type="hidden" name="original">
             </form>
         </div>
         <div class="navbar-buttons">
@@ -74,7 +75,7 @@
                            th:id="${ #ids.seq('interview-category-checkbox-') }"
                            type="checkbox"
                            name="keyword"
-                           th:value="${ categoryDto.name }">
+                           th:value="${ categoryDto.id }">
                     <label class="interview-category-item clickable"
                            th:for="${ #ids.prev('interview-category-checkbox-') }">
                         <span class="interview-category-checkview"></span>
@@ -103,7 +104,7 @@
                 <div th:replace="fragment/selectbox::selectBoxFragment(selectBoxId='modal-insert-content-category-select',
                 optionList=${ categoryDtoList },
                 optionText='name',
-                optionValue='name')"></div>
+                optionValue='id')"></div>
             </form>
             <a id="modal-insert-content-qtitle">Q.</a>
             <textarea maxlength="200" class="modal-insert-content-input"

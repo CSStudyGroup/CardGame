@@ -47,7 +47,7 @@ public class CardGameService {
         Card newCard = Card.createCard(cardDto);
         // 예외처리 필요
         try {
-            categoryRepository.findByName(cardDto.getCategoryName())
+            categoryRepository.findOne(cardDto.getCid())
                     .ifPresentOrElse(category -> category.addCard(newCard), () -> {
                         throw new NoSuchElementException();
                     });
@@ -75,21 +75,26 @@ public class CardGameService {
 
     // 카테고리로 카드 필터링
     @Transactional
-    public CategoryIncludeCategoryDto findCardByCategory(String categoryName) {
+    public CategoryIncludeCategoryDto findCardByCategory(long cid) {
         CategoryIncludeCategoryDto categoryIncludeCategoryDto = new CategoryIncludeCategoryDto();
-        Category category = Objects.requireNonNull(categoryRepository.findByName(categoryName).orElse(null));
-        categoryIncludeCategoryDto.setId(category.getId());
-        categoryIncludeCategoryDto.setName(category.getName());
-        categoryIncludeCategoryDto.setCardCount(category.getCardCount());
-        categoryIncludeCategoryDto.setCardDtoList(category.getCards().stream()
-                .map(cardMapper::toDto).sorted().collect(Collectors.toList()));
+        try {
+            Category category = Objects.requireNonNull(categoryRepository.findOne(cid).orElse(null));
+            categoryIncludeCategoryDto.setId(category.getId());
+            categoryIncludeCategoryDto.setName(category.getName());
+            categoryIncludeCategoryDto.setCardCount(category.getCardCount());
+            categoryIncludeCategoryDto.setCardDtoList(category.getCards().stream()
+                    .map(cardMapper::toDto).sorted().collect(Collectors.toList()));
+        }
+        catch (Exception e) {
+            return categoryIncludeCategoryDto;
+        }
         return categoryIncludeCategoryDto;
     }
 
     // 여러개의 카테고리로 카드 필터링
     @Transactional
-    public List<CardDto> findCardByCategoryIn(List<String> categoryNameList) {
-        return cardRepository.findByCategoryNameIn(categoryNameList).stream()
+    public List<CardDto> findCardByCategoryIn(List<Long> cidList) {
+        return cardRepository.findByCategoryIn(cidList).stream()
                 .map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -117,7 +122,7 @@ public class CardGameService {
         // 비즈니스 로직으로 구현
         // 예외처리 필요
         Card target = Objects.requireNonNull(cardRepository.findOne(cardDto.getId()).orElse(null));
-        Category changedCategory = Objects.requireNonNull(categoryRepository.findByName(cardDto.getCategoryName()).orElse(null));
+        Category changedCategory = Objects.requireNonNull(categoryRepository.findOne(cardDto.getCid()).orElse(null));
         target.getCategory().removeCard(target);
         changedCategory.addCard(target);
 
@@ -135,7 +140,7 @@ public class CardGameService {
         // 예외처리 필요
         System.out.println("============================================================================");
         Card target = Objects.requireNonNull(cardRepository.findOne(cardDto.getId()).orElse(null));
-        Category changedCategory = Objects.requireNonNull(categoryRepository.findByName(cardDto.getCategoryName()).orElse(null));
+        Category changedCategory = Objects.requireNonNull(categoryRepository.findOne(cardDto.getCid()).orElse(null));
         changedCategory.removeCard(target);
         System.out.println("============================================================================");
         return cardRepository.deleteById(cardDto.getId());
