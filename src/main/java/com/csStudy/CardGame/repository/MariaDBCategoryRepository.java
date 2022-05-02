@@ -1,13 +1,11 @@
 package com.csStudy.CardGame.repository;
 
-import com.csStudy.CardGame.domain.Card;
 import com.csStudy.CardGame.domain.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Repository("mariadb_category")
@@ -22,12 +20,11 @@ public class MariaDBCategoryRepository implements CategoryRepository {
 
     @Override
     public void save(Category category) {
-        // 예외처리 필요
-        try {
+        if (category.getId() == null) {
             em.persist(category);
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        else {
+            em.merge(category);
         }
     }
 

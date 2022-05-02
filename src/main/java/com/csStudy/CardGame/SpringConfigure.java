@@ -6,6 +6,7 @@ import com.csStudy.CardGame.mapper.CategoryMapper;
 import com.csStudy.CardGame.mapper.CategoryMapperImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 
 @Configuration
 public class SpringConfigure {
@@ -17,5 +18,11 @@ public class SpringConfigure {
     @Bean
     public CategoryMapper categoryMapper(){
         return new CategoryMapperImpl();
+    }
+
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor
+        exceptionTranslationPostProcessor() {
+        return new PersistenceExceptionTranslationPostProcessor();
     }
 }

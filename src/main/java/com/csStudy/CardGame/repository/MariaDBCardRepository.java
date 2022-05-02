@@ -6,9 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository("mariadb_card")
 public class MariaDBCardRepository implements CardRepository {
@@ -22,11 +20,11 @@ public class MariaDBCardRepository implements CardRepository {
 
     @Override
     public void save(Card card) {
-        try {
+        if (card.getId() == null) {
             em.persist(card);
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        else {
+            em.merge(card);
         }
     }
 
