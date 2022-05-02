@@ -81,7 +81,7 @@ function insertModalSubmit(){
     cardHttpRequest.open('POST', '/card/cardInsert')
     cardHttpRequest.setRequestHeader('Content-type', 'application/json');
     cardHttpRequest.send(JSON.stringify({
-        categoryName: insertCategory.dataset.value,
+        cid: insertCategory.dataset.value,
         question: insertQuestion.value,
         answer: insertAnswer.value,
         tags: insertTags.value
@@ -132,10 +132,11 @@ const navbarSearchKeyword = document.querySelector("#navbar-search-keyword");
 const searchForm = document.querySelector("#navbar-search-form");
 const searchCriteria = searchForm.querySelector('.search-criteria');
 const searchKeyword = searchForm.querySelector('.search-keyword');
+const searchOriginal = searchForm.querySelector('.search-original');
 
 // 검색 결과 표시 페이지일 경우(list) 키워드 표시
 if (window.location.pathname === "/card/list") {
-    if (keyword !== "") {
+    if (original !== "") {
         let criteria_text = '카테고리';
         if (criteria === 'tag') {
             criteria_text = '태그';
@@ -144,13 +145,25 @@ if (window.location.pathname === "/card/list") {
             criteria_text = '질문';
         }
         selectOption('navbar-search-criteria', criteria_text, criteria);
-        navbarSearchKeyword.value = keyword;
+        navbarSearchKeyword.value = original;
     }
 }
 
 function search() {
+    let kw = navbarSearchKeyword.value;
     searchCriteria.value = navbarSearchCriteria.dataset.value;
-    searchKeyword.value = navbarSearchKeyword.value;
+    if (searchCriteria.value == 'category') {
+        let cid = -1;
+        for (let i=0; i<categoryDtoList.length; i++) {
+            if (categoryDtoList[i].name == kw) {
+                cid = categoryDtoList[i].id;
+                break;
+            }
+        }
+        kw = cid;
+    }
+    searchKeyword.value = kw;
+    searchOriginal.value = navbarSearchKeyword.value;
     searchForm.submit();
 }
 

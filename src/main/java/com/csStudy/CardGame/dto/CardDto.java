@@ -15,7 +15,7 @@ public class CardDto implements Comparable<CardDto> {
 
     private String tags;
 
-    private String categoryName;
+    private Long cid;
 
     @Override
     public int compareTo(CardDto o) {

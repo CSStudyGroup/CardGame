@@ -11,7 +11,7 @@
         <div class="category-container">
             <div class="card-frame card-category clickable"
                  th:each="categoryDto: ${ categoryDtoList }"
-                 th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.name }'|">
+                 th:attr="onclick=|location.href='/card/category?keyword=${ categoryDto.id }'|">
                 <div class="card-category-name">
                     <p th:text="${ categoryDto.name }"></p>
                 </div>

@@ -2,7 +2,7 @@
 const categoryList = document.querySelectorAll(".card-category")
 function newCardHandler(event) {
     for(let i=0; i<categoryDtoList.length; i++) {
-        if(categoryDtoList[i].name === event.detail.categoryName) {
+        if(categoryDtoList[i].id === event.detail.cid) {
             categoryDtoList[i].cardCount += 1;
             categoryList[i].children[1].textContent = parseInt(categoryList[i].children[1].textContent) + 1;
             break;
