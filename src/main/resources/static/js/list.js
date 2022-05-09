@@ -181,7 +181,7 @@ remove.addEventListener('click', () => {
 
 window.onload = function(){
     // 0개 대응
-    if (dto === null) {
+    if (dto.length === 0) {
         const main = document.querySelector(".container");
         main.innerHTML = "<br><br><br><br><br><br><br><br>검색 결과가 없습니다.<br><br>다른 검색어로 검색해주세요";
     }

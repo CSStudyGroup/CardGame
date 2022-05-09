@@ -507,7 +507,7 @@
     }
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 600px) {
     .navbar-search-container {
         position: fixed;
         display: none;
