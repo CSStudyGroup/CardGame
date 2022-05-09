@@ -136,17 +136,15 @@ const searchOriginal = searchForm.querySelector('.search-original');
 
 // 검색 결과 표시 페이지일 경우(list) 키워드 표시
 if (window.location.pathname === "/card/list") {
-    if (original !== "") {
-        let criteria_text = '카테고리';
-        if (criteria === 'tag') {
-            criteria_text = '태그';
-        }
-        else if (criteria === 'question') {
-            criteria_text = '질문';
-        }
-        selectOption('navbar-search-criteria', criteria_text, criteria);
-        navbarSearchKeyword.value = original;
+    let criteria_text = '카테고리';
+    if (criteria === 'tag') {
+        criteria_text = '태그';
     }
+    else if (criteria === 'question') {
+        criteria_text = '질문';
+    }
+    selectOption('navbar-search-criteria', criteria_text, criteria);
+    navbarSearchKeyword.value = original;
 }
 
 function search() {
@@ -271,7 +269,7 @@ function nxtItem() {
 
 /* resize observer */
 function resize(entries) {
-    if (entries[0].contentRect.width > 500) {
+    if (entries[0].contentRect.width > 600) {
         navbarSearchHide();
     }
 

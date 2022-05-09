@@ -4,7 +4,7 @@ import com.csStudy.CardGame.domain.Card;
 import com.csStudy.CardGame.domain.Category;
 import com.csStudy.CardGame.dto.CardDto;
 import com.csStudy.CardGame.dto.CategoryDto;
-import com.csStudy.CardGame.dto.CategoryIncludeCategoryDto;
+import com.csStudy.CardGame.dto.CategoryIncludeCardDto;
 import com.csStudy.CardGame.dto.ChangeCategoryResultDto;
 import com.csStudy.CardGame.mapper.CardMapper;
 import com.csStudy.CardGame.mapper.CategoryMapper;
@@ -75,20 +75,20 @@ public class CardGameService {
 
     // 카테고리로 카드 필터링
     @Transactional
-    public CategoryIncludeCategoryDto findCardByCategory(long cid) {
-        CategoryIncludeCategoryDto categoryIncludeCategoryDto = new CategoryIncludeCategoryDto();
+    public CategoryIncludeCardDto findCardByCategory(long cid) {
+        CategoryIncludeCardDto categoryIncludeCardDto = new CategoryIncludeCardDto();
         try {
             Category category = Objects.requireNonNull(categoryRepository.findOne(cid).orElse(null));
-            categoryIncludeCategoryDto.setId(category.getId());
-            categoryIncludeCategoryDto.setName(category.getName());
-            categoryIncludeCategoryDto.setCardCount(category.getCardCount());
-            categoryIncludeCategoryDto.setCardDtoList(category.getCards().stream()
+            categoryIncludeCardDto.setId(category.getId());
+            categoryIncludeCardDto.setName(category.getName());
+            categoryIncludeCardDto.setCardCount(category.getCardCount());
+            categoryIncludeCardDto.setCardDtoList(category.getCards().stream()
                     .map(cardMapper::toDto).sorted().collect(Collectors.toList()));
         }
         catch (Exception e) {
-            return categoryIncludeCategoryDto;
+            return categoryIncludeCardDto;
         }
-        return categoryIncludeCategoryDto;
+        return categoryIncludeCardDto;
     }
 
     // 여러개의 카테고리로 카드 필터링

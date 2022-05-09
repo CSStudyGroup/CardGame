@@ -73,8 +73,7 @@
         content=~{::.modal-update-content},
         buttons=~{::.modal-update-buttons},
         closeButton=false,
-        escClose=true,
-        outClose=true)">
+        escClose=true)">
         <th:block class="modal-update-title">
             <a class="modal-title-text" id="modal-update-title-text"></a>
         </th:block>
@@ -91,7 +90,12 @@
             <textarea maxlength="200" class="modal-content-textarea"
                       id="modal-update-content-question"></textarea>
             <a class="modal-content-title modal-title-answer">A.</a>
-            <textarea maxlength="1000" class="modal-content-textarea"
+            <textarea onkeydown="if(event.keyCode===9){
+                let v=this.value,s=this.selectionStart,e=this.selectionEnd;
+                this.value=v.substring(0, s)+'\t'+v.substring(e);
+                this.selectionStart=this.selectionEnd=s+1;
+                return false;
+            }" maxlength="1000" class="modal-content-textarea"
                       id="modal-update-content-answer"></textarea>
             <a class="modal-content-title modal-title-tags">T.</a>
             <textarea maxlength="210" class="modal-content-textarea"

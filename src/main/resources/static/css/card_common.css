@@ -10,8 +10,26 @@ abbr, acronym, address, applet, article, aside, audio, b, big, body, canvas, cap
     --page-title-height: 45px;
 }
 
+html {
+    tab-size: 4;
+}
+
 body {
     padding: 0.1px;
+}
+
+pre {
+    border: 3px double black;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+code {
+    display: block;
+    overflow: scroll;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
 }
 
 /* others */

@@ -94,8 +94,7 @@
         content=~{::.modal-insert-content},
         buttons=~{::.modal-insert-buttons},
         closeButton=false,
-        escClose=true,
-        outClose=true)">
+        escClose=true)">
         <th:block class="modal-insert-title">
             <a id="modal-insert-title-text">카드 추가</a>
         </th:block>
@@ -110,11 +109,15 @@
             <textarea maxlength="200" class="modal-insert-content-input"
                       id="modal-insert-content-question"></textarea>
             <a id="modal-insert-content-atitle">A.</a>
-            <textarea maxlength="800" class="modal-insert-content-input"
+            <textarea onkeydown="if(event.keyCode===9){
+                let v=this.value,s=this.selectionStart,e=this.selectionEnd;
+                this.value=v.substring(0, s)+'\t'+v.substring(e);
+                this.selectionStart=this.selectionEnd=s+1;
+                return false;
+            }" maxlength="800" class="modal-insert-content-input"
                       id="modal-insert-content-answer"></textarea>
             <a id="modal-insert-content-ttitle">T.</a>
-            <textarea maxlength="210" class="modal-insert-content-input"
-                      id="modal-insert-content-tags"></textarea>
+            <textarea maxlength="210" class="modal-insert-content-input" id="modal-insert-content-tags"></textarea>
         </th:block>
         <th:block class="modal-insert-buttons">
             <button class="clickable modal-insert-buttons" type="button"
