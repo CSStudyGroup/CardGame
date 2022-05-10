@@ -38,7 +38,7 @@ window.onload = function(){
     const category = document.querySelector(".card-category");
     let check = null;
     card.addEventListener("click", function () {
-        if (check == null){
+        if (check == null && !codeBoxClick){
             card.classList.add("rotate");
             setTimeout(function () {
                 if (cardTitle.innerText === "Q.") {
@@ -177,4 +177,59 @@ window.onload = function(){
         }
     }
     document.addEventListener('newcard', newCardHandler);
+
+    // 코드 박스 드래그 체킹용
+    const codeBox = document.querySelectorAll("code");
+    let codeBoxClick = false;
+    let isMouseDown = false;
+    let startX, scrollLeft;
+
+    for (let i = 0; i < codeBox.length; i++) {
+
+        // 드래그 방지
+        codeBox[i].onselectstart = new Function("return false");
+
+        // 클릭 방지
+        codeBox[i].addEventListener('click', (e) => {
+            if (Math.abs((e.pageX - codeBox[i].offsetLeft) - startX) > 10) {
+                e.stopPropagation();
+            }
+            else {
+                codeBoxClick = false;
+            }
+        })
+
+        codeBox[i].addEventListener('mousedown', (e) => {
+            codeBoxClick = true;
+            isMouseDown = true;
+            codeBox[i].classList.add('active');
+
+            startX = e.pageX - codeBox[i].offsetLeft;
+            scrollLeft = codeBox[i].scrollLeft;
+        });
+
+        codeBox[i].addEventListener('mouseleave', () => {
+            isMouseDown = false;
+            codeBox[i].classList.remove('active');
+        });
+
+        codeBox[i].addEventListener('mouseup', () => {
+            isMouseDown = false;
+            codeBox[i].classList.remove('active');
+        });
+
+        codeBox[i].addEventListener('mousemove', (e) => {
+            if (!isMouseDown) return;
+            const x = e.pageX - codeBox[i].offsetLeft;
+            const walk = (x - startX) * 1;
+            codeBox[i].scrollLeft = scrollLeft - walk;
+        });
+    }
+
+    // 코드 박스 드래그 끝 처리
+    document.addEventListener('mouseup', () => {
+        setTimeout(function () {
+            codeBoxClick = false;
+        }, 1);
+    })
 }
