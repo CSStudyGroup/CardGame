@@ -74,11 +74,11 @@
     ```yaml
     # 설정파일 비밀번호 수정 후 저장
     spring:
-    	datasource:
-    		url: jdbc:mariadb://127.0.0.1:3306/cardgame
-    		username: root
-    		password: <DB 비밀번호>
-    		pool-size: 30
+      datasource:
+        url: jdbc:mariadb://127.0.0.1:3306/cardgame
+        username: root
+        password: <DB 비밀번호>
+        pool-size: 30
     ```
 
 * jar파일 실행
@@ -100,12 +100,4 @@
 
 * play video
 
-<iframe
-    width="640"
-    height="480"
-    src="https://youtube.com/embed/8W7sI1XssTI"
-    frameborder="0"
-    allow="autoplay; encrypted-media"
-    allowfullscreen
->
-</iframe>
+[![Video Label](https://img.youtube.com/vi/8W7sI1XssTI/0.jpg)](https://youtu.be/8W7sI1XssTI)
