@@ -31,7 +31,6 @@ insertModal.addEventListener('click', () => {
 });
 
 function insert() {
-    insertCategory.value = 'none';
     insertQuestion.value = "";
     insertAnswer.value = "";
     insertTags.value = "";
