@@ -98,6 +98,4 @@
 
 #### 4. 활용법
 
-* play video
-
-[![Video Label](https://img.youtube.com/vi/8W7sI1XssTI/0.jpg)](https://youtu.be/8W7sI1XssTI)
+* [play video](https://youtu.be/8W7sI1XssTI)
