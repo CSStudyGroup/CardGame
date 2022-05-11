@@ -75,6 +75,17 @@ html {
     background-clip: padding-box;
 }
 
+/* card code box copy button CSS */
+.code-copy {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: none;
+}
+pre:hover > .code-copy {
+    display: block;
+}
+
 /* card rotate animation CSS */
 .rotate {
     animation-name: rotate;

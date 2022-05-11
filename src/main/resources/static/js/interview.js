@@ -99,6 +99,7 @@ window.onload = function(){
                 answer.scrollTo(0,0);
                 question.innerText = dto[now].question;
                 answer.innerHTML = marked.parse(dto[now].answer);
+                adjustCodeBox();
             }, 500);
             check = setTimeout(function () {
                 card.classList.remove("prev-show");
@@ -123,6 +124,7 @@ window.onload = function(){
                 answer.scrollTo(0,0);
                 question.innerText = dto[now].question;
                 answer.innerHTML = marked.parse(dto[now].answer);
+                adjustCodeBox();
             }, 500);
             check = setTimeout(function () {
                 card.classList.remove("next-show");
@@ -146,6 +148,7 @@ window.onload = function(){
     category.innerText = "(" + categoryMap.get(dto[now].cid) + ")";
     question.innerText = dto[now].question;
     answer.innerHTML = marked.parse(dto[now].answer);
+    adjustCodeBox();
 
     // 끝내기 다이얼로그
     const closeModal = document.getElementById("modal-close");
@@ -179,51 +182,73 @@ window.onload = function(){
     document.addEventListener('newcard', newCardHandler);
 
     // 코드 박스 드래그 체킹용
-    const codeBox = document.querySelectorAll("code");
     let codeBoxClick = false;
     let isMouseDown = false;
     let startX, scrollLeft;
 
-    for (let i = 0; i < codeBox.length; i++) {
+    function adjustCodeBox() {
+        const codeBox = document.querySelectorAll("code");
 
-        // 드래그 방지
-        codeBox[i].onselectstart = new Function("return false");
-
-        // 클릭 방지
-        codeBox[i].addEventListener('click', (e) => {
-            if (Math.abs((e.pageX - codeBox[i].offsetLeft) - startX) > 10) {
+        for (let i = 0; i < codeBox.length; i++) {
+            // 복사 버튼 생성
+            let new_button = document.createElement("button");
+            new_button.setAttribute("class", "code-copy");
+            new_button.innerText = "코드 복사";
+            new_button.addEventListener("click", (e) => {
                 e.stopPropagation();
-            }
-            else {
-                codeBoxClick = false;
-            }
-        })
+                navigator.clipboard.writeText(codeBox[i].innerText)
+                    // 성공인 경우
+                    .then(() => {
+                        alert("클립보드에 복사 성공");
+                    })
+                    // 실패인 경우
+                    .catch(err => {
+                        alert("클립보드에 복사 실패");
+                        console.log('클립보드에 복사 실패', err);
+                    })
+            })
+            codeBox[i].parentElement.append(new_button);
 
-        codeBox[i].addEventListener('mousedown', (e) => {
-            codeBoxClick = true;
-            isMouseDown = true;
-            codeBox[i].classList.add('active');
+            // 드래그 방지
+            codeBox[i].onselectstart = new Function("return false");
 
-            startX = e.pageX - codeBox[i].offsetLeft;
-            scrollLeft = codeBox[i].scrollLeft;
-        });
+            // 클릭 방지
+            codeBox[i].addEventListener('click', (e) => {
+                if (Math.abs((e.pageX - codeBox[i].offsetLeft) - startX) > 10) {
+                    e.stopPropagation();
+                }
+                else {
+                    codeBoxClick = false;
+                }
+            })
 
-        codeBox[i].addEventListener('mouseleave', () => {
-            isMouseDown = false;
-            codeBox[i].classList.remove('active');
-        });
+            // 드래그를 통한 이동 처리
+            codeBox[i].addEventListener('mousedown', (e) => {
+                codeBoxClick = true;
+                isMouseDown = true;
+                codeBox[i].classList.add('active');
 
-        codeBox[i].addEventListener('mouseup', () => {
-            isMouseDown = false;
-            codeBox[i].classList.remove('active');
-        });
+                startX = e.pageX - codeBox[i].offsetLeft;
+                scrollLeft = codeBox[i].scrollLeft;
+            });
 
-        codeBox[i].addEventListener('mousemove', (e) => {
-            if (!isMouseDown) return;
-            const x = e.pageX - codeBox[i].offsetLeft;
-            const walk = (x - startX) * 1;
-            codeBox[i].scrollLeft = scrollLeft - walk;
-        });
+            codeBox[i].addEventListener('mouseleave', () => {
+                isMouseDown = false;
+                codeBox[i].classList.remove('active');
+            });
+
+            codeBox[i].addEventListener('mouseup', () => {
+                isMouseDown = false;
+                codeBox[i].classList.remove('active');
+            });
+
+            codeBox[i].addEventListener('mousemove', (e) => {
+                if (!isMouseDown) return;
+                const x = e.pageX - codeBox[i].offsetLeft;
+                const walk = (x - startX) * 1;
+                codeBox[i].scrollLeft = scrollLeft - walk;
+            });
+        }
     }
 
     // 코드 박스 드래그 끝 처리
