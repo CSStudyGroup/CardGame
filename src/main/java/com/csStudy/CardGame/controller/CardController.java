@@ -190,4 +190,10 @@ public class CardController {
 
         return cardService.changeCategories(insertDtoList, updateDtoList, deleteDtoList);
     }
+
+    @GetMapping("/corstest")
+    @ResponseBody
+    public String corstest() {
+        return "hello";
+    }
 }
