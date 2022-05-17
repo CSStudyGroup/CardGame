@@ -55,7 +55,7 @@ function insertModalSubmit(){
     insertModal.style.display = 'none';
     narrowNav.style.display = "block";
 
-    // AJAX 수정 요청
+    // AJAX 추가 요청
     let cardHttpRequest = new XMLHttpRequest();
     cardHttpRequest.onreadystatechange = postInsertCard;
     function postInsertCard(){
