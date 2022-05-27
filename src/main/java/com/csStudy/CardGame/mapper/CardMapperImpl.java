@@ -11,13 +11,13 @@ public class CardMapperImpl implements CardMapper{
             return null;
         }
         else {
-            CardDto cardDto = new CardDto();
-            cardDto.setId(card.getId());
-            cardDto.setQuestion(card.getQuestion());
-            cardDto.setAnswer(card.getAnswer());
-            cardDto.setTags(card.getTags());
-            cardDto.setCid(card.getCategory().getId());
-            return cardDto;
+            return CardDto.builder()
+                    .id(card.getId())
+                    .question(card.getQuestion())
+                    .answer(card.getAnswer())
+                    .tags(card.getTags())
+                    .cid(card.getCategory().getId())
+                    .build();
         }
     }
 }

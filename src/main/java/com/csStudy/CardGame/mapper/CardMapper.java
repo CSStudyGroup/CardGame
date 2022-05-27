@@ -5,7 +5,5 @@ import com.csStudy.CardGame.dto.CardDto;
 
 
 public interface CardMapper {
-
     CardDto toDto(Card card);
-
 }
