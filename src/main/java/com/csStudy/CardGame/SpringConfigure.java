@@ -1,9 +1,10 @@
 package com.csStudy.CardGame;
 
-import com.csStudy.CardGame.mapper.CardMapper;
-import com.csStudy.CardGame.mapper.CardMapperImpl;
-import com.csStudy.CardGame.mapper.CategoryMapper;
-import com.csStudy.CardGame.mapper.CategoryMapperImpl;
+import com.csStudy.CardGame.domain.RefreshToken;
+import com.csStudy.CardGame.dto.RefreshTokenDto;
+import com.csStudy.CardGame.mapper.*;
+import com.csStudy.CardGame.security.SecurityUtil;
+import com.csStudy.CardGame.security.SecurityUtilImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -21,8 +22,24 @@ public class SpringConfigure {
     }
 
     @Bean
+    public RefreshTokenMapper refreshTokenMapper() {
+        return new RefreshTokenMapperImpl();
+    }
+
+    @Bean
+    public MemberMapper memberMapper() {
+        return new MemberMapperImpl();
+    }
+
+    @Bean
     public PersistenceExceptionTranslationPostProcessor
         exceptionTranslationPostProcessor() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
+
+    @Bean
+    public SecurityUtil securityUtil() {
+        return new SecurityUtilImpl();
+    }
+
 }

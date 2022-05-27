@@ -8,9 +8,10 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 @Getter
 @Setter
-@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Cacheable
@@ -31,11 +32,10 @@ public class Category {
     private Set<Card> cards = new HashSet<>();
 
     public static Category createCategory(String name) {
-        Category newCategory = new Category();
-        newCategory.setName(name);
-        newCategory.setCardCount(0);
-
-        return newCategory;
+        return Category.builder()
+                .name(name)
+                .cardCount(0)
+                .build();
     }
 
     public void addCard(Card card) {

@@ -7,12 +7,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
+@Entity
+@Cacheable
 @Getter
 @Setter
-@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Cacheable
 public class Card {
 
     @Id
@@ -36,11 +37,11 @@ public class Card {
     private Category category;
 
     public static Card createCard(CardDto cardDto) {
-        Card newCard = new Card();
-        newCard.setQuestion(cardDto.getQuestion());
-        newCard.setAnswer(cardDto.getAnswer());
-        newCard.setTags(cardDto.getTags());
-        return newCard;
+        return Card.builder()
+                .question(cardDto.getQuestion())
+                .answer(cardDto.getAnswer())
+                .tags(cardDto.getTags())
+                .build();
     }
 
 }
