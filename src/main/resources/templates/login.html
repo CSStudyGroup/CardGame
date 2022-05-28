@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/card_common.css(ver=${#calendars.createNow()})}">
+    <script defer th:src="@{/js/card_common.js(ver=${#calendars.createNow()})}"></script>
+    <title>CS Study</title>
+    <link rel="stylesheet" th:href="@{/css/login.css(ver=${#calendars.createNow()})}">
+    <script defer th:src="@{/js/login.js(ver=${#calendars.createNow()})}"></script>
+</head>
+<body>
+    <div class="loading-page"
+         style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 999; transition: opacity 0.5s, visibility 0.5s">
+    </div>
+    <div class="login">
+        <div class="login-background"></div>
+        <form class="login-form">
+            <img class="login-title-image" th:src="@{/img/member_login_image.png}">
+            <div class="login-id">
+                <img class="login-image" th:src="@{/img/id_image.png}">
+                <input class="login-input" type="text" placeholder="ID" maxlength="20">
+            </div>
+            <div class="login-password">
+                <img class="login-image" th:src="@{/img/password_image.png}">
+                <input class="login-input" type="password" placeholder="Password" maxlength="50">
+            </div>
+            <div class="login-buttons">
+                <button class="login-button clickable" type="button" onclick="login()">로그인</button>
+                <button class="register-button clickable" type="button" onclick="location.href='/register'">회원가입</button>
+            </div>
+            <!--remember, forgot 처리 추가-->
+        </form>
+    </div>
+    <script th:inline="javascript">
+        let role = [[${role}]];
+    </script>
+</body>
+</html>

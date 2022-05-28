@@ -29,7 +29,7 @@ window.onload = function(){
 
     // 카테고리 표시
     const pageTitle = document.querySelector(".page-title");
-    pageTitle.innerText = "Category > " + categoryMap.get(dto[0].cid);
+    pageTitle.firstElementChild.innerText = "Category > " + categoryMap.get(dto[0].cid);
 
     // 각 종 elements
     const cardTitle = document.querySelector(".card-title");

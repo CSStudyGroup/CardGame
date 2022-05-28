@@ -464,6 +464,12 @@ window.onload = function(){
                         const saveButton = document.querySelector(".save");
                         saveButton.classList.remove("save-pop-up");
                         changeCheck = true;
+
+                        // 카테고리 수정 이벤트
+                        const categoryChangedEvent = new CustomEvent('categoryChanged', {
+                            detail: dto
+                        });
+                        document.dispatchEvent(categoryChangedEvent);
                     }
                     else {
                         alert("저장 실패");

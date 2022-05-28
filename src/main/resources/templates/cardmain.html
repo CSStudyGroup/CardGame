@@ -6,7 +6,11 @@
     <script defer th:src="@{/js/cardmain.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
-    <th:block th:replace="fragment/navigator::navigator(title='cardmain')"></th:block>
+    <div th:switch="${role}">
+        <div th:case="'admin'"><th:block th:replace="fragment/navigator-admin::navigator-admin(title='Main')"></th:block></div>
+        <div th:case="'user'"><th:block th:replace="fragment/navigator-user::navigator-user(title='Main', role='user')"></th:block></div>
+        <div th:case="*"><th:block th:replace="fragment/navigator-user::navigator-user(title='Main', role='guest')"></th:block></div>
+    </div>
     <div class="main">
         <div class="category-container">
             <div class="card-frame card-category clickable"
@@ -21,5 +25,8 @@
             </div>
         </div>
     </div>
+    <script th:inline="javascript">
+        let role = [[${role}]];
+    </script>
 </body>
 </html>

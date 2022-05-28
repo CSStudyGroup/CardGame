@@ -29,7 +29,7 @@ window.onload = function(){
 
     // 문항 수 표시
     const counter = document.querySelector(".page-title");
-    counter.innerText = "Interview (문항 수 : " + dto.length + ")";
+    counter.firstElementChild.innerText = "Interview (문항 수 : " + dto.length + ")";
 
     // 카드 클릭 애니메이션
     const cardTitle = document.querySelector(".card-title");
@@ -174,7 +174,7 @@ window.onload = function(){
             if (keywords[i] == event.detail.cid) {
                 // 현재 위치 뒤에 무작위 삽입
                 dto.splice(Math.floor(Math.random() * (dto.length - now)) + now + 1, 0, event.detail);
-                counter.innerText = "Interview (문항 수 : " + dto.length + ")";
+                counter.firstElementChild.innerText = "Interview (문항 수 : " + dto.length + ")";
                 break
             }
         }
