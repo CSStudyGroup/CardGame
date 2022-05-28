@@ -7,7 +7,11 @@
     <script defer th:src="@{/js/categorymanage.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
-    <th:block th:replace="fragment/navigator::navigator(title='Category Manage')"></th:block>
+    <div th:switch="${role}">
+        <div th:case="'admin'"><th:block th:replace="fragment/navigator-admin::navigator-admin(title='Category Management')"></th:block></div>
+        <div th:case="'user'"><th:block th:replace="fragment/navigator-user::navigator-user(title='Category Management', role='user')"></th:block></div>
+        <div th:case="*"><th:block th:replace="fragment/navigator-user::navigator-user(title='Category Management', role='guest')"></th:block></div>
+    </div>
     <div class="main">
         <div class="container-item">
             <div class="container-body" th:each="categoryDto : ${categoryDtoList}">
@@ -65,6 +69,7 @@
     </div>
     <script th:inline="javascript">
         let dto = [[${categoryDtoList}]];
+        let role = [[${role}]];
     </script>
 </body>
 </html>

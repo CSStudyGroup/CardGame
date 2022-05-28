@@ -1,0 +1,84 @@
+.login {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+.login-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url("/img/common_background_image.jpg");
+    background-size: cover;
+    opacity: 0.6;
+    z-index: -100;
+}
+
+.login-form {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 6px 10px 1px rgba(173, 174, 174, 0.6);
+    border-radius: 30px;
+    width: 400px;
+    height: 350px;
+    background-color: white;
+}
+
+.login-title-image {
+    position: relative;
+    top: -90px;
+    left: calc(50% - 75px);
+    width: 150px;
+    height: 150px;
+    border-radius: 200px;
+    background-color: yellow;
+    opacity: 0.9;
+}
+
+.login-id, .login-password {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: -50px;
+    left: 50px;
+    width: 300px;
+    height: 60px;
+}
+
+.login-image {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+}
+
+.login-input {
+    font-size: 20px;
+    height: 30px;
+    width: 210px;
+    margin-left: 15px;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.login-buttons {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    bottom: 0px;
+}
+
+.login-button, .register-button {
+    height: 30px;
+    width: 100px;
+    border-radius: 5px;
+    border: 1px solid rgba(200, 200, 200, 0.3);
+    background-color: skyblue;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover, .register-button:hover {
+    background-color: deepskyblue;
+}

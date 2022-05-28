@@ -34,6 +34,7 @@ public class CardController {
         // 카테고리 리스트를 받아오는 부분
         List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
+        model.addAttribute("role", "guest");
         return "cardmain";
     }
 
@@ -47,6 +48,7 @@ public class CardController {
         // 카테고리 리스트를 받아오는 부분
         List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
+        model.addAttribute("role", "admin");
         return "category";
     }
 
@@ -62,7 +64,7 @@ public class CardController {
 
         // 키워드 모델에 추가
         model.addAttribute("keywords", keywords);
-
+        model.addAttribute("role", "admin");
         return "interview";
     }
 
@@ -71,6 +73,7 @@ public class CardController {
         // 카테고리 리스트를 받아오는 부분
         List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
+        model.addAttribute("role", "admin");
         return "categorymanage";
     }
 
@@ -104,8 +107,17 @@ public class CardController {
         model.addAttribute("criteria", criteria);
         model.addAttribute("keyword", keyword);
         model.addAttribute("original", original);
-
+        model.addAttribute("role", "admin");
         return "list";
+    }
+
+    @GetMapping("/card/requestmanage")
+    public String requestmanagePage(Model model) {
+        // 카테고리 리스트를 받아오는 부분
+        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
+        model.addAttribute("categoryDtoList", categoryDtoList);
+        model.addAttribute("role", "user");
+        return "requestmanage";
     }
 
 
@@ -189,11 +201,5 @@ public class CardController {
         }
 
         return cardService.changeCategories(insertDtoList, updateDtoList, deleteDtoList);
-    }
-
-    @GetMapping("/corstest")
-    @ResponseBody
-    public String corstest() {
-        return "hello";
     }
 }

@@ -22,6 +22,33 @@ const insertTags = document.querySelector("#modal-insert-content-tags");
 const insertQuestion = document.querySelector("#modal-insert-content-question");
 const insertAnswer = document.querySelector("#modal-insert-content-answer");
 
+// 카테고리 수정 이벤트 처리 (카드추가)
+function categoryChangeHandlerAddCard(event) {
+    const sbOptionList = document.querySelectorAll(".sb-option-list");
+    sbOptionList[1].innerHTML = "";
+    if (event.detail.length !== 0) {
+        insertCategory.setAttribute("data-value", event.detail[0].id);
+        const sbOptionText = document.querySelectorAll(".sb-option-text");
+        sbOptionText[1].innerText = event.detail[0].name;
+    }
+
+    for (let i = 0; i < event.detail.length; i++) {
+        // li
+        let new_li = document.createElement("li");
+        new_li.setAttribute("class", "sb-option-item");
+        new_li.setAttribute("data-value", event.detail[i].id);
+        new_li.setAttribute("onclick", "selectOption('modal-insert-content-category-select', '" + event.detail[i].name + "', '" + event.detail[i].id + "')");
+
+        // span
+        let new_span = document.createElement("span");
+        new_span.innerText = event.detail[i].name;
+        new_li.appendChild(new_span);
+
+        sbOptionList[1].appendChild(new_li);
+    }
+}
+document.addEventListener('categoryChanged', categoryChangeHandlerAddCard);
+
 insertCategory.addEventListener('click', (e) => {
     e.stopPropagation();
 })
@@ -31,6 +58,11 @@ insertModal.addEventListener('click', () => {
 });
 
 function insert() {
+    if (role === "guest") {
+        alert("로그인이 필요한 서비스입니다.");
+        location.href = "/login";
+        return;
+    }
     insertQuestion.value = "";
     insertAnswer.value = "";
     insertTags.value = "";
@@ -56,35 +88,40 @@ function insertModalSubmit(){
     narrowNav.style.display = "block";
 
     // AJAX 추가 요청
-    let cardHttpRequest = new XMLHttpRequest();
-    cardHttpRequest.onreadystatechange = postInsertCard;
-    function postInsertCard(){
-        if (cardHttpRequest.readyState === XMLHttpRequest.DONE) {
-            if (cardHttpRequest.status === 200) {
-                let addedCard = cardHttpRequest.response;
-                if (addedCard != null) {
-                    alert("삽입 성공");
-                    const newCardAddedEvent = new CustomEvent('newcard', {
-                        detail: JSON.parse(addedCard)
-                    });
-                    document.dispatchEvent(newCardAddedEvent);
+    if (role === "admin") {
+        let cardHttpRequest = new XMLHttpRequest();
+        cardHttpRequest.onreadystatechange = postInsertCard;
+        function postInsertCard(){
+            if (cardHttpRequest.readyState === XMLHttpRequest.DONE) {
+                if (cardHttpRequest.status === 200) {
+                    let addedCard = cardHttpRequest.response;
+                    if (addedCard != null) {
+                        alert("삽입 성공");
+                        const newCardAddedEvent = new CustomEvent('newcard', {
+                            detail: JSON.parse(addedCard)
+                        });
+                        document.dispatchEvent(newCardAddedEvent);
+                    }
+                    else {
+                        alert("삽입 실패");
+                    }
+                } else {
+                    alert('Request Error!');
                 }
-                else {
-                    alert("삽입 실패");
-                }
-            } else {
-                alert('Request Error!');
             }
         }
+        cardHttpRequest.open('POST', '/card/cardInsert')
+        cardHttpRequest.setRequestHeader('Content-type', 'application/json');
+        cardHttpRequest.send(JSON.stringify({
+            cid: insertCategory.dataset.value,
+            question: insertQuestion.value,
+            answer: insertAnswer.value,
+            tags: insertTags.value
+        }));
     }
-    cardHttpRequest.open('POST', '/card/cardInsert')
-    cardHttpRequest.setRequestHeader('Content-type', 'application/json');
-    cardHttpRequest.send(JSON.stringify({
-        cid: insertCategory.dataset.value,
-        question: insertQuestion.value,
-        answer: insertAnswer.value,
-        tags: insertTags.value
-    }));
+    else {
+        alert("요청 전달!");
+    }
 }
 function insertModalClose(){
     insertModal.style.display = 'none';
@@ -93,7 +130,41 @@ function insertModalClose(){
 // 인터뷰 링크
 const interviewModal = document.querySelector("#modal-interview");
 const interviewForm = document.querySelector(".form-interview");
-const checkList = document.querySelectorAll(".interview-category-checkbox");
+let checkList = document.querySelectorAll(".interview-category-checkbox");
+
+// 카테고리 수정 이벤트 처리 (인터뷰)
+function categoryChangeHandlerInterview(event) {
+    interviewForm.innerHTML = "";
+    for (let i = 0; i < event.detail.length; i++) {
+        // input
+        let new_input = document.createElement("input");
+        new_input.setAttribute("class", "interview-category-checkbox");
+        new_input.setAttribute("id", "interview-category-checkbox-" + (i + 1).toString());
+        new_input.setAttribute("type", "checkbox");
+        new_input.setAttribute("name", "keyword");
+        new_input.value = event.detail[i].id;
+        interviewForm.appendChild(new_input);
+
+        // label
+        let new_label = document.createElement("label");
+        new_label.setAttribute("class", "interview-category-item clickable");
+        new_label.setAttribute("for", "interview-category-checkbox-" + (i + 1).toString());
+
+        // span
+        let new_span = document.createElement("span");
+        new_span.setAttribute("class", "interview-category-checkview");
+        new_label.appendChild(new_span);
+
+        // p
+        let new_p = document.createElement("p");
+        new_p.innerText = event.detail[i].name;
+        new_label.appendChild(new_p);
+
+        interviewForm.appendChild(new_label);
+    }
+    checkList = document.querySelectorAll(".interview-category-checkbox");
+}
+document.addEventListener('categoryChanged', categoryChangeHandlerInterview);
 
 function interview() {
     for(let i=0; i<checkList.length; i++) {
@@ -268,13 +339,17 @@ function nxtItem() {
 
 /* resize observer */
 function resize(entries) {
-    if (entries[0].contentRect.width > 600) {
+    if (entries[0].contentRect.width > 650) {
         navbarSearchHide();
     }
 
-    if (entries[0].contentRect.width > 1000) {
+    if (entries[0].contentRect.width > 1150) {
         narrowNavbarHide();
     }
 }
 const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(navbar);
+
+function logout() {
+    alert("logout!");
+}

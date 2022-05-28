@@ -7,7 +7,11 @@
     <script defer th:src="@{/js/list.js(ver=${#calendars.createNow()})}"></script>
 </head>
 <body>
-    <th:block th:replace="fragment/navigator::navigator(title='List')"></th:block>
+    <div th:switch="${role}">
+        <div th:case="'admin'"><th:block th:replace="fragment/navigator-admin::navigator-admin(title='List')"></th:block></div>
+        <div th:case="'user'"><th:block th:replace="fragment/navigator-user::navigator-user(title='List', role='user')"></th:block></div>
+        <div th:case="*"><th:block th:replace="fragment/navigator-user::navigator-user(title='List', role='guest')"></th:block></div>
+    </div>
     <div class="main">
         <div class="container">
             <table class="table">
@@ -127,6 +131,7 @@
         let criteria = [[${criteria}]];
         let keyword = [[${keyword}]];
         let original = [[${original}]];
+        let role = [[${role}]];
     </script>
 </body>
 </html>
