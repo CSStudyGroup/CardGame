@@ -3,6 +3,7 @@ package com.csStudy.CardGame.repository;
 import com.csStudy.CardGame.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
@@ -16,6 +17,7 @@ public class MariaDBMemberRepository implements MemberRepository {
         this.em = em;
     }
 
+    @Transactional
     @Override
     public Optional<Member> save(Member member) {
         em.persist(member);
