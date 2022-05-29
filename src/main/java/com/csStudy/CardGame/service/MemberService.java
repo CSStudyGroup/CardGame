@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface MemberService {
     Optional<MemberDto> register(RegisterRequestForm form);
     Optional<MemberDto> findByEmail(String email);
+    Optional<MemberDto> findOne(Long id);
 }

@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class AuthService implements UserDetailsService {
 
@@ -20,6 +22,7 @@ public class AuthService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         return memberRepository.findByEmail(userEmail)
                 .map(SecuredMember::new)

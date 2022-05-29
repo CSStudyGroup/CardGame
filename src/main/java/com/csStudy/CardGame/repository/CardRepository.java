@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CardRepository {
     // 카드 추가
-    void save(Card card);
+    Optional<Card> save(Card card);
 
     // 카드 삭제
     int delete(Card card);

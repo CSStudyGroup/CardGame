@@ -17,7 +17,6 @@ public class MariaDBMemberRepository implements MemberRepository {
         this.em = em;
     }
 
-    @Transactional
     @Override
     public Optional<Member> save(Member member) {
         em.persist(member);
@@ -29,5 +28,10 @@ public class MariaDBMemberRepository implements MemberRepository {
         return Optional.ofNullable(em.createQuery("select m from Member m where m.email = :email", Member.class)
                 .setParameter("email", email)
                 .getSingleResult());
+    }
+
+    @Override
+    public Optional<Member> findOne(Long id) {
+        return Optional.ofNullable(em.find(Member.class,id));
     }
 }

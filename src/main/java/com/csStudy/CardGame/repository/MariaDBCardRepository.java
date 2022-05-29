@@ -19,13 +19,14 @@ public class MariaDBCardRepository implements CardRepository {
     }
 
     @Override
-    public void save(Card card) {
+    public Optional<Card> save(Card card) {
         if (card.getId() == null) {
             em.persist(card);
         }
         else {
             em.merge(card);
         }
+        return Optional.ofNullable(card);
     }
 
     @Override

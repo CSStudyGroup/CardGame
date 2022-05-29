@@ -41,7 +41,6 @@ public class Category {
     public void addCard(Card card) {
         if (!this.cards.contains(card)) {
             this.cards.add(card);
-            card.setCategory(this);
             this.cardCount += 1;
         }
     }

@@ -1,11 +1,12 @@
 package com.csStudy.CardGame.domain;
 
-
 import com.csStudy.CardGame.dto.CardDto;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Cacheable
@@ -14,8 +15,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Card {
-
+public class CardRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +29,17 @@ public class Card {
     @Column(name = "tags")
     private String tags;
 
+    @Column(name = "request_status", nullable = false, length = 20)
+    private RequestStatus requestStatus;
+
+    @CreationTimestamp
+    @Column(nullable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Date modifiedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "category_id",
@@ -38,17 +49,8 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(
-            name = "author_id",
+            name = "requester_id",
             nullable = false
     )
-    private Member author;
-
-    public static Card createCard(CardDto cardDto) {
-        return Card.builder()
-                .question(cardDto.getQuestion())
-                .answer(cardDto.getAnswer())
-                .tags(cardDto.getTags())
-                .build();
-    }
-
+    private Member requester;
 }

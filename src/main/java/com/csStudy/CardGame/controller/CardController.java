@@ -34,7 +34,7 @@ public class CardController {
         // 카테고리 리스트를 받아오는 부분
         List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
         model.addAttribute("categoryDtoList", categoryDtoList);
-        model.addAttribute("role", "guest");
+        model.addAttribute("role", "admin");
         return "cardmain";
     }
 

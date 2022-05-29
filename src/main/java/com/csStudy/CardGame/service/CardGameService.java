@@ -2,14 +2,12 @@ package com.csStudy.CardGame.service;
 
 import com.csStudy.CardGame.domain.Card;
 import com.csStudy.CardGame.domain.Category;
-import com.csStudy.CardGame.dto.CardDto;
-import com.csStudy.CardGame.dto.CategoryDto;
-import com.csStudy.CardGame.dto.CategoryIncludeCardDto;
-import com.csStudy.CardGame.dto.ChangeCategoryResultDto;
+import com.csStudy.CardGame.dto.*;
 import com.csStudy.CardGame.mapper.CardMapper;
 import com.csStudy.CardGame.mapper.CategoryMapper;
 import com.csStudy.CardGame.repository.CardRepository;
 import com.csStudy.CardGame.repository.CategoryRepository;
+import com.csStudy.CardGame.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
@@ -24,16 +22,19 @@ import java.util.stream.Collectors;
 public class CardGameService {
     private final CardRepository cardRepository;
     private final CategoryRepository categoryRepository;
+    private final MemberRepository memberRepository;
     private final CardMapper cardMapper;
     private final CategoryMapper categoryMapper;
 
     @Autowired
     public CardGameService(@Qualifier("mariadb_card") CardRepository cardRepository,
                            @Qualifier("mariadb_category")CategoryRepository categoryRepository,
+                           MemberRepository memberRepository,
                            CardMapper cardMapper,
                            CategoryMapper categoryMapper) {
         this.cardRepository = cardRepository;
         this.categoryRepository = categoryRepository;
+        this.memberRepository = memberRepository;
         this.cardMapper = cardMapper;
         this.categoryMapper = categoryMapper;
     }
@@ -44,15 +45,29 @@ public class CardGameService {
     @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
     public CardDto addCard(CardDto cardDto) {
-        Card newCard = Card.createCard(cardDto);
+        Card newCard = Card.builder()
+                .question(cardDto.getQuestion())
+                .answer(cardDto.getAnswer())
+                .tags(cardDto.getTags())
+                .build();
         // 예외처리 필요
         try {
             categoryRepository.findOne(cardDto.getCid())
-                    .ifPresentOrElse(category -> category.addCard(newCard), () -> {
+                    .ifPresentOrElse((category) -> {
+                        newCard.setCategory(category);
+                        category.addCard(newCard);
+                    }, () -> {
+                        throw new NoSuchElementException();
+                    });
+            memberRepository.findOne(2L)
+                    .ifPresentOrElse((author) -> {
+                        newCard.setAuthor(author);
+                        author.addAcceptedCards(newCard);
+                    }, () -> {
                         throw new NoSuchElementException();
                     });
         } catch(Exception e) {
-            e.printStackTrace();
+            System.out.println("카드추가시 카테고리, 관리자 탐색 예외처리");
         }
         cardRepository.save(newCard);
         return cardMapper.toDto(newCard);

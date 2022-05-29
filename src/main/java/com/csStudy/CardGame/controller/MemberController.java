@@ -55,11 +55,6 @@ public class MemberController {
         this.securityUtil = securityUtil;
     }
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login";
-    }
-
     @ResponseBody
     @PostMapping("/login")
     public String login(@RequestBody LoginRequestForm form, HttpServletRequest request, HttpServletResponse response) {
@@ -118,9 +113,10 @@ public class MemberController {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return "unauthorized";
         }
-        return "redirect:/";
+        return "login_success";
     }
 
+    @ResponseBody
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -140,18 +136,13 @@ public class MemberController {
 
         SecurityContextHolder.getContext().setAuthentication(null);
 
-        return "redirect:/";
-    }
-
-    @GetMapping("/register")
-    public String registerPage() {
-        return "register";
+        return "logout";
     }
 
     @ResponseBody
     @PostMapping("/register")
     public String registerProcess(@RequestBody RegisterRequestForm form, HttpServletRequest request, HttpServletResponse response) {
         MemberDto registeredMember = memberService.register(form).orElse(null);
-        return "redirect:/";
+        return "registered";
     }
 }
