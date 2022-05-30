@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface MemberRepository {
     Optional<Member> save(Member member);
     Optional<Member> findByEmail(String userEmail);
+    Optional<Member> findOne(Long id);
 }

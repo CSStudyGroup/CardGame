@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RegisterRequestForm {
     private String userEmail;
+    private String nickname;
     private String password;
 }

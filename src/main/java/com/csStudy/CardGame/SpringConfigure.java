@@ -1,5 +1,6 @@
 package com.csStudy.CardGame;
 
+import com.csStudy.CardGame.domain.CardRequest;
 import com.csStudy.CardGame.domain.RefreshToken;
 import com.csStudy.CardGame.dto.RefreshTokenDto;
 import com.csStudy.CardGame.mapper.*;
@@ -29,6 +30,11 @@ public class SpringConfigure {
     @Bean
     public MemberMapper memberMapper() {
         return new MemberMapperImpl();
+    }
+
+    @Bean
+    public CardRequestMapper cardRequestMapper() {
+        return new CardRequestMapperImpl();
     }
 
     @Bean
