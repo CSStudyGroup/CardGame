@@ -16,10 +16,14 @@ public class SecuredMember extends User {
 
     private static final String rolePrefix = "ROLE_";
     private final Long id;
+    private final String nickname;
+    private final String email;
 
     public SecuredMember(Member member) {
         super(member.getEmail(), member.getPassword(), toGrantedAuthority(member.getRoles()));
         this.id = member.getId();
+        this.nickname = member.getNickname();
+        this.email = member.getEmail();
     }
 
     private static List<GrantedAuthority> toGrantedAuthority(Set<Role> roles) {

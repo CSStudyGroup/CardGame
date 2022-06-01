@@ -1,6 +1,7 @@
 package com.csStudy.CardGame.security;
 
 import com.csStudy.CardGame.domain.Role;
+import com.csStudy.CardGame.dto.SecuredMember;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -23,10 +24,11 @@ public class JwtTokenProvider {
     private static final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L;
     private static final long REFRESH_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L;
 
-    public Map<String, String> generateTokens(Authentication auth) {
+    public Map<String, String> generateTokens(SecuredMember securedMember) {
         Map<String, String> tokens = new HashMap<>();
-        Claims claims = Jwts.claims().setSubject(auth.getName());
-        claims.put("roles", auth.getAuthorities().stream()
+        Claims claims = Jwts.claims().setSubject(securedMember.getEmail());
+        claims.put("nickname", securedMember.getNickname());
+        claims.put("roles", securedMember.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
         Date now = new Date();
@@ -53,9 +55,12 @@ public class JwtTokenProvider {
         return tokens;
     }
 
-    public String generateAccessToken(String userName, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(userName);
-        claims.put("roles", roles);
+    public String generateAccessToken(SecuredMember securedMember) {
+        Claims claims = Jwts.claims().setSubject(securedMember.getEmail());
+        claims.put("nickname", securedMember.getNickname());
+        claims.put("roles", securedMember.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()));
         Date now = new Date();
         // Access Token 생성
         return Jwts.builder()
