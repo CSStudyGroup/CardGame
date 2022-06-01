@@ -96,10 +96,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     SecuredMember securedMember = (SecuredMember) userDetailsService.loadUserByUsername(userEmail);
                                     Cookie cookie = new Cookie(
                                             "X-AUTH-TOKEN",
-                                            jwtTokenProvider.generateAccessToken(
-                                                    securedMember.getUsername(),
-                                                    securedMember.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())
-                                            ));
+                                            jwtTokenProvider.generateAccessToken(securedMember));
                                     cookie.setPath("/");
                                     cookie.setMaxAge(3600);
                                     response.addCookie(cookie);

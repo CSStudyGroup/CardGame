@@ -1,9 +1,6 @@
 package com.csStudy.CardGame.controller;
 
-import com.csStudy.CardGame.dto.LoginRequestForm;
-import com.csStudy.CardGame.dto.MemberDto;
-import com.csStudy.CardGame.dto.RefreshTokenDto;
-import com.csStudy.CardGame.dto.RegisterRequestForm;
+import com.csStudy.CardGame.dto.*;
 import com.csStudy.CardGame.security.HashcodeProvider;
 import com.csStudy.CardGame.security.JwtTokenProvider;
 import com.csStudy.CardGame.security.SecurityUtil;
@@ -77,7 +74,7 @@ public class MemberController {
             securityContext.setAuthentication(authentication);
 
             // access token, refresh token 발급
-            Map<String, String> tokens = jwtTokenProvider.generateTokens(authentication);
+            Map<String, String> tokens = jwtTokenProvider.generateTokens((SecuredMember) authentication.getPrincipal());
 
             // access token 쿠키
             Cookie accessTokenCookie = new Cookie(
