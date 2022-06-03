@@ -125,7 +125,7 @@ public class CardController {
 
     // 카테고리 목록 전체 호출
     @ResponseBody
-    @PostMapping("card/categoryList")
+    @GetMapping("card/categoryList")
     public List<CategoryDto> categoryList() {
         return cardService.findCategoryAll();
     }
