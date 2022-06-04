@@ -77,40 +77,6 @@ public class CardController {
         return "categorymanage";
     }
 
-    @GetMapping("/card/list")
-    public String list(@RequestParam("criteria") String criteria,
-                       @RequestParam("keyword") String keyword,
-                       @RequestParam("original") String original, Model model) {
-        // 빈 배열 선언
-        List<CardDto> cardDtoList = Collections.emptyList();
-
-        switch (criteria) {
-            case "tag":
-                cardDtoList = cardService.findCardByTag(keyword);
-                break;
-            case "question":
-                cardDtoList = cardService.findCardByQuestion(keyword);
-                break;
-            case "category":
-                cardDtoList = cardService.findCardByCategory(parseLong(keyword)).getCardDtoList();
-                break;
-        }
-
-        // 모델 추가
-        model.addAttribute("cardDtoList", cardDtoList);
-
-        // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-        model.addAttribute("categoryDtoList", categoryDtoList);
-
-        // 검색 키워드를 알기위한 키워드 전송
-        model.addAttribute("criteria", criteria);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("original", original);
-        model.addAttribute("role", "admin");
-        return "list";
-    }
-
     @GetMapping("/card/requestmanage")
     public String requestmanagePage(Model model) {
         // 카테고리 리스트를 받아오는 부분
@@ -128,6 +94,30 @@ public class CardController {
     @GetMapping("card/categoryList")
     public List<CategoryDto> categoryList() {
         return cardService.findCategoryAll();
+    }
+
+    @ResponseBody
+    @GetMapping("/card/list")
+    public List<CardDto> list(@RequestParam("criteria") String criteria,
+                              @RequestParam("keyword") String keyword) {
+        // 빈 배열 선언
+        List<CardDto> cardDtoList = Collections.emptyList();
+
+        switch (criteria) {
+            case "tag":
+                cardDtoList = cardService.findCardByTag(keyword);
+                System.out.println("tag");
+                break;
+            case "question":
+                cardDtoList = cardService.findCardByQuestion(keyword);
+                System.out.println("question");
+                break;
+            case "category":
+                cardDtoList = cardService.findCardByCategory(parseLong(keyword)).getCardDtoList();
+                System.out.println("category");
+                break;
+        }
+        return cardDtoList;
     }
 
     // 카드 추가
