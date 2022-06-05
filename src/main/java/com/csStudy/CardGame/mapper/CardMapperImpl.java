@@ -17,6 +17,7 @@ public class CardMapperImpl implements CardMapper{
                     .answer(card.getAnswer())
                     .tags(card.getTags())
                     .cid(card.getCategory().getId())
+                    .cname(card.getCategory().getName())
                     .build();
         }
     }

@@ -61,7 +61,7 @@ public class MariaDBCategoryRepository implements CategoryRepository {
 
     @Override
     public Optional<Category> findByName(String name) {
-        return Optional.ofNullable(em.createQuery("select c from Category c where c.name = :name", Category.class)
+        return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards where c.name = :name", Category.class)
                 .setParameter("name", name)
                 .getSingleResult());
     }

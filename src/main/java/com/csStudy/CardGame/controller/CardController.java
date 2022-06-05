@@ -40,7 +40,7 @@ public class CardController {
 
     // 선택된 카테고리에 맞게 표시
     @GetMapping("/card/category")
-    public String category(@RequestParam(value="keyword") Long keyword, Model model) {
+    public String category(@RequestParam(value="keyword") String keyword, Model model) {
         // 해당되는 키워드의 카드리스트를 받아와 반환
         List<CardDto> cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
         model.addAttribute("cardDtoList", cardDtoList);
@@ -113,7 +113,7 @@ public class CardController {
                 System.out.println("question");
                 break;
             case "category":
-                cardDtoList = cardService.findCardByCategory(parseLong(keyword)).getCardDtoList();
+                cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
                 System.out.println("category");
                 break;
         }
