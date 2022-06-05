@@ -18,6 +18,8 @@ public class CardDto implements Comparable<CardDto> {
 
     private Long cid;
 
+    private String cname;
+
     @Override
     public int compareTo(CardDto o) {
         if (this.id > o.getId()) {

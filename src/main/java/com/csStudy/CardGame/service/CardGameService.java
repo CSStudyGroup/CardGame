@@ -90,10 +90,10 @@ public class CardGameService {
 
     // 카테고리로 카드 필터링
     @Transactional
-    public CategoryIncludeCardDto findCardByCategory(long cid) {
+    public CategoryIncludeCardDto findCardByCategory(String name) {
         CategoryIncludeCardDto categoryIncludeCardDto = new CategoryIncludeCardDto();
         try {
-            Category category = Objects.requireNonNull(categoryRepository.findOne(cid).orElse(null));
+            Category category = Objects.requireNonNull(categoryRepository.findByName(name).orElse(null));
             categoryIncludeCardDto.setId(category.getId());
             categoryIncludeCardDto.setName(category.getName());
             categoryIncludeCardDto.setCardCount(category.getCardCount());
