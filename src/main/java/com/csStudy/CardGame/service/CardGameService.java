@@ -107,11 +107,21 @@ public class CardGameService {
     }
 
     // 여러개의 카테고리로 카드 필터링
+//    @Transactional
+//    public List<CardDto> findCardByCategoryIn(List<Long> cidList) {
+//        return cardRepository.findByCategoryIn(cidList).stream()
+//                .map(cardMapper::toDto)
+//                .collect(Collectors.toList());
+//    }
+
     @Transactional
-    public List<CardDto> findCardByCategoryIn(List<Long> cidList) {
-        return cardRepository.findByCategoryIn(cidList).stream()
-                .map(cardMapper::toDto)
-                .collect(Collectors.toList());
+    public List<CardDto> findCardByCategoryIn(List<String> nameList) {
+        List<CardDto> cardDtoList = new ArrayList<>();
+        for (String name : nameList) {
+            CategoryIncludeCardDto categoryIncludeCardDto = findCardByCategory(name);
+            cardDtoList.addAll(categoryIncludeCardDto.getCardDtoList());
+        }
+        return cardDtoList;
     }
 
     // 질문에 키워드가 포함된 카드 필터링

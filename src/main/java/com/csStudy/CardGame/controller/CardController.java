@@ -38,35 +38,35 @@ public class CardController {
         return "cardmain";
     }
 
-    // 선택된 카테고리에 맞게 표시
-    @GetMapping("/card/category")
-    public String category(@RequestParam(value="keyword") String keyword, Model model) {
-        // 해당되는 키워드의 카드리스트를 받아와 반환
-        List<CardDto> cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
-        model.addAttribute("cardDtoList", cardDtoList);
+//    // 선택된 카테고리에 맞게 표시
+//    @GetMapping("/card/category")
+//    public String category(@RequestParam(value="keyword") String keyword, Model model) {
+//        // 해당되는 키워드의 카드리스트를 받아와 반환
+//        List<CardDto> cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
+//        model.addAttribute("cardDtoList", cardDtoList);
+//
+//        // 카테고리 리스트를 받아오는 부분
+//        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
+//        model.addAttribute("categoryDtoList", categoryDtoList);
+//        model.addAttribute("role", "admin");
+//        return "category";
+//    }
 
-        // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-        model.addAttribute("categoryDtoList", categoryDtoList);
-        model.addAttribute("role", "admin");
-        return "category";
-    }
-
-    // navi bar interview checkbox submit
-    @GetMapping("/card/interview")
-    public String interview(@RequestParam("keyword") List<Long> keywords, Model model) {
-        List<CardDto> cardDtoList = cardService.findCardByCategoryIn(keywords);
-        model.addAttribute("cardDtoList", cardDtoList);
-
-        // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-        model.addAttribute("categoryDtoList", categoryDtoList);
-
-        // 키워드 모델에 추가
-        model.addAttribute("keywords", keywords);
-        model.addAttribute("role", "admin");
-        return "interview";
-    }
+//    // navi bar interview checkbox submit
+//    @GetMapping("/card/interview")
+//    public String interview(@RequestParam("keyword") List<Long> keywords, Model model) {
+//        List<CardDto> cardDtoList = cardService.findCardByCategoryIn(keywords);
+//        model.addAttribute("cardDtoList", cardDtoList);
+//
+//        // 카테고리 리스트를 받아오는 부분
+//        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
+//        model.addAttribute("categoryDtoList", categoryDtoList);
+//
+//        // 키워드 모델에 추가
+//        model.addAttribute("keywords", keywords);
+//        model.addAttribute("role", "admin");
+//        return "interview";
+//    }
 
     @GetMapping("/card/management")
     public String categoryManagement(Model model) {
@@ -96,6 +96,7 @@ public class CardController {
         return cardService.findCategoryAll();
     }
 
+    // 카드 리스트 반환
     @ResponseBody
     @GetMapping("/card/list")
     public List<CardDto> list(@RequestParam("criteria") String criteria,
@@ -117,6 +118,26 @@ public class CardController {
                 System.out.println("category");
                 break;
         }
+        return cardDtoList;
+    }
+
+    // 선택된 카테고리에 맞게 표시
+    @ResponseBody
+    @GetMapping("/card/category/{name}")
+    public List<CardDto> category(@PathVariable("name") String name) {
+        // 해당되는 키워드의 카드리스트를 받아와 반환
+        List<CardDto> cardDtoList = cardService.findCardByCategory(name).getCardDtoList();
+
+        return cardDtoList;
+    }
+
+    // navi bar interview checkbox submit
+    @ResponseBody
+    @GetMapping("/card/interview")
+    public List<CardDto> interview(@RequestParam("keyword") List<String> keywords) {
+        // 최적화 필요
+        List<CardDto> cardDtoList = cardService.findCardByCategoryIn(keywords);
+
         return cardDtoList;
     }
 
