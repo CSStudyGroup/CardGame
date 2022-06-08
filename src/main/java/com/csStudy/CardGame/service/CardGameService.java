@@ -214,74 +214,61 @@ public class CardGameService {
     // 예외처리 필요
     @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
-    public ChangeCategoryResultDto changeCategories(List<CategoryDto> insertList, List<CategoryDto> updateList, List<CategoryDto> deleteList) {
-        ChangeCategoryResultDto changeCategoryResultDto = new ChangeCategoryResultDto();
-        changeCategoryResultDto.setDone(false);
-        List<Integer> deleteResult = null;
-        List<Integer> updateResult = null;
-        List<CategoryDto> insertResult = null;
+    public boolean changeCategories(List<CategoryDto> insertedList, List<CategoryDto> updatedList, Set<Long> deletedList) {
 
         /* 삭제리스트 처리 */
-        if (deleteList != null) {
-            deleteResult = deleteCategories(deleteList);
+        if (!deletedList.isEmpty()) {
+            deleteCategories(deletedList);
         }
 
         /* 수정리스트 처리 */
-        if (updateList != null) {
-            updateResult = updateCategories(updateList);
+        if (!updatedList.isEmpty()) {
+            updateCategories(updatedList);
         }
 
         /* 추가리스트 처리 */
-        if (insertList != null) {
-            insertResult = insertCategories(insertList);
+        if (!insertedList.isEmpty()) {
+            insertCategories(insertedList);
         }
 
-        /* 모든 작업 정상처리시 결과 세팅 후 반환 */
-        changeCategoryResultDto.setDone(true);
-        changeCategoryResultDto.setDeleteResult(deleteResult);
-        changeCategoryResultDto.setUpdateResult(updateResult);
-        changeCategoryResultDto.setInsertResult(insertResult);
-        return changeCategoryResultDto;
+        return true;
     }
 
     // 카테고리 여러개 추가
-    private List<CategoryDto> insertCategories(List<CategoryDto> categoryDtoList) {
-        if (categoryDtoList == null) {
-            return null;
+    private boolean insertCategories(List<CategoryDto> insertedCategoryList) {
+        if (insertedCategoryList.isEmpty()) {
+            return false;
         }
-        List<CategoryDto> result = new ArrayList<>();
-        for(CategoryDto categoryDto:categoryDtoList) {
+
+        for(CategoryDto categoryDto: insertedCategoryList) {
             Category newCategory = Category.createCategory(categoryDto.getName());
             categoryRepository.save(newCategory);
-            result.add(categoryMapper.toDto(newCategory));
         }
-        return result;
+        return true;
     }
 
     // 카테고리 여러개 수정
-    private List<Integer> updateCategories(List<CategoryDto> categoryDtoList) {
+    private boolean updateCategories(List<CategoryDto> updatedCategoryList) {
         // 예외처리 필요
-        if (categoryDtoList == null) {
-            return null;
+        if (updatedCategoryList.isEmpty()) {
+            return false;
         }
-        List<Integer> result = new ArrayList<>();
-        for(CategoryDto categoryDto:categoryDtoList) {
-            Category target = Objects.requireNonNull(categoryRepository.findOne(categoryDto.getId()).orElse(null));
-            target.setName(categoryDto.getName());
-            result.add(1);
+
+        for(CategoryDto categoryDto: updatedCategoryList) {
+            categoryRepository.findOne(categoryDto.getId())
+                            .ifPresent((target) -> {
+                                target.setName(categoryDto.getName());
+                            });
         }
-        return result;
+        return true;
     }
 
     // 카테고리 여러개 삭제
-    private List<Integer> deleteCategories(List<CategoryDto> categoryDtoList) {
-        if (categoryDtoList == null) {
-            return null;
+    private boolean deleteCategories(Set<Long> deletedCategorySet) {
+        if (deletedCategorySet.isEmpty()) {
+            return false;
         }
-        List<Integer> result = new ArrayList<>();
-        for(CategoryDto categoryDto:categoryDtoList) {
-            result.add(categoryRepository.deleteById(categoryDto.getId()));
-        }
-        return result;
+
+        return categoryRepository.deleteByIdIn(deletedCategorySet);
     }
 }

@@ -1,7 +1,6 @@
 package com.csStudy.CardGame.controller;
 import com.csStudy.CardGame.dto.CardDto;
 import com.csStudy.CardGame.dto.CategoryDto;
-import com.csStudy.CardGame.dto.ChangeCategoryResultDto;
 import com.csStudy.CardGame.service.CardGameService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Long.parseLong;
 
@@ -186,31 +183,38 @@ public class CardController {
     // 카테고리 변경 체크
     @ResponseBody
     @PostMapping("card/categoryChange")
-    public ChangeCategoryResultDto categoryChange(@RequestBody String jsonList) throws JsonProcessingException {
+    public boolean categoryChange(@RequestBody String jsonList) throws JsonProcessingException {
         JSONObject jObject = new JSONObject(jsonList);
         ObjectMapper mapper = new ObjectMapper();
 
         // 추가
-        List<CategoryDto> insertDtoList = new ArrayList<>();
+        List<CategoryDto> insertedCategoryList = new ArrayList<>();
         JSONArray insertList = jObject.getJSONArray("insert");
-        for (int i = 0; i < insertList.length(); i++) {
-            insertDtoList.add(mapper.readValue(insertList.get(i).toString(), CategoryDto.class));
+        for (Object o: insertList) {
+            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
+            insertedCategoryList.add(dto);
         }
 
         // 수정
-        List<CategoryDto> updateDtoList = new ArrayList<>();
+        List<CategoryDto> updatedCategoryList = new ArrayList<>();
         JSONArray updateList = jObject.getJSONArray("update");
-        for (int i = 0; i < updateList.length(); i++) {
-            updateDtoList.add(mapper.readValue(updateList.get(i).toString(), CategoryDto.class));
+        for (Object o: updateList) {
+            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
+            updatedCategoryList.add(dto);
         }
 
         // 삭제
-        List<CategoryDto> deleteDtoList = new ArrayList<>();
+        Set<Long> deletedCategorySet = new HashSet<>();
         JSONArray deleteList = jObject.getJSONArray("delete");
-        for (int i = 0; i < deleteList.length(); i++) {
-            deleteDtoList.add(mapper.readValue(deleteList.get(i).toString(), CategoryDto.class));
+        for (Object o: deleteList) {
+            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
+            deletedCategorySet.add(dto.getId());
         }
 
-        return cardService.changeCategories(insertDtoList, updateDtoList, deleteDtoList);
+        if (cardService.changeCategories(insertedCategoryList, updatedCategoryList, deletedCategorySet)) {
+            return true;
+        }
+        else
+            return false;
     }
 }
