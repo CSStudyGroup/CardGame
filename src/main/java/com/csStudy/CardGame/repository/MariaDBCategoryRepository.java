@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository("mariadb_category")
 public class MariaDBCategoryRepository implements CategoryRepository {
@@ -54,6 +55,18 @@ public class MariaDBCategoryRepository implements CategoryRepository {
         }
     }
 
+    public boolean deleteByIdIn(Set<Long> idSet) {
+        try {
+            em.createQuery("delete from Category c where c.id in :idSet")
+                    .setParameter("idSet", idSet)
+                    .executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public Optional<Category> findOne(Long id) {
         return Optional.ofNullable(em.find(Category.class, id));
@@ -64,6 +77,12 @@ public class MariaDBCategoryRepository implements CategoryRepository {
         return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards where c.name = :name", Category.class)
                 .setParameter("name", name)
                 .getSingleResult());
+    }
+
+    public Optional<List<Category>> findByIdIn(Set<Long> idSet) {
+        return Optional.ofNullable(em.createQuery("select c from Category c where c.id in :idSet", Category.class)
+                .setParameter("idSet", idSet)
+                .getResultList());
     }
 
     @Override
