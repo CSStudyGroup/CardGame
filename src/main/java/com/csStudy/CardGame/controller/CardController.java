@@ -7,13 +7,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static java.lang.Long.parseLong;
 
 @Controller
 public class CardController {
@@ -24,67 +26,6 @@ public class CardController {
     public CardController(CardGameService cardService) {
         this.cardService = cardService;
     }
-
-    // 메인
-    @GetMapping("/card")
-    public String card(Model model) {
-        // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-        model.addAttribute("categoryDtoList", categoryDtoList);
-        model.addAttribute("role", "admin");
-        return "cardmain";
-    }
-
-//    // 선택된 카테고리에 맞게 표시
-//    @GetMapping("/card/category")
-//    public String category(@RequestParam(value="keyword") String keyword, Model model) {
-//        // 해당되는 키워드의 카드리스트를 받아와 반환
-//        List<CardDto> cardDtoList = cardService.findCardByCategory(keyword).getCardDtoList();
-//        model.addAttribute("cardDtoList", cardDtoList);
-//
-//        // 카테고리 리스트를 받아오는 부분
-//        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-//        model.addAttribute("categoryDtoList", categoryDtoList);
-//        model.addAttribute("role", "admin");
-//        return "category";
-//    }
-
-//    // navi bar interview checkbox submit
-//    @GetMapping("/card/interview")
-//    public String interview(@RequestParam("keyword") List<Long> keywords, Model model) {
-//        List<CardDto> cardDtoList = cardService.findCardByCategoryIn(keywords);
-//        model.addAttribute("cardDtoList", cardDtoList);
-//
-//        // 카테고리 리스트를 받아오는 부분
-//        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-//        model.addAttribute("categoryDtoList", categoryDtoList);
-//
-//        // 키워드 모델에 추가
-//        model.addAttribute("keywords", keywords);
-//        model.addAttribute("role", "admin");
-//        return "interview";
-//    }
-
-    @GetMapping("/card/management")
-    public String categoryManagement(Model model) {
-        // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-        model.addAttribute("categoryDtoList", categoryDtoList);
-        model.addAttribute("role", "admin");
-        return "categorymanage";
-    }
-
-    @GetMapping("/card/requestmanage")
-    public String requestmanagePage(Model model) {
-        // 카테고리 리스트를 받아오는 부분
-        List<CategoryDto> categoryDtoList = cardService.findCategoryAll();
-        model.addAttribute("categoryDtoList", categoryDtoList);
-        model.addAttribute("role", "user");
-        return "requestmanage";
-    }
-
-
-    // 이하 AJAX용 함수들
 
     // 카테고리 목록 전체 호출
     @ResponseBody
@@ -183,7 +124,12 @@ public class CardController {
     // 카테고리 변경 체크
     @ResponseBody
     @PostMapping("card/categoryChange")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public boolean categoryChange(@RequestBody String jsonList) throws JsonProcessingException {
+        for (String role: SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toList())) {
+            System.out.println(role);
+        }
         JSONObject jObject = new JSONObject(jsonList);
         ObjectMapper mapper = new ObjectMapper();
 
@@ -217,4 +163,5 @@ public class CardController {
         else
             return false;
     }
+
 }

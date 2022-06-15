@@ -3,17 +3,16 @@ package com.csStudy.CardGame.repository;
 import com.csStudy.CardGame.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
 
 @Repository
-public class MariaDBMemberRepository implements MemberRepository {
+public class MemberRepositoryImpl implements MemberRepository {
     private final EntityManager em;
 
     @Autowired
-    public MariaDBMemberRepository(EntityManager em) {
+    public MemberRepositoryImpl(EntityManager em) {
         this.em = em;
     }
 
