@@ -90,20 +90,22 @@ public class CardGameService {
 
     // 카테고리로 카드 필터링
     @Transactional
-    public CategoryIncludeCardDto findCardByCategory(String name) {
-        CategoryIncludeCardDto categoryIncludeCardDto = new CategoryIncludeCardDto();
+    public CategoryDetail findCardByCategory(String name) {
         try {
             Category category = Objects.requireNonNull(categoryRepository.findByName(name).orElse(null));
-            categoryIncludeCardDto.setId(category.getId());
-            categoryIncludeCardDto.setName(category.getName());
-            categoryIncludeCardDto.setCardCount(category.getCardCount());
-            categoryIncludeCardDto.setCardDtoList(category.getCards().stream()
-                    .map(cardMapper::toDto).sorted().collect(Collectors.toList()));
+            return CategoryDetail.builder()
+                    .id(category.getId())
+                    .name(category.getName())
+                    .cardCount(category.getCardCount())
+                    .cardDtoList(category.getCards().stream()
+                            .map(cardMapper::toDto)
+                            .collect(Collectors.toList()))
+                    .build();
+
         }
         catch (Exception e) {
-            return categoryIncludeCardDto;
+            return null;
         }
-        return categoryIncludeCardDto;
     }
 
     // 여러개의 카테고리로 카드 필터링
@@ -118,7 +120,7 @@ public class CardGameService {
     public List<CardDto> findCardByCategoryIn(List<String> nameList) {
         List<CardDto> cardDtoList = new ArrayList<>();
         for (String name : nameList) {
-            CategoryIncludeCardDto categoryIncludeCardDto = findCardByCategory(name);
+            CategoryDetail categoryIncludeCardDto = findCardByCategory(name);
             cardDtoList.addAll(categoryIncludeCardDto.getCardDtoList());
         }
         return cardDtoList;
@@ -177,7 +179,7 @@ public class CardGameService {
     @Cacheable("categoryList")
     @Transactional
     public List<CategoryDto> findCategoryAll() {
-        return categoryRepository.findAll().stream()
+        return categoryRepository.findAll().orElseGet(ArrayList::new).stream()
                 .map(categoryMapper::toDto)
                 .collect(Collectors.toList());
     }

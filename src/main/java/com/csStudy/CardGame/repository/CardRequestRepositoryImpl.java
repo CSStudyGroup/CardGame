@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class MariaDBCardRequestRepository implements CardRequestRepository {
+public class CardRequestRepositoryImpl implements CardRequestRepository {
 
     private final EntityManager em;
 
     @Autowired
-    public MariaDBCardRequestRepository(EntityManager em) {
+    public CardRequestRepositoryImpl(EntityManager em) {
         this.em = em;
     }
 

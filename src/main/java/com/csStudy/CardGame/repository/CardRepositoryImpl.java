@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository("mariadb_card")
-public class MariaDBCardRepository implements CardRepository {
+public class CardRepositoryImpl implements CardRepository {
 
     private final EntityManager em;
 
     @Autowired
-    public MariaDBCardRepository(EntityManager em) {
+    public CardRepositoryImpl(EntityManager em) {
         this.em = em;
     }
 

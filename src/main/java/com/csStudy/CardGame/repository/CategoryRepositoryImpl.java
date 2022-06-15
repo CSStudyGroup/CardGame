@@ -5,17 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Repository("mariadb_category")
-public class MariaDBCategoryRepository implements CategoryRepository {
+public class CategoryRepositoryImpl implements CategoryRepository {
 
     private final EntityManager em;
 
     @Autowired
-    public MariaDBCategoryRepository(EntityManager em) {
+    public CategoryRepositoryImpl(EntityManager em) {
         this.em = em;
     }
 
@@ -73,22 +74,43 @@ public class MariaDBCategoryRepository implements CategoryRepository {
     }
 
     @Override
+    public Optional<Category> findDetailOne(Long id) {
+        return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards where c.id = :id", Category.class)
+                .setParameter("id", id)
+                .getSingleResult());
+    }
+
+    @Override
     public Optional<Category> findByName(String name) {
         return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards where c.name = :name", Category.class)
                 .setParameter("name", name)
                 .getSingleResult());
     }
 
-    public Optional<List<Category>> findByIdIn(Set<Long> idSet) {
+    public Optional<List<Category>> findByIdIn(Collection<Long> idSet) {
         return Optional.ofNullable(em.createQuery("select c from Category c where c.id in :idSet", Category.class)
                 .setParameter("idSet", idSet)
                 .getResultList());
     }
 
     @Override
-    public List<Category> findAll() {
-        return em.createQuery("select c from Category c", Category.class)
-                .getResultList();
+    public Optional<List<Category>> findDetailByIdIn(Collection<Long> idSet) {
+        return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards where c.id in :idSet", Category.class)
+                .setParameter("idSet", idSet)
+                .getResultList());
     }
+
+    @Override
+    public Optional<List<Category>> findAll() {
+        return Optional.ofNullable(em.createQuery("select c from Category c", Category.class)
+                .getResultList());
+    }
+
+    @Override
+    public Optional<List<Category>> findDetailAll() {
+        return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards", Category.class)
+                .getResultList());
+    }
+
 
 }
