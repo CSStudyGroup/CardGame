@@ -18,6 +18,7 @@ public class CardMapperImpl implements CardMapper{
                     .tags(card.getTags())
                     .cid(card.getCategory().getId())
                     .cname(card.getCategory().getName())
+                    .authorName(card.getAuthor().getNickname())
                     .build();
         }
     }

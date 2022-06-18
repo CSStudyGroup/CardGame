@@ -2,6 +2,7 @@ package com.csStudy.CardGame.repository;
 
 import com.csStudy.CardGame.domain.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -74,8 +75,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
+    @EntityGraph(attributePaths = "cards")
     public Optional<Category> findDetailOne(Long id) {
-        return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards where c.id = :id", Category.class)
+        return Optional.ofNullable(em.createQuery("select c from Category c where c.id = :id", Category.class)
                 .setParameter("id", id)
                 .getSingleResult());
     }
@@ -94,8 +96,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
+    @EntityGraph(attributePaths = "cards")
     public Optional<List<Category>> findDetailByIdIn(Collection<Long> idSet) {
-        return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards where c.id in :idSet", Category.class)
+        return Optional.ofNullable(em.createQuery("select c from Category c where c.id in :idSet", Category.class)
                 .setParameter("idSet", idSet)
                 .getResultList());
     }
