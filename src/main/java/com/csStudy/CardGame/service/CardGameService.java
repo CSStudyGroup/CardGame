@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// 서비스 분리작업 진행 후 삭제
 @Service
 public class CardGameService {
     private final CardRepository cardRepository;

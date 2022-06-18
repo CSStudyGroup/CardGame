@@ -9,6 +9,7 @@ import com.csStudy.CardGame.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public List<CategoryDto> getAllCategories() {
         return categoryRepository.findAll().orElseGet(ArrayList::new).stream()
                 .map(categoryMapper::toDto)
@@ -38,6 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public List<CategoryDetail> getAllCategoriesDetail() {
         return categoryRepository.findDetailAll().orElseGet(ArrayList::new).stream()
                 .map((category) -> {
@@ -54,6 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public List<CategoryDto> getSelectedCategories(Collection<Long> categoryIdSet) {
         return categoryRepository.findByIdIn(categoryIdSet).orElseGet(ArrayList::new).stream()
                 .map(categoryMapper::toDto)
@@ -61,6 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public List<CategoryDetail> getSelectedCategoriesDetail(Collection<Long> categoryIdSet) {
         return categoryRepository.findDetailByIdIn(categoryIdSet).orElseGet(ArrayList::new).stream()
                 .map((category) -> {
@@ -77,14 +82,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto getCategoryById(Long id) {
         Category target = categoryRepository.findOne(id).orElse(null);
         return target == null ? null : categoryMapper.toDto(target);
     }
 
     @Override
+    @Transactional
     public CategoryDetail getCategoryDetailById(Long id) {
-        Category target = categoryRepository.findOne(id).orElse(null);
+        Category target = categoryRepository.findDetailOne(id).orElse(null);
         return target == null ? null : CategoryDetail.builder()
                 .id(target.getId())
                 .name(target.getName())

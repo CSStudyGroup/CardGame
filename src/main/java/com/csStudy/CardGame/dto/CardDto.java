@@ -20,6 +20,8 @@ public class CardDto implements Comparable<CardDto> {
 
     private String cname;
 
+    private String authorName;
+
     @Override
     public int compareTo(CardDto o) {
         if (this.id > o.getId()) {
