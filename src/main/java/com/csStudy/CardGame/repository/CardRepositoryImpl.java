@@ -67,7 +67,7 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
-    public List<Card> findByCategory(Long cid) {
+    public List<Card> findByCategoryId(Long cid) {
         return em.createQuery("select c from Card c where c.category.id = :cid", Card.class)
                 .setParameter("cid", cid)
                 .getResultList();
@@ -77,6 +77,13 @@ public class CardRepositoryImpl implements CardRepository {
     public List<Card> findByCategoryIn(List<Long> cidList) {
         return em.createQuery("select c from Card c where c.category.id in :cidList", Card.class)
                 .setParameter("cidList", cidList)
+                .getResultList();
+    }
+
+    @Override
+    public List<Card> findByCategoryNameContaining(String keyword) {
+        return em.createQuery("select c from Card c where c.category.name like :keyword", Card.class)
+                .setParameter("keyword", String.format("%%%s%%", keyword))
                 .getResultList();
     }
 

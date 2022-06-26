@@ -54,6 +54,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
+    public Optional<MemberDto> findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname)
+                .map(memberMapper::toDto);
+    }
+
+    @Override
+    @Transactional
     public Optional<MemberDto> findOne(Long id) {
         return memberRepository.findOne(id)
                 .map(memberMapper::toDto);

@@ -89,30 +89,30 @@ public class CategoryRepositoryImpl implements CategoryRepository {
                 .getSingleResult());
     }
 
-    public Optional<List<Category>> findByIdIn(Collection<Long> idSet) {
-        return Optional.ofNullable(em.createQuery("select c from Category c where c.id in :idSet", Category.class)
+    public List<Category> findByIdIn(Collection<Long> idSet) {
+        return em.createQuery("select c from Category c where c.id in :idSet", Category.class)
                 .setParameter("idSet", idSet)
-                .getResultList());
+                .getResultList();
     }
 
     @Override
     @EntityGraph(attributePaths = "cards")
-    public Optional<List<Category>> findDetailByIdIn(Collection<Long> idSet) {
-        return Optional.ofNullable(em.createQuery("select c from Category c where c.id in :idSet", Category.class)
+    public List<Category> findDetailByIdIn(Collection<Long> idSet) {
+        return em.createQuery("select c from Category c where c.id in :idSet", Category.class)
                 .setParameter("idSet", idSet)
-                .getResultList());
+                .getResultList();
     }
 
     @Override
-    public Optional<List<Category>> findAll() {
-        return Optional.ofNullable(em.createQuery("select c from Category c", Category.class)
-                .getResultList());
+    public List<Category> findAll() {
+        return em.createQuery("select c from Category c", Category.class)
+                .getResultList();
     }
 
     @Override
-    public Optional<List<Category>> findDetailAll() {
-        return Optional.ofNullable(em.createQuery("select distinct c from Category c join fetch c.cards", Category.class)
-                .getResultList());
+    public List<Category> findDetailAll() {
+        return em.createQuery("select distinct c from Category c join fetch c.cards", Category.class)
+                .getResultList();
     }
 
 

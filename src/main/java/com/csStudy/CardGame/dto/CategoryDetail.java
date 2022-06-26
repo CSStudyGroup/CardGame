@@ -2,7 +2,6 @@ package com.csStudy.CardGame.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +15,10 @@ public class CategoryDetail {
 
     private int cardCount = 0;
 
-    private List<CardDto> cardDtoList = new ArrayList<>();
+    private List<CardDto> cards = new ArrayList<>();
 
     public void addCardDto(CardDto cardDto) {
-        this.cardDtoList.add(cardDto);
+        this.cards.add(cardDto);
         this.cardCount += 1;
     }
 }

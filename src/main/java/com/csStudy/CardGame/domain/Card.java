@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Cacheable
@@ -43,12 +44,40 @@ public class Card {
     )
     private Member author;
 
-    public static Card createCard(CardDto cardDto) {
+    // 새 엔티티 생성
+    public static Card createCard(CardDto cardDto, @NotNull Category category, @NotNull Member author) {
         return Card.builder()
+                .category(category)
                 .question(cardDto.getQuestion())
                 .answer(cardDto.getAnswer())
                 .tags(cardDto.getTags())
+                .author(author)
                 .build();
     }
 
+    // DTO를 받아 컨텐츠(질문, 답변, 태그) 업데이트
+    public void updateContent(CardDto cardDto) {
+        String question = cardDto.getQuestion();
+        String answer = cardDto.getAnswer();
+        String tags = cardDto.getTags();
+        if (question != null) {
+            this.question = question;
+        }
+        if (answer != null) {
+            this.answer = answer;
+        }
+        if (tags != null) {
+            this.tags = tags;
+        }
+    }
+
+    // 카테고리 변경
+    public void changeCategory(Category category) {
+        // 기존 카테고리와의 관계 해제
+        this.category.removeCard(this);
+
+        // 새 카테고리 설정
+        category.addCard(this);
+        this.category = category;
+    }
 }

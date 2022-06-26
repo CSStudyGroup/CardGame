@@ -24,9 +24,16 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public Optional<Member> findByEmail(String email) {
-        return Optional.ofNullable(em.createQuery("select m from Member m where m.email = :email", Member.class)
+        return em.createQuery("select m from Member m where m.email = :email", Member.class)
                 .setParameter("email", email)
-                .getSingleResult());
+                .getResultStream().findFirst();
+    }
+
+    @Override
+    public Optional<Member> findByNickname(String nickname) {
+        return em.createQuery("select m from Member m where m.nickname = :nickname", Member.class)
+                .setParameter("nickname", nickname)
+                .getResultStream().findFirst();
     }
 
     @Override
