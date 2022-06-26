@@ -31,14 +31,14 @@ public interface CategoryRepository {
     Optional<Category> findByName(String name);
 
     // id set 에 포함된 카테고리 검색
-    Optional<List<Category>> findByIdIn(Collection<Long> idSet);
+    List<Category> findByIdIn(Collection<Long> idSet);
 
     // id set 에 포함된 카테고리 상세 검색
-    Optional<List<Category>> findDetailByIdIn(Collection<Long> idSet);
+    List<Category> findDetailByIdIn(Collection<Long> idSet);
 
     // 모든 카테고리
-    Optional<List<Category>> findAll();
+    List<Category> findAll();
 
     // 모든 카테고리 상세
-    Optional<List<Category>> findDetailAll();
+    List<Category> findDetailAll();
 }

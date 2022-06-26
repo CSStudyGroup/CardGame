@@ -5,6 +5,7 @@ import com.csStudy.CardGame.dto.CategoryDto;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface CategoryService {
     /* 조회 */
@@ -26,4 +27,6 @@ public interface CategoryService {
     // 특정 카테고리 상세조회
     CategoryDetail getCategoryDetailById(Long id);
 
+    // 카테고리 변경사항(추가, 수정, 삭제) 반영
+    boolean changeCategories(List<CategoryDto> insertedList, List<CategoryDto> updatedList, Set<Long> deletedList);
 }

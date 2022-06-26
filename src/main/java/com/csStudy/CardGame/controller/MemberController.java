@@ -8,24 +8,24 @@ import com.csStudy.CardGame.service.MemberService;
 import com.csStudy.CardGame.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 public class MemberController {
     private final UserDetailsService userDetailsService;
     private final MemberService memberService;
@@ -52,7 +52,6 @@ public class MemberController {
         this.securityUtil = securityUtil;
     }
 
-    @ResponseBody
     @PostMapping("/login")
     public String login(@RequestBody LoginRequestForm form, HttpServletRequest request, HttpServletResponse response) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -113,7 +112,6 @@ public class MemberController {
         return "login_success";
     }
 
-    @ResponseBody
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -136,10 +134,17 @@ public class MemberController {
         return "logout";
     }
 
-    @ResponseBody
     @PostMapping("/register")
     public String registerProcess(@RequestBody RegisterRequestForm form, HttpServletRequest request, HttpServletResponse response) {
         MemberDto registeredMember = memberService.register(form).orElse(null);
         return "registered";
+    }
+
+    @GetMapping("/valid")
+    public ResponseEntity<Boolean> memberDuplicateCheck(@RequestParam String email, @RequestParam String nickname) {
+        if (memberService.findByEmail(email).isPresent() || memberService.findByNickname(nickname).isPresent()) {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
