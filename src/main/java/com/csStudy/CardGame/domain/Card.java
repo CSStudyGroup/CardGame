@@ -3,7 +3,6 @@ package com.csStudy.CardGame.domain;
 
 import com.csStudy.CardGame.dto.CardDto;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Cacheable
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -72,12 +70,24 @@ public class Card {
     }
 
     // 카테고리 변경
-    public void changeCategory(Category category) {
+    public void setCategory(Category category) {
         // 기존 카테고리와의 관계 해제
-        this.category.removeCard(this);
+        if (this.category != null)
+            this.category.removeCard(this);
 
         // 새 카테고리 설정
         category.addCard(this);
         this.category = category;
+    }
+
+    // 저자 설정
+    public void setAuthor(Member member) {
+        // 기존 멤버와의 관계 해제
+        if (this.author != null)
+            this.author.removeAcceptedCard(this);
+
+        // 새 멤버 설정
+        member.addAcceptedCard(this);
+        this.author = member;
     }
 }

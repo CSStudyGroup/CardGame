@@ -6,7 +6,6 @@ import org.springframework.data.redis.core.RedisHash;
 import javax.persistence.Id;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

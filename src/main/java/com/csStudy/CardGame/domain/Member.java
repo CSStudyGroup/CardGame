@@ -4,12 +4,10 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -30,24 +28,39 @@ public class Member {
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "member_role")
     @Column(name = "role")
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "author")
+    @Builder.Default
     private Set<Card> acceptedCards = new HashSet<>();
 
     @OneToMany(mappedBy = "requester")
+    @Builder.Default
     private Set<CardRequest> requestedCards = new HashSet<>();
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
 
     public void addRole(Role role) {
         roles.add(role);
     }
 
-    public void addAcceptedCards(Card card) {
+    public void addAcceptedCard(Card card) {
         this.acceptedCards.add(card);
     }
 
-    public void addRequestedCards(CardRequest cardRequest) {
+    public void removeAcceptedCard(Card card) {
+        this.acceptedCards.remove(card);
+    }
+
+    public void addRequestedCard(CardRequest cardRequest) {
         this.requestedCards.add(cardRequest);
+    }
+
+    public void removeRequestedCard(CardRequest cardRequest) {
+        this.requestedCards.remove(cardRequest);
     }
 
 }

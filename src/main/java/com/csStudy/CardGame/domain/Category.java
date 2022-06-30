@@ -1,6 +1,7 @@
 package com.csStudy.CardGame.domain;
 
 
+import com.csStudy.CardGame.dto.CategoryDto;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -10,7 +11,6 @@ import java.util.Set;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +18,8 @@ import java.util.Set;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq")
+    @SequenceGenerator(name = "category_seq", sequenceName = "category_sequence")
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -28,12 +29,17 @@ public class Category {
     private int cardCount;
 
     @OneToMany(mappedBy = "category")
+    @Builder.Default
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Card> cards = new HashSet<>();
 
-    public static Category createCategory(String name) {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public static Category createCategory(CategoryDto categoryDto) {
         return Category.builder()
-                .name(name)
+                .name(categoryDto.getName())
                 .cardCount(0)
                 .build();
     }

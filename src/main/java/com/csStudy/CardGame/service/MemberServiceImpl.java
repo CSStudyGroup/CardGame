@@ -4,14 +4,16 @@ import com.csStudy.CardGame.domain.Member;
 import com.csStudy.CardGame.domain.Role;
 import com.csStudy.CardGame.dto.MemberDto;
 import com.csStudy.CardGame.dto.RegisterRequestForm;
+import com.csStudy.CardGame.dto.SecuredMember;
 import com.csStudy.CardGame.mapper.MemberMapper;
 import com.csStudy.CardGame.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,36 +35,20 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public Optional<MemberDto> register(RegisterRequestForm form) {
+    public MemberDto register(RegisterRequestForm form) {
         Member newMember = Member.builder()
                 .email(form.getUserEmail())
                 .password(form.getPassword())
                 .nickname(form.getNickname())
                 .build();
-        newMember.setRoles(Set.of(Role.USER));
-        newMember.setPassword(passwordEncoder.encode(newMember.getPassword()));
-        return memberRepository.save(newMember)
-                .map(memberMapper::toDto);
+        newMember.addRole(Role.USER);
+        newMember.changePassword(passwordEncoder.encode(newMember.getPassword()));
+        return memberMapper.toDto(memberRepository.save(newMember));
     }
 
     @Override
-    @Transactional
-    public Optional<MemberDto> findByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .map(memberMapper::toDto);
+    public Boolean checkExists(String email, String nickname) {
+        return memberRepository.existsByEmailOrNickname(email, nickname);
     }
 
-    @Override
-    @Transactional
-    public Optional<MemberDto> findByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname)
-                .map(memberMapper::toDto);
-    }
-
-    @Override
-    @Transactional
-    public Optional<MemberDto> findOne(Long id) {
-        return memberRepository.findOne(id)
-                .map(memberMapper::toDto);
-    }
 }

@@ -78,10 +78,6 @@ public class CardGameController {
     @PostMapping("/categories")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public boolean changeCategories(@RequestBody String jsonList) throws JsonProcessingException {
-        for (String role: SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).collect(Collectors.toList())) {
-            System.out.println(role);
-        }
         JSONObject jObject = new JSONObject(jsonList);
         ObjectMapper mapper = new ObjectMapper();
 

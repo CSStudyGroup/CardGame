@@ -45,17 +45,16 @@ public class CardRequestServiceImpl implements CardRequestService {
 
     @Override
     @Transactional
-    public Optional<CardRequestDto> save(CardRequestDto cardRequestDto) {
+    public void save(CardRequestDto cardRequestDto) {
         CardRequest newCardRequest = cardRequestMapper.toEntity(cardRequestDto);
-        categoryRepository.findOne(cardRequestDto.getCategoryId())
+        categoryRepository.findById(cardRequestDto.getCategoryId())
                 .ifPresent(newCardRequest::setCategory);
-        memberRepository.findOne(cardRequestDto.getRequesterId())
+        memberRepository.findById(cardRequestDto.getRequesterId())
                 .ifPresent((member) -> {
                     newCardRequest.setRequester(member);
-                    member.addRequestedCards(newCardRequest);
+                    member.addRequestedCard(newCardRequest);
                 });
-        return cardRequestRepository.save(newCardRequest)
-                .map(cardRequestMapper::toDto);
+        cardRequestRepository.save(newCardRequest);
     }
 
     @Override
@@ -83,7 +82,7 @@ public class CardRequestServiceImpl implements CardRequestService {
 
     @Override
     @Transactional
-    public Optional<CardDto> acceptRequest(Long id) {
+    public void acceptRequest(Long id) {
         CardRequest acceptedRequest = cardRequestRepository.findOne(id).orElse(null);
         if (acceptedRequest != null) {
             Card newCard = Card.builder()
@@ -94,9 +93,7 @@ public class CardRequestServiceImpl implements CardRequestService {
                     .author(acceptedRequest.getRequester())
                     .build();
             newCard.getCategory().addCard(newCard);
-            return cardRepository.save(newCard)
-                    .map(cardMapper::toDto);
+            cardRepository.save(newCard);
         }
-        return Optional.empty();
     }
 }

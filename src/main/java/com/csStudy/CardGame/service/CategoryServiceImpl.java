@@ -11,9 +11,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,7 +83,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryDto getCategoryById(Long id) {
-        Category target = categoryRepository.findOne(id).orElse(null);
+        Category target = categoryRepository.findById(id).orElse(null);
         return target == null ? null : categoryMapper.toDto(target);
     }
 
@@ -103,10 +101,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .build();
     }
 
-
-    ////////////////////////////////////////////////////////
-    // 이전 서비스의 구현 그대로 가져옴 => 최적화와 리팩토링 필요  //
-    ////////////////////////////////////////////////////////
     // 카테고리 변경사항 전체반영
     // 예외처리 필요
     @CacheEvict(value = "categoryList", allEntries = true)
@@ -136,11 +130,9 @@ public class CategoryServiceImpl implements CategoryService {
         if (insertedCategoryList.isEmpty()) {
             return false;
         }
-
-        for(CategoryDto categoryDto: insertedCategoryList) {
-            Category newCategory = Category.createCategory(categoryDto.getName());
-            categoryRepository.save(newCategory);
-        }
+        categoryRepository.saveAll(insertedCategoryList.stream()
+                .map(Category::createCategory)
+                .collect(Collectors.toList()));
         return true;
     }
 
@@ -150,12 +142,15 @@ public class CategoryServiceImpl implements CategoryService {
         if (updatedCategoryList.isEmpty()) {
             return false;
         }
-
-        for(CategoryDto categoryDto: updatedCategoryList) {
-            categoryRepository.findOne(categoryDto.getId())
-                    .ifPresent((target) -> {
-                        target.setName(categoryDto.getName());
-                    });
+        Map<Long, Category> targets = new HashMap<>();
+        categoryRepository.findByIdIn(updatedCategoryList.stream()
+                .map(CategoryDto::getId)
+                .collect(Collectors.toList()))
+                .forEach((category) -> targets.put(category.getId(), category));
+        for (CategoryDto categoryDto: updatedCategoryList) {
+            if (targets.containsKey(categoryDto.getId())) {
+                targets.get(categoryDto.getId()).setName(categoryDto.getName());
+            }
         }
         return true;
     }
@@ -165,7 +160,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (deletedCategorySet.isEmpty()) {
             return false;
         }
-
-        return categoryRepository.deleteByIdIn(deletedCategorySet);
+        categoryRepository.deleteAllByIdInBatch(deletedCategorySet);
+        return true;
     }
 }
