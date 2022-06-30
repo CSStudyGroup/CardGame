@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CardRequestService {
-    Optional<CardRequestDto> save(CardRequestDto cardRequestDto);
+    void save(CardRequestDto cardRequestDto);
     Optional<CardRequestDto> findOne(Long id);
     List<CardRequestDto> findAll();
     List<CardRequestDto> findByRequesterId(Long id);
-    Optional<CardDto> acceptRequest(Long id);
+    void acceptRequest(Long id);
 }

@@ -9,13 +9,11 @@ import com.csStudy.CardGame.repository.CardRepository;
 import com.csStudy.CardGame.repository.CategoryRepository;
 import com.csStudy.CardGame.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,14 +46,14 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public List<CardDto> findCardsByCategories(List<Long> categoryIdList) {
-        return cardRepository.findByCategoryIn(categoryIdList).stream()
+        return cardRepository.findByCategory_IdIn(categoryIdList).stream()
                 .map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CardDto> findCardsByCategoryName(String keyword) {
-        return cardRepository.findByCategoryNameContaining(keyword).stream()
+        return cardRepository.findByCategory_NameContaining(keyword).stream()
                 .map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -71,7 +69,7 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public List<CardDto> findCardsByTag(String keyword) {
-        return cardRepository.findByTagContaining(keyword).stream()
+        return cardRepository.findByTagsContaining(keyword).stream()
                 .map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -80,7 +78,7 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public boolean addCard(CardDto cardDto) {
         // 추가할 카드의 카테고리(Category)와 저자(Member) 조회
-        Category category = categoryRepository.findOne(cardDto.getCid()).orElse(null);
+        Category category = categoryRepository.findById(cardDto.getCid()).orElse(null);
         Member author = memberRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
 
         if (category == null || author == null) {
@@ -89,7 +87,7 @@ public class CardServiceImpl implements CardService {
 
         Card newCard = Card.createCard(cardDto, category, author);
         category.addCard(newCard);
-        author.addAcceptedCards(newCard);
+        author.addAcceptedCard(newCard);
 
         cardRepository.save(newCard);
         return true;
@@ -97,20 +95,21 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void editCard(CardDto cardDto) {
-        cardRepository.findOne(cardDto.getId())
+        cardRepository.findById(cardDto.getId())
                 .ifPresent((target) -> {
                     target.updateContent(cardDto);
                     if (!target.getCategory().getId().equals(cardDto.getCid())) {
-                        categoryRepository.findOne(cardDto.getCid())
-                                .ifPresent(target::changeCategory);
+                        categoryRepository.findById(cardDto.getCid())
+                                .ifPresent(target::setCategory);
                     }
                 });
     }
 
     @Override
     public void deleteCard(Long cardId) {
-        cardRepository.findOne(cardId)
+        cardRepository.findById(cardId)
                 .ifPresent(cardRepository::delete);
     }
+
 
 }

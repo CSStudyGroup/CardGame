@@ -6,8 +6,6 @@ import com.csStudy.CardGame.dto.RegisterRequestForm;
 import java.util.Optional;
 
 public interface MemberService {
-    Optional<MemberDto> register(RegisterRequestForm form);
-    Optional<MemberDto> findByEmail(String email);
-    Optional<MemberDto> findByNickname(String nickname);
-    Optional<MemberDto> findOne(Long id);
+    MemberDto register(RegisterRequestForm form);
+    Boolean checkExists(String email, String nickname);
 }

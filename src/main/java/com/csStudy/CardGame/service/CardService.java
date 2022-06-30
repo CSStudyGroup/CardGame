@@ -29,4 +29,5 @@ public interface CardService {
 
     // 카드를 삭제
     void deleteCard(Long cardId);
+
 }

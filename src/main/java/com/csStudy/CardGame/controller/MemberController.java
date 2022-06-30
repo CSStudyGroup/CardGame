@@ -7,27 +7,25 @@ import com.csStudy.CardGame.security.SecurityUtil;
 import com.csStudy.CardGame.service.MemberService;
 import com.csStudy.CardGame.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class MemberController {
-    private final UserDetailsService userDetailsService;
     private final MemberService memberService;
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -36,14 +34,12 @@ public class MemberController {
     private final SecurityUtil securityUtil;
 
     @Autowired
-    public MemberController(UserDetailsService userDetailsService,
-                            MemberService memberService,
+    public MemberController(MemberService memberService,
                             RefreshTokenService refreshTokenService,
                             JwtTokenProvider jwtTokenProvider,
                             AuthenticationManager authenticationManager,
                             HashcodeProvider hashcodeProvider,
                             SecurityUtil securityUtil) {
-        this.userDetailsService = userDetailsService;
         this.memberService = memberService;
         this.refreshTokenService = refreshTokenService;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -53,14 +49,9 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequestForm form, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestForm form, HttpServletRequest request) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
 
-        // 이미 인증이 완료된 상태라면 메인 페이지로 리다이렉트
-        if (securityContext.getAuthentication() != null
-                && !securityContext.getAuthentication().getName().equals("anonymousUser")) {
-            return "redirect:/";
-        }
         try {
             // userName, password 로 인증
             UsernamePasswordAuthenticationToken authenticationToken =
@@ -76,11 +67,10 @@ public class MemberController {
             Map<String, String> tokens = jwtTokenProvider.generateTokens((SecuredMember) authentication.getPrincipal());
 
             // access token 쿠키
-            Cookie accessTokenCookie = new Cookie(
-                    "X-AUTH-TOKEN"
-                    , tokens.get("accessToken"));
-            accessTokenCookie.setMaxAge(3600);
-            accessTokenCookie.setPath("/");
+            ResponseCookie accessTokenCookie = ResponseCookie.from("X-AUTH-TOKEN", tokens.get("accessToken"))
+                    .maxAge(3600)
+                    .path("/")
+                    .build();
 
             // refresh token 쿠키
             // refresh token의 id는 유저 이메일과 (유저 이메일 + 현재시간)을 해싱한 값을 이어붙여 생성
@@ -95,56 +85,48 @@ public class MemberController {
 
             // redis 저장소에 refresh token 저장
             refreshTokenService.save(refreshTokenDto);
-            Cookie refreshTokenCookie = new Cookie(
-                    "X-REFRESH-TOKEN"
-                    , refreshTokenDto.getId());
-            refreshTokenCookie.setMaxAge(3600 * 24 * 7);
-            refreshTokenCookie.setHttpOnly(true);
-            refreshTokenCookie.setPath("/");
 
-            response.addCookie(accessTokenCookie);
-            response.addCookie(refreshTokenCookie);
+            // refresh token 쿠키
+            ResponseCookie refreshTokenCookie = ResponseCookie.from("X-REFRESH-TOKEN", refreshTokenDto.getId())
+                    .httpOnly(true)
+                    .path("/")
+                    .maxAge(3600 * 24 * 7)
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString(), refreshTokenCookie.toString())
+                    .body(Map.of("ACCESS_TOKEN", tokens.get("accessToken")));
         }
         catch (Exception e) {
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return "unauthorized";
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-        return "login_success";
     }
 
     @PostMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getName() == "anonymous") {
-            return "redirect:/";
-        }
+    public ResponseEntity<?> logout(HttpServletRequest request) {
         for (Cookie cookie: request.getCookies()) {
             if (cookie.getName().equals("X-REFRESH-TOKEN")) {
                 refreshTokenService.deleteById(cookie.getValue());
             }
         }
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-        cookie = new Cookie("X-REFRESH-TOKEN", null);
-        response.addCookie(cookie);
+        ResponseCookie cookie = ResponseCookie.from("X-REFRESH-TOKEN", "")
+                .maxAge(0)
+                .build();
 
-        SecurityContextHolder.getContext().setAuthentication(null);
-
-        return "logout";
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .build();
     }
 
     @PostMapping("/register")
-    public String registerProcess(@RequestBody RegisterRequestForm form, HttpServletRequest request, HttpServletResponse response) {
-        MemberDto registeredMember = memberService.register(form).orElse(null);
-        return "registered";
+    public ResponseEntity<?> registerProcess(@RequestBody RegisterRequestForm form) {
+        memberService.register(form);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/valid")
-    public ResponseEntity<Boolean> memberDuplicateCheck(@RequestParam String email, @RequestParam String nickname) {
-        if (memberService.findByEmail(email).isPresent() || memberService.findByNickname(nickname).isPresent()) {
-            return new ResponseEntity<>(false, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(true, HttpStatus.OK);
+    public ResponseEntity<Boolean> checkRegisterValidation(@RequestParam String email, @RequestParam String nickname) {
+        return ResponseEntity.ok()
+                    .body(!memberService.checkExists(email, nickname));
     }
 }
