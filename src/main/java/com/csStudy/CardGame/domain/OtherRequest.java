@@ -15,7 +15,8 @@ import java.util.Date;
 @Entity
 public class OtherRequest {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "other_request_seq")
+    @SequenceGenerator(name = "other_request_seq", sequenceName = "other_request_sequence")
     private Long id;
 
     @Column(nullable = false)

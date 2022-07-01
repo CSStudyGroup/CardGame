@@ -16,7 +16,8 @@ import javax.validation.constraints.NotNull;
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_seq")
+    @SequenceGenerator(name = "card_seq", sequenceName = "card_sequence")
     private Long id;
 
     @Column(name = "question", nullable = false)
