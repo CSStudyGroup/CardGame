@@ -13,7 +13,8 @@ import java.util.Set;
 @Builder
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
+    @SequenceGenerator(name = "member_seq", sequenceName = "member_sequence")
     private Long id;
 
     @Column(nullable = false, length = 50, unique = true)

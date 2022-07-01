@@ -17,7 +17,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class CardRequest {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_request_seq")
+    @SequenceGenerator(name = "card_request_seq", sequenceName = "card_request_sequence")
     private Long id;
 
     @Column(name = "question", nullable = false)
