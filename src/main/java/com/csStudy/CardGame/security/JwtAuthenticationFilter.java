@@ -1,16 +1,12 @@
 package com.csStudy.CardGame.security;
 
-import com.csStudy.CardGame.dto.RefreshTokenDto;
-import com.csStudy.CardGame.dto.SecuredMember;
-import com.csStudy.CardGame.service.RefreshTokenService;
-import com.csStudy.CardGame.service.RefreshTokenServiceImpl;
+import com.csStudy.CardGame.domain.member.dto.MemberDetails;
+import com.csStudy.CardGame.domain.refreshtoken.service.RefreshTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -77,18 +73,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 && refreshToken.getUserIp().equals(securityUtil.getIp(request))) {
                             try {
                                 String userEmail = jwtTokenProvider.getUserName(refreshToken.getToken());
-                                SecuredMember securedMember = (SecuredMember) userDetailsService.loadUserByUsername(userEmail);
+                                MemberDetails memberDetails = (MemberDetails) userDetailsService.loadUserByUsername(userEmail);
                                 UsernamePasswordAuthenticationToken authentication =
                                         new UsernamePasswordAuthenticationToken(
-                                                securedMember.getUsername(),
+                                                memberDetails.getUsername(),
                                                 null,
-                                                securedMember.getAuthorities()
+                                                memberDetails.getAuthorities()
                                         );
                                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                                 SecurityContextHolder.getContext().setAuthentication(authentication);
                                 Cookie cookie = new Cookie(
                                         "X-AUTH-TOKEN",
-                                        jwtTokenProvider.generateAccessToken(securedMember));
+                                        jwtTokenProvider.generateAccessToken(memberDetails));
                                 cookie.setPath("/");
                                 cookie.setMaxAge(3600);
                                 response.addCookie(cookie);
@@ -110,12 +106,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (accessToken.startsWith("Bearer ")) {
                 try {
                     String userEmail = jwtTokenProvider.getUserName(accessToken.split(" ")[1]);
-                    SecuredMember securedMember = (SecuredMember) userDetailsService.loadUserByUsername(userEmail);
+                    MemberDetails memberDetails = (MemberDetails) userDetailsService.loadUserByUsername(userEmail);
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
-                                    securedMember.getUsername(),
+                                    memberDetails.getUsername(),
                                     null,
-                                    securedMember.getAuthorities()
+                                    memberDetails.getAuthorities()
                             );
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -129,7 +125,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         return IGNORE.stream().anyMatch(ignore -> ignore.equalsIgnoreCase(request.getServletPath()));
     }
 }

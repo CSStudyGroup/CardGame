@@ -1,20 +1,16 @@
 package com.csStudy.CardGame.security;
 
-import com.csStudy.CardGame.domain.Role;
-import com.csStudy.CardGame.dto.SecuredMember;
+import com.csStudy.CardGame.domain.member.dto.MemberDetails;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,11 +20,11 @@ public class JwtTokenProvider {
     private static final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L;
     private static final long REFRESH_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L;
 
-    public Map<String, String> generateTokens(SecuredMember securedMember) {
+    public Map<String, String> generateTokens(MemberDetails memberDetails) {
         Map<String, String> tokens = new HashMap<>();
-        Claims claims = Jwts.claims().setSubject(securedMember.getEmail());
-        claims.put("nickname", securedMember.getNickname());
-        claims.put("roles", securedMember.getAuthorities().stream()
+        Claims claims = Jwts.claims().setSubject(memberDetails.getEmail());
+        claims.put("nickname", memberDetails.getNickname());
+        claims.put("roles", memberDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
         Date now = new Date();
@@ -55,10 +51,10 @@ public class JwtTokenProvider {
         return tokens;
     }
 
-    public String generateAccessToken(SecuredMember securedMember) {
-        Claims claims = Jwts.claims().setSubject(securedMember.getEmail());
-        claims.put("nickname", securedMember.getNickname());
-        claims.put("roles", securedMember.getAuthorities().stream()
+    public String generateAccessToken(MemberDetails memberDetails) {
+        Claims claims = Jwts.claims().setSubject(memberDetails.getEmail());
+        claims.put("nickname", memberDetails.getNickname());
+        claims.put("roles", memberDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
         Date now = new Date();

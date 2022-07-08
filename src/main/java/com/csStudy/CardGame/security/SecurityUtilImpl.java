@@ -1,7 +1,10 @@
 package com.csStudy.CardGame.security;
 
+import org.springframework.stereotype.Component;
+
 import javax.servlet.http.HttpServletRequest;
 
+@Component
 public class SecurityUtilImpl implements SecurityUtil {
     public String getIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");

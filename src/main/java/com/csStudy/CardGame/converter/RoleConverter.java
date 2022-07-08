@@ -1,6 +1,6 @@
 package com.csStudy.CardGame.converter;
 
-import com.csStudy.CardGame.domain.Role;
+import com.csStudy.CardGame.domain.member.entity.Role;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
