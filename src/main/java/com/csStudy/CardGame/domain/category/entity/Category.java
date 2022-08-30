@@ -2,7 +2,7 @@ package com.csStudy.CardGame.domain.category.entity;
 
 
 import com.csStudy.CardGame.domain.card.entity.Card;
-import com.csStudy.CardGame.domain.category.dto.CategoryDto;
+import com.csStudy.CardGame.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -30,20 +30,24 @@ public class Category {
     @Builder.Default
     private Integer cardCount = 0;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "owner_id",
+            nullable = false
+    )
+    private Member owner;
+
     @OneToMany(mappedBy = "category")
     @Builder.Default
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Card> cards = new HashSet<>();
 
-    public void setName(String name) {
+    public void changeName(String name) {
         this.name = name;
     }
 
-    public static Category createCategory(CategoryDto categoryDto) {
-        return Category.builder()
-                .name(categoryDto.getName())
-                .cardCount(0)
-                .build();
+    public void changeAuthor(Member owner) {
+        this.owner = owner;
     }
 
     public void addCard(Card card) {

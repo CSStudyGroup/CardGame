@@ -1,1 +1,0 @@
-DROP INDEX cname on category;

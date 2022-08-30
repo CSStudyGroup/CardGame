@@ -1,8 +1,9 @@
 package com.csStudy.CardGame.domain.category.service;
 
+import com.csStudy.CardGame.domain.category.dto.NewCategory;
 import com.csStudy.CardGame.domain.category.entity.Category;
 import com.csStudy.CardGame.domain.category.dto.CategoryDetail;
-import com.csStudy.CardGame.domain.category.dto.CategoryDto;
+import com.csStudy.CardGame.domain.category.dto.SimpleCategory;
 import com.csStudy.CardGame.domain.card.mapper.CardMapper;
 import com.csStudy.CardGame.domain.category.mapper.CategoryMapper;
 import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
@@ -32,9 +33,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<CategoryDto> getAllCategories() {
+    public List<SimpleCategory> getAllCategories() {
         return categoryRepository.findAll().stream()
-                .map(categoryMapper::toDto)
+                .map(categoryMapper::toSimpleCategory)
                 .collect(Collectors.toList());
     }
 
@@ -47,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
                             .name(category.getName())
                             .cardCount(category.getCardCount())
                             .cards(category.getCards().stream()
-                                    .map(cardMapper::toDto)
+                                    .map(cardMapper::toDetailCard)
                                     .collect(Collectors.toList()))
                             .build())
                 .collect(Collectors.toList());
@@ -55,9 +56,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<CategoryDto> getSelectedCategories(Collection<Long> categoryIdSet) {
+    public List<SimpleCategory> getSelectedCategories(Collection<Long> categoryIdSet) {
         return categoryRepository.findByIdIn(categoryIdSet).stream()
-                .map(categoryMapper::toDto)
+                .map(categoryMapper::toSimpleCategory)
                 .collect(Collectors.toList());
     }
 
@@ -70,7 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
                             .name(category.getName())
                             .cardCount(category.getCardCount())
                             .cards(category.getCards().stream()
-                                    .map(cardMapper::toDto)
+                                    .map(cardMapper::toDetailCard)
                                     .collect(Collectors.toList()))
                             .build())
                 .collect(Collectors.toList());
@@ -78,9 +79,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDto getCategoryById(Long id) {
+    public SimpleCategory getCategoryById(Long id) {
         Category target = categoryRepository.findById(id).orElse(null);
-        return target == null ? null : categoryMapper.toDto(target);
+        return target == null ? null : categoryMapper.toSimpleCategory(target);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .name(target.getName())
                 .cardCount(target.getCardCount())
                 .cards(target.getCards().stream()
-                        .map(cardMapper::toDto)
+                        .map(cardMapper::toDetailCard)
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -101,7 +102,7 @@ public class CategoryServiceImpl implements CategoryService {
     // 예외처리 필요
     @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
-    public boolean changeCategories(List<CategoryDto> insertedList, List<CategoryDto> updatedList, Set<Long> deletedList) {
+    public boolean changeCategories(List<NewCategory> insertedList, List<SimpleCategory> updatedList, Set<Long> deletedList) {
 
         /* 삭제리스트 처리 */
         if (!deletedList.isEmpty()) {
@@ -122,30 +123,30 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     // 카테고리 여러개 추가
-    private boolean insertCategories(List<CategoryDto> insertedCategoryList) {
+    private boolean insertCategories(List<NewCategory> insertedCategoryList) {
         if (insertedCategoryList.isEmpty()) {
             return false;
         }
         categoryRepository.saveAll(insertedCategoryList.stream()
-                .map(Category::createCategory)
+                .map(categoryMapper::toEntity)
                 .collect(Collectors.toList()));
         return true;
     }
 
     // 카테고리 여러개 수정
-    private boolean updateCategories(List<CategoryDto> updatedCategoryList) {
+    private boolean updateCategories(List<SimpleCategory> updatedCategoryList) {
         // 예외처리 필요
         if (updatedCategoryList.isEmpty()) {
             return false;
         }
         Map<Long, Category> targets = new HashMap<>();
         categoryRepository.findByIdIn(updatedCategoryList.stream()
-                .map(CategoryDto::getId)
+                .map(SimpleCategory::getId)
                 .collect(Collectors.toList()))
                 .forEach((category) -> targets.put(category.getId(), category));
-        for (CategoryDto categoryDto: updatedCategoryList) {
-            if (targets.containsKey(categoryDto.getId())) {
-                targets.get(categoryDto.getId()).setName(categoryDto.getName());
+        for (SimpleCategory simpleCategory : updatedCategoryList) {
+            if (targets.containsKey(simpleCategory.getId())) {
+                targets.get(simpleCategory.getId()).changeName(simpleCategory.getName());
             }
         }
         return true;

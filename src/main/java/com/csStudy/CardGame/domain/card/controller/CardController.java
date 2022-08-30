@@ -1,6 +1,7 @@
 package com.csStudy.CardGame.domain.card.controller;
 
-import com.csStudy.CardGame.domain.card.dto.CardDto;
+import com.csStudy.CardGame.domain.card.dto.DetailCard;
+import com.csStudy.CardGame.domain.card.dto.NewCard;
 import com.csStudy.CardGame.domain.card.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,9 +21,9 @@ public class CardController {
 
     // 전체 카드 또는 조건에 맞는 카드의 리스트를 반환하는 API
     @GetMapping("/cards")
-    public List<CardDto> getCards(@RequestParam(required = false) List<Long> selected) {
-        if (selected != null) {
-            return cardService.findCardsByCategories(selected);
+    public List<DetailCard> getCards(@RequestParam(required = false) List<Long> category) {
+        if (category != null) {
+            return cardService.findCardsByCategories(category);
         }
         return cardService.getAllCards();
     }
@@ -30,15 +31,15 @@ public class CardController {
     // 카드 추가
     @PostMapping("/cards")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void addCard(@RequestBody CardDto cardDto){
-        cardService.addCard(cardDto);
+    public void addCard(@RequestBody NewCard newCard){
+        cardService.addCard(newCard);
     }
 
     // 카드 수정
     @PutMapping("/cards")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void editCard(@RequestBody CardDto cardDto){
-        cardService.editCard(cardDto);
+    public void editCard(@RequestBody DetailCard detailCard){
+        cardService.editCard(detailCard);
     }
 
     // 카드 삭제

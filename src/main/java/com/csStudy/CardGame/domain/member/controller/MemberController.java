@@ -51,8 +51,8 @@ public class MemberController {
         this.securityUtil = securityUtil;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestForm form, HttpServletRequest request) {
+    @PostMapping("/authentication")
+    public ResponseEntity<Map<String, String>> authentication(@RequestBody LoginRequestForm form, HttpServletRequest request) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
 
         try {
@@ -103,22 +103,6 @@ public class MemberController {
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
-        for (Cookie cookie: request.getCookies()) {
-            if (cookie.getName().equals("X-REFRESH-TOKEN")) {
-                refreshTokenService.deleteById(cookie.getValue());
-            }
-        }
-        ResponseCookie cookie = ResponseCookie.from("X-REFRESH-TOKEN", "")
-                .maxAge(0)
-                .build();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .build();
     }
 
     @PostMapping("/register")
