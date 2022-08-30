@@ -1,7 +1,5 @@
 package com.csStudy.CardGame.domain.member.entity;
 
-import com.csStudy.CardGame.domain.cardrequest.entity.CardRequest;
-import com.csStudy.CardGame.domain.card.entity.Card;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,13 +32,9 @@ public class Member {
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "author")
-    @Builder.Default
-    private Set<Card> acceptedCards = new HashSet<>();
-
-    @OneToMany(mappedBy = "requester")
-    @Builder.Default
-    private Set<CardRequest> requestedCards = new HashSet<>();
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public void changePassword(String password) {
         this.password = password;
@@ -50,20 +44,7 @@ public class Member {
         roles.add(role);
     }
 
-    public void addAcceptedCard(Card card) {
-        this.acceptedCards.add(card);
+    public void removeRole(Role role) {
+        roles.remove(role);
     }
-
-    public void removeAcceptedCard(Card card) {
-        this.acceptedCards.remove(card);
-    }
-
-    public void addRequestedCard(CardRequest cardRequest) {
-        this.requestedCards.add(cardRequest);
-    }
-
-    public void removeRequestedCard(CardRequest cardRequest) {
-        this.requestedCards.remove(cardRequest);
-    }
-
 }

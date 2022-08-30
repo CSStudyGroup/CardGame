@@ -1,6 +1,6 @@
 package com.csStudy.CardGame.domain.category.dto;
 
-import com.csStudy.CardGame.domain.card.dto.CardDto;
+import com.csStudy.CardGame.domain.card.dto.DetailCard;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,10 +18,10 @@ public class CategoryDetail {
     private int cardCount = 0;
 
     @Builder.Default
-    private List<CardDto> cards = new ArrayList<>();
+    private List<DetailCard> cards = new ArrayList<>();
 
-    public void addCardDto(CardDto cardDto) {
-        this.cards.add(cardDto);
+    public void addCardDto(DetailCard detailCard) {
+        this.cards.add(detailCard);
         this.cardCount += 1;
     }
 }

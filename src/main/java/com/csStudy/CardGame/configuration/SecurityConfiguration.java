@@ -1,6 +1,5 @@
 package com.csStudy.CardGame.configuration;
 
-import com.csStudy.CardGame.security.HashcodeProvider;
 import com.csStudy.CardGame.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

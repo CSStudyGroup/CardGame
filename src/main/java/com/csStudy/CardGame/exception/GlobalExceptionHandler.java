@@ -1,4 +1,4 @@
-package com.csStudy.CardGame.advice;
+package com.csStudy.CardGame.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

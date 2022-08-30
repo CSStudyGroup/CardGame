@@ -1,6 +1,7 @@
 package com.csStudy.CardGame.domain.category.controller;
 
-import com.csStudy.CardGame.domain.category.dto.CategoryDto;
+import com.csStudy.CardGame.domain.category.dto.NewCategory;
+import com.csStudy.CardGame.domain.category.dto.SimpleCategory;
 import com.csStudy.CardGame.domain.category.dto.CategoryDetail;
 import com.csStudy.CardGame.domain.category.service.CategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,7 +34,7 @@ public class CategoryController {
 
     // 전체 카테고리 또는 선택된 카테고리 리스트를 반환하는 API
     @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDto>> getCategories(@RequestParam(required = false) List<Long> selected) {
+    public ResponseEntity<List<SimpleCategory>> getCategories(@RequestParam(required = false) List<Long> selected) {
         if (selected == null) {
             return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
         }
@@ -44,7 +45,7 @@ public class CategoryController {
 
     // 특정 카테고리를 반환하는 API
     @GetMapping("/categories/{cid}")
-    public CategoryDto getCategory(@PathVariable Long cid) {
+    public SimpleCategory getCategory(@PathVariable Long cid) {
         return categoryService.getCategoryById(cid);
     }
 
@@ -73,18 +74,18 @@ public class CategoryController {
         ObjectMapper mapper = new ObjectMapper();
 
         // 추가
-        List<CategoryDto> insertedCategoryList = new ArrayList<>();
+        List<NewCategory> insertedCategoryList = new ArrayList<>();
         JSONArray insertList = jObject.getJSONArray("insert");
         for (Object o: insertList) {
-            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
-            insertedCategoryList.add(dto);
+            NewCategory newCategory = mapper.readValue(o.toString(), NewCategory.class);
+            insertedCategoryList.add(newCategory);
         }
 
         // 수정
-        List<CategoryDto> updatedCategoryList = new ArrayList<>();
+        List<SimpleCategory> updatedCategoryList = new ArrayList<>();
         JSONArray updateList = jObject.getJSONArray("update");
         for (Object o: updateList) {
-            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
+            SimpleCategory dto = mapper.readValue(o.toString(), SimpleCategory.class);
             updatedCategoryList.add(dto);
         }
 
@@ -92,7 +93,7 @@ public class CategoryController {
         Set<Long> deletedCategorySet = new HashSet<>();
         JSONArray deleteList = jObject.getJSONArray("delete");
         for (Object o: deleteList) {
-            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
+            SimpleCategory dto = mapper.readValue(o.toString(), SimpleCategory.class);
             deletedCategorySet.add(dto.getId());
         }
 
