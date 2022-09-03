@@ -1,10 +1,12 @@
 package com.csStudy.CardGame.domain.member.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -13,9 +15,9 @@ import java.util.Set;
 @Builder
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
-    @SequenceGenerator(name = "member_seq", sequenceName = "member_sequence")
-    private Long id;
+    @Column(columnDefinition = "VARCHAR(255)")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    private UUID id;
 
     @Column(nullable = false, length = 50, unique = true)
     private String email;

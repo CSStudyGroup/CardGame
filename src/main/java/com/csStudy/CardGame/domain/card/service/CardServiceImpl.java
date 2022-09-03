@@ -1,7 +1,6 @@
 package com.csStudy.CardGame.domain.card.service;
 
 import com.csStudy.CardGame.domain.card.dto.NewCard;
-import com.csStudy.CardGame.domain.card.dto.SimpleCard;
 import com.csStudy.CardGame.domain.card.entity.Card;
 import com.csStudy.CardGame.domain.category.entity.Category;
 import com.csStudy.CardGame.domain.card.dto.DetailCard;

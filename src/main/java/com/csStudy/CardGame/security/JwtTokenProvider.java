@@ -5,14 +5,14 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.KeyPair;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,9 +22,10 @@ public class JwtTokenProvider {
     private static final long REFRESH_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L;
 
     public Map<String, String> generateTokens(MemberDetails memberDetails) {
-        System.out.println(Arrays.toString(keypair.getPrivate().getEncoded()));
         Map<String, String> tokens = new HashMap<>();
         Claims claims = Jwts.claims().setSubject(memberDetails.getEmail());
+        claims.put("id", memberDetails.getId());
+        claims.put("email", memberDetails.getEmail());
         claims.put("nickname", memberDetails.getNickname());
         claims.put("roles", memberDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -49,37 +50,35 @@ public class JwtTokenProvider {
 
         tokens.put("accessToken", accessToken);
         tokens.put("refreshToken", refreshToken);
-        tokens.put("publicKey", keypair.getPublic().toString());
+        tokens.put("publicKey", Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded()));
 
         return tokens;
     }
 
-    public String generateAccessToken(MemberDetails memberDetails) {
-        Claims claims = Jwts.claims().setSubject(memberDetails.getEmail());
-        claims.put("nickname", memberDetails.getNickname());
-        claims.put("roles", memberDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList()));
-        Date now = new Date();
-
-        // Access Token 생성
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_VALID_TIME))
-                .signWith(keypair.getPrivate())
-                .compact();
-    }
-
-    public String getUserName(String jwtToken) {
-        return Jwts
+    public Authentication getAuthentication(String jwtToken) {
+        Claims claims = Jwts
                 .parserBuilder()
-                .setSigningKey(keypair.getPublic())
+                .setSigningKey(keypair.getPrivate())
                 .build()
                 .parseClaimsJws(jwtToken)
-                .getBody()
-                .getSubject();
-    }
+                .getBody();
 
+        Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) claims.get("roles", List.class).stream()
+                .map(role -> new SimpleGrantedAuthority((String) role))
+                .collect(Collectors.toSet());
+
+        MemberDetails memberDetails = MemberDetails.builder()
+                .id(UUID.fromString(claims.get("id", String.class)))
+                .nickname(claims.get("nickname", String.class))
+                .email(claims.get("email", String.class))
+                .authorities(authorities)
+                .build();
+
+        return new UsernamePasswordAuthenticationToken(
+                memberDetails,
+                null,
+                memberDetails.getAuthorities()
+        );
+    }
 
 }

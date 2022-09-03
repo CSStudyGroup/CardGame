@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -32,11 +33,12 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberDto register(RegisterRequestForm form) {
         Member newMember = Member.builder()
+                .id(UUID.randomUUID())
                 .email(form.getUserEmail())
                 .password(form.getPassword())
                 .nickname(form.getNickname())
                 .build();
-        newMember.addRole(Role.USER);
+        newMember.addRole(Role.ROLE_USER);
         newMember.changePassword(passwordEncoder.encode(newMember.getPassword()));
         return memberMapper.toDto(memberRepository.save(newMember));
     }

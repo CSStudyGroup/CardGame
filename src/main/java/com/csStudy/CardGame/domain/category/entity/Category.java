@@ -46,7 +46,7 @@ public class Category {
         this.name = name;
     }
 
-    public void changeAuthor(Member owner) {
+    public void changeOwner(Member owner) {
         this.owner = owner;
     }
 
