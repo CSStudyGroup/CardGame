@@ -4,6 +4,7 @@ import com.csStudy.CardGame.domain.member.entity.Role;
 import lombok.*;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -11,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDto {
-    private Long id;
+    private UUID id;
     private String email;
     private String nickname;
     private String password;

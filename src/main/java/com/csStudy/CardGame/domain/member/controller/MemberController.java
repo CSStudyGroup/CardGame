@@ -1,18 +1,15 @@
 package com.csStudy.CardGame.domain.member.controller;
 
-import com.csStudy.CardGame.domain.member.dto.LoginRequestForm;
-import com.csStudy.CardGame.domain.member.dto.RegisterRequestForm;
-import com.csStudy.CardGame.domain.member.dto.MemberDetails;
+import com.csStudy.CardGame.domain.member.dto.*;
 import com.csStudy.CardGame.domain.refreshtoken.dto.RefreshTokenDto;
 import com.csStudy.CardGame.security.HashcodeProvider;
 import com.csStudy.CardGame.security.JwtTokenProvider;
 import com.csStudy.CardGame.security.SecurityUtil;
 import com.csStudy.CardGame.domain.member.service.MemberService;
 import com.csStudy.CardGame.domain.refreshtoken.service.RefreshTokenService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
@@ -52,7 +48,7 @@ public class MemberController {
     }
 
     @PostMapping("/authentication")
-    public ResponseEntity<Map<String, String>> authentication(@RequestBody LoginRequestForm form, HttpServletRequest request) {
+    public ResponseEntity<TokenResponse> authentication(@RequestBody LoginRequestForm form, HttpServletRequest request) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
 
         try {
@@ -60,7 +56,8 @@ public class MemberController {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(
                             form.getUserEmail(),
-                            form.getPassword()
+                            form.getPassword(),
+                            null
                     );
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -69,13 +66,6 @@ public class MemberController {
             // access token, refresh token 발급
             Map<String, String> tokens = jwtTokenProvider.generateTokens((MemberDetails) authentication.getPrincipal());
 
-            // access token 쿠키
-            ResponseCookie accessTokenCookie = ResponseCookie.from("X-AUTH-TOKEN", tokens.get("accessToken"))
-                    .maxAge(3600)
-                    .path("/")
-                    .build();
-
-            // refresh token 쿠키
             // refresh token의 id는 유저 이메일과 (유저 이메일 + 현재시간)을 해싱한 값을 이어붙여 생성
             RefreshTokenDto refreshTokenDto =
                     RefreshTokenDto.builder()
@@ -89,19 +79,64 @@ public class MemberController {
             // redis 저장소에 refresh token 저장
             refreshTokenService.save(refreshTokenDto);
 
-            // refresh token 쿠키
-            ResponseCookie refreshTokenCookie = ResponseCookie.from("X-REFRESH-TOKEN", refreshTokenDto.getId())
-                    .httpOnly(true)
-                    .path("/")
-                    .maxAge(3600 * 24 * 7)
-                    .build();
-
             return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString(), refreshTokenCookie.toString())
-                    .body(Map.of("ACCESS_TOKEN", tokens.get("accessToken")));
+                    .body(TokenResponse.builder()
+                            .accessToken(tokens.get("accessToken"))
+                            .refreshTokenKey(refreshTokenDto.getId())
+                            .signaturePublicKey(tokens.get("publicKey"))
+                            .build());
         }
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(RefreshRequest refreshRequest, HttpServletRequest request) {
+        String refreshTokenKey = refreshRequest.getRefreshTokenKey();
+
+        RefreshTokenDto refreshToken = refreshTokenService.findById(refreshTokenKey).orElseThrow();
+
+        // refresh token 에 저장된 user agent 정보와 ip 정보가 일치하는지 확인
+        if (refreshToken.getUserAgent().equals(request.getHeader("User-Agent"))
+                && refreshToken.getUserIp().equals(securityUtil.getIp(request))) {
+            try {
+                Authentication authentication = jwtTokenProvider.getAuthentication(refreshToken.getToken());
+
+                // access token, refresh token 발급
+                Map<String, String> tokens = jwtTokenProvider.generateTokens((MemberDetails) authentication.getPrincipal());
+
+                // refresh token의 id는 유저 이메일과 (유저 이메일 + 현재시간)을 해싱한 값을 이어붙여 생성
+                RefreshTokenDto refreshTokenDto =
+                        RefreshTokenDto.builder()
+                                .id(hashcodeProvider.generateHashcode(authentication.getName(), authentication.getName() + new Date()))
+                                .token(tokens.get("refreshToken"))
+                                .userEmail(authentication.getName())
+                                .userAgent(request.getHeader("User-Agent"))
+                                .userIp(securityUtil.getIp(request))
+                                .build();
+
+                // redis 저장소에 refresh token 저장
+                refreshTokenService.save(refreshTokenDto);
+
+                return ResponseEntity.ok()
+                        .body(TokenResponse.builder()
+                                .accessToken(tokens.get("accessToken"))
+                                .refreshTokenKey(refreshTokenDto.getId())
+                                .signaturePublicKey(tokens.get("publicKey"))
+                                .build());
+            }
+            catch (ExpiredJwtException ex) { // refresh token 만료시
+                // 403
+                throw new RuntimeException();
+            }
+            catch (Exception ex) {
+                // 403
+                throw new RuntimeException();
+            }
+        }
+        else {
+            throw new RuntimeException();
         }
     }
 

@@ -68,7 +68,7 @@ public class CategoryController {
 
     // 카테고리 변경사항 반영 API
     @PostMapping("/categories")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public boolean changeCategories(@RequestBody String jsonList) throws JsonProcessingException {
         JSONObject jObject = new JSONObject(jsonList);
         ObjectMapper mapper = new ObjectMapper();

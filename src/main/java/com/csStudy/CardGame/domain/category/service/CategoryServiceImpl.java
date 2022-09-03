@@ -1,5 +1,6 @@
 package com.csStudy.CardGame.domain.category.service;
 
+import com.csStudy.CardGame.domain.card.entity.Card;
 import com.csStudy.CardGame.domain.category.dto.NewCategory;
 import com.csStudy.CardGame.domain.category.entity.Category;
 import com.csStudy.CardGame.domain.category.dto.CategoryDetail;
@@ -7,8 +8,11 @@ import com.csStudy.CardGame.domain.category.dto.SimpleCategory;
 import com.csStudy.CardGame.domain.card.mapper.CardMapper;
 import com.csStudy.CardGame.domain.category.mapper.CategoryMapper;
 import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
+import com.csStudy.CardGame.domain.member.entity.Member;
+import com.csStudy.CardGame.domain.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,14 +23,17 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final MemberRepository memberRepository;
     private final CategoryMapper categoryMapper;
     private final CardMapper cardMapper;
 
     @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository,
+                               MemberRepository memberRepository,
                                CategoryMapper categoryMapper,
                                CardMapper cardMapper) {
         this.categoryRepository = categoryRepository;
+        this.memberRepository = memberRepository;
         this.categoryMapper = categoryMapper;
         this.cardMapper = cardMapper;
     }
@@ -127,8 +134,18 @@ public class CategoryServiceImpl implements CategoryService {
         if (insertedCategoryList.isEmpty()) {
             return false;
         }
+        Member owner = memberRepository.findByEmail(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName()
+        ).orElse(null);
         categoryRepository.saveAll(insertedCategoryList.stream()
-                .map(categoryMapper::toEntity)
+                .map((dto) -> {
+                    Category newCategory = categoryMapper.toEntity(dto);
+                    newCategory.changeOwner(owner);
+                    return newCategory;
+                })
                 .collect(Collectors.toList()));
         return true;
     }
