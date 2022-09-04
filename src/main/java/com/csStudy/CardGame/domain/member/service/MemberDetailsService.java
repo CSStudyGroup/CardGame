@@ -2,8 +2,10 @@ package com.csStudy.CardGame.domain.member.service;
 
 import com.csStudy.CardGame.domain.member.dto.MemberDetails;
 import com.csStudy.CardGame.domain.member.repository.MemberRepository;
+import com.csStudy.CardGame.exception.ApiErrorEnums;
+import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,19 +28,16 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userEmail) {
-        MemberDetails target = memberRepository.findByEmail(userEmail)
-                .map((member) -> {
-                    return MemberDetails.builder()
-                            .id(member.getId())
-                            .nickname(member.getNickname())
-                            .email(member.getEmail())
-                            .password(member.getPassword())
-                            .authorities(member.getRoles().stream()
-                                    .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
-                                    .collect(Collectors.toSet()))
-                            .build();
-                })
-                .orElseThrow(() -> new UsernameNotFoundException(userEmail));
-        return target;
+        return memberRepository.findByEmail(userEmail)
+                .map((member) -> MemberDetails.builder()
+                        .id(member.getId())
+                        .nickname(member.getNickname())
+                        .email(member.getEmail())
+                        .password(member.getPassword())
+                        .authorities(member.getRoles().stream()
+                                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                                .collect(Collectors.toSet()))
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found: " + userEmail));
     }
 }
