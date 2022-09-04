@@ -1,10 +1,12 @@
 package com.csStudy.CardGame.security;
 
 import com.csStudy.CardGame.domain.member.dto.MemberDetails;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.csStudy.CardGame.exception.ApiErrorEnums;
+import com.csStudy.CardGame.exception.ApiErrorException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -56,12 +58,39 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String jwtToken) {
-        Claims claims = Jwts
-                .parserBuilder()
-                .setSigningKey(keypair.getPrivate())
-                .build()
-                .parseClaimsJws(jwtToken)
-                .getBody();
+        Claims claims = null;
+        try {
+            claims = Jwts
+                    .parserBuilder()
+                    .setSigningKey(keypair.getPrivate())
+                    .build()
+                    .parseClaimsJws(jwtToken)
+                    .getBody();
+        }
+        catch (ExpiredJwtException ex) { // refresh token 만료시
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.EXPIRED_TOKEN,
+                            HttpStatus.UNAUTHORIZED,
+                            "access token expired");
+        }
+        catch (SignatureException ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INVALID_TOKEN,
+                            HttpStatus.UNAUTHORIZED,
+                            "invalid signature of access token");
+        }
+        catch (MalformedJwtException ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INVALID_TOKEN,
+                            HttpStatus.UNAUTHORIZED,
+                            "invalid format of access token");
+        }
+        catch (Exception ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                            ex.getMessage());
+        }
 
         Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) claims.get("roles", List.class).stream()
                 .map(role -> new SimpleGrantedAuthority((String) role))

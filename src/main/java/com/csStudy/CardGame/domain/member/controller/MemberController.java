@@ -2,16 +2,21 @@ package com.csStudy.CardGame.domain.member.controller;
 
 import com.csStudy.CardGame.domain.member.dto.*;
 import com.csStudy.CardGame.domain.refreshtoken.dto.RefreshTokenDto;
+import com.csStudy.CardGame.exception.ApiErrorEnums;
+import com.csStudy.CardGame.exception.ApiErrorException;
 import com.csStudy.CardGame.security.HashcodeProvider;
 import com.csStudy.CardGame.security.JwtTokenProvider;
 import com.csStudy.CardGame.security.SecurityUtil;
 import com.csStudy.CardGame.domain.member.service.MemberService;
 import com.csStudy.CardGame.domain.refreshtoken.service.RefreshTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -50,7 +55,7 @@ public class MemberController {
     @PostMapping("/authentication")
     public ResponseEntity<TokenResponse> authentication(@RequestBody LoginRequestForm form, HttpServletRequest request) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-
+        TokenResponse tokenResponse = null;
         try {
             // userName, password 로 인증
             UsernamePasswordAuthenticationToken authenticationToken =
@@ -79,16 +84,27 @@ public class MemberController {
             // redis 저장소에 refresh token 저장
             refreshTokenService.save(refreshTokenDto);
 
-            return ResponseEntity.ok()
-                    .body(TokenResponse.builder()
-                            .accessToken(tokens.get("accessToken"))
-                            .refreshTokenKey(refreshTokenDto.getId())
-                            .signaturePublicKey(tokens.get("publicKey"))
-                            .build());
+            tokenResponse = TokenResponse.builder()
+                    .accessToken(tokens.get("accessToken"))
+                    .refreshTokenKey(refreshTokenDto.getId())
+                    .signaturePublicKey(tokens.get("publicKey"))
+                    .build();
         }
-        catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        catch (BadCredentialsException ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INVALID_EMAIL_OR_PASSWORD,
+                            HttpStatus.UNAUTHORIZED,
+                            null);
         }
+        catch (Exception ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                            ex.getMessage());
+        }
+
+        return ResponseEntity.ok()
+                .body(tokenResponse);
     }
 
     @PostMapping("/refresh")
@@ -127,16 +143,35 @@ public class MemberController {
                                 .build());
             }
             catch (ExpiredJwtException ex) { // refresh token 만료시
-                // 403
-                throw new RuntimeException();
+                throw ApiErrorException
+                        .createException(ApiErrorEnums.EXPIRED_TOKEN,
+                                HttpStatus.UNAUTHORIZED,
+                                "access token expired");
+            }
+            catch (SignatureException ex) {
+                throw ApiErrorException
+                        .createException(ApiErrorEnums.INVALID_TOKEN,
+                                HttpStatus.UNAUTHORIZED,
+                                "invalid signature of access token");
+            }
+            catch (MalformedJwtException ex) {
+                throw ApiErrorException
+                        .createException(ApiErrorEnums.INVALID_TOKEN,
+                                HttpStatus.UNAUTHORIZED,
+                                "invalid format of access token");
             }
             catch (Exception ex) {
-                // 403
-                throw new RuntimeException();
+                throw ApiErrorException
+                        .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
+                                HttpStatus.INTERNAL_SERVER_ERROR,
+                                ex.getMessage());
             }
         }
         else {
-            throw new RuntimeException();
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                            "use refresh token from different ip/user-agent");
         }
     }
 
