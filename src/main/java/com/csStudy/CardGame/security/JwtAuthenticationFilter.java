@@ -41,15 +41,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 액세스 토큰이 존재할 경우
         if (accessToken.startsWith("Bearer ")) {
-            try {
-                Authentication authentication = jwtTokenProvider.getAuthentication(accessToken.split(" ")[1]);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (ExpiredJwtException accessTokenExpiredJwtException) { // 만료된 토큰일 경우
-                response.setStatus(HttpStatus.FORBIDDEN.value());
-            } catch (Exception exception) {   // 잘못된 토큰일 경우
-                response.setStatus(HttpStatus.FORBIDDEN.value());
-            }
+            jwtTokenProvider.authenticate(accessToken.split(" ")[1]);
         }
+
         filterChain.doFilter(request,response);
     }
 

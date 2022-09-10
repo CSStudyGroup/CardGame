@@ -4,10 +4,13 @@ package com.csStudy.CardGame.domain.category.entity;
 import com.csStudy.CardGame.domain.card.entity.Card;
 import com.csStudy.CardGame.domain.member.entity.Member;
 import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,21 +29,21 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "cnt", nullable = false)
-    @Builder.Default
+    // TODO: 2022-09-10 조회성 API 호출시에만 가져오도록 해야함
+    @Formula("(select count(*) from card c where c.category_id = id)")
     private Integer cardCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "owner_id",
-            nullable = false
+            name = "owner_id"
     )
     private Member owner;
 
+    // TODO: 2022-09-10 OneToMany 매핑시 paging 이슈에 대해 알아보기
     @OneToMany(mappedBy = "category")
     @Builder.Default
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Card> cards = new HashSet<>();
+    private List<Card> cards = new ArrayList<>();
 
     public void changeName(String name) {
         this.name = name;
@@ -51,16 +54,10 @@ public class Category {
     }
 
     public void addCard(Card card) {
-        if (!this.cards.contains(card)) {
-            this.cards.add(card);
-            this.cardCount += 1;
-        }
+        this.cards.add(card);
     }
 
     public void removeCard(Card card) {
-        if (this.cards.contains(card)) {
-            this.cards.remove(card);
-            this.cardCount -= 1;
-        }
+        this.cards.remove(card);
     }
 }

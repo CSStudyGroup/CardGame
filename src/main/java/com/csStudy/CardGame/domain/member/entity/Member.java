@@ -28,7 +28,7 @@ public class Member {
     @Column
     private String password;
 
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "member_role")
     @Column(name = "role")
     @Builder.Default

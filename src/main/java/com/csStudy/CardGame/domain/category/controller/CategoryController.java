@@ -2,7 +2,7 @@ package com.csStudy.CardGame.domain.category.controller;
 
 import com.csStudy.CardGame.domain.category.dto.NewCategory;
 import com.csStudy.CardGame.domain.category.dto.SimpleCategory;
-import com.csStudy.CardGame.domain.category.dto.CategoryDetail;
+import com.csStudy.CardGame.domain.category.dto.DetailCategory;
 import com.csStudy.CardGame.domain.category.service.CategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +51,7 @@ public class CategoryController {
 
     // 전체 카테고리 또는 선택된 카테고리 상세조회 리스트를 반환하는 API
     @GetMapping("/categories/detail")
-    public List<CategoryDetail> getCategoriesDetail(@RequestParam List<Long> selected) {
+    public List<DetailCategory> getCategoriesDetail(@RequestParam List<Long> selected) {
         if (selected == null) {
             return categoryService.getAllCategoriesDetail();
         }
@@ -62,7 +62,7 @@ public class CategoryController {
 
     // 특정 카테고리 상세 조회 API
     @GetMapping("/categories/detail/{cid}")
-    public CategoryDetail getCategoryDetail(@PathVariable Long cid) {
+    public DetailCategory getCategoryDetail(@PathVariable Long cid) {
         return categoryService.getCategoryDetailById(cid);
     }
 

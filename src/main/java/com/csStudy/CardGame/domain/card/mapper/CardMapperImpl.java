@@ -1,54 +1,35 @@
 package com.csStudy.CardGame.domain.card.mapper;
 
-import com.csStudy.CardGame.domain.card.dto.NewCard;
-import com.csStudy.CardGame.domain.card.dto.SimpleCard;
+import com.csStudy.CardGame.domain.card.dto.CardForm;
 import com.csStudy.CardGame.domain.card.entity.Card;
-import com.csStudy.CardGame.domain.card.dto.DetailCard;
-import com.csStudy.CardGame.domain.category.entity.Category;
+import com.csStudy.CardGame.domain.card.dto.CardDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CardMapperImpl implements CardMapper{
 
     @Override
-    public Card toEntity(NewCard newCard) {
+    public Card toEntity(CardForm cardForm) {
         return Card.builder()
-                .question(newCard.getQuestion())
-                .answer(newCard.getAnswer())
-                .tags(newCard.getTags())
+                .question(cardForm.getQuestion())
+                .answer(cardForm.getAnswer())
                 .build();
     }
 
     @Override
-    public DetailCard toDetailCard(Card card) {
+    public CardDto toDetailCard(Card card) {
         if (card == null) {
             return null;
         }
         else {
-            return DetailCard.builder()
+            return CardDto.builder()
                     .id(card.getId())
                     .question(card.getQuestion())
                     .answer(card.getAnswer())
-                    .tags(card.getTags())
-                    .cid(card.getCategory().getId())
-                    .cname(card.getCategory().getName())
+                    .categoryId(card.getCategory().getId())
                     .build();
         }
     }
 
-    @Override
-    public SimpleCard toSimpleCard(Card card) {
-        if (card == null) {
-            return null;
-        }
-        else {
-            return SimpleCard.builder()
-                    .id(card.getId())
-                    .question(card.getQuestion())
-                    .answer(card.getAnswer())
-                    .tags(card.getTags())
-                    .build();
-        }
-    }
 
 }

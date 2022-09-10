@@ -13,7 +13,6 @@ public class MemberMapperImpl implements MemberMapper {
                 .id(memberDto.getId())
                 .email(memberDto.getEmail())
                 .nickname(memberDto.getNickname())
-                .password(memberDto.getPassword())
                 .roles(memberDto.getRoles())
                 .build();
     }
@@ -24,7 +23,6 @@ public class MemberMapperImpl implements MemberMapper {
                 .id(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
-                .password(member.getPassword())
                 .roles(member.getRoles())
                 .build();
     }

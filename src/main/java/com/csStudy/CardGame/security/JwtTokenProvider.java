@@ -1,18 +1,27 @@
 package com.csStudy.CardGame.security;
 
+import antlr.Token;
 import com.csStudy.CardGame.domain.member.dto.MemberDetails;
+import com.csStudy.CardGame.domain.member.dto.TokenResponse;
+import com.csStudy.CardGame.domain.refreshtoken.dto.RefreshTokenDto;
+import com.csStudy.CardGame.domain.refreshtoken.service.RefreshTokenService;
 import com.csStudy.CardGame.exception.ApiErrorEnums;
 import com.csStudy.CardGame.exception.ApiErrorException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.KeyPair;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,8 +31,137 @@ public class JwtTokenProvider {
     private static final KeyPair keypair = Keys.keyPairFor(SignatureAlgorithm.RS256);
     private static final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L;
     private static final long REFRESH_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L;
+    private final UserDetailsService userDetailsService;
+    private final RefreshTokenService refreshTokenService;
+    private final AuthenticationManager authenticationManager;
+    private final HashcodeProvider hashcodeProvider;
+    private final SecurityUtil securityUtil;
 
-    public Map<String, String> generateTokens(MemberDetails memberDetails) {
+    public JwtTokenProvider(
+            UserDetailsService userDetailsService,
+            RefreshTokenService refreshTokenService,
+            AuthenticationManager authenticationManager,
+            HashcodeProvider hashcodeProvider,
+            SecurityUtil securityUtil
+    ) {
+        this.userDetailsService = userDetailsService;
+        this.refreshTokenService = refreshTokenService;
+        this.authenticationManager = authenticationManager;
+        this.hashcodeProvider = hashcodeProvider;
+        this.securityUtil = securityUtil;
+    }
+
+    public TokenResponse getTokensByUsernamePassword(String username, String password, HttpServletRequest request) {
+        TokenResponse tokenResponse = null;
+
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            username,
+                            password,
+                            null
+                    );
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+            // access token, refresh token 발급
+            Map<String, String> tokens = generateTokens((MemberDetails) authentication.getPrincipal());
+
+            // refresh token 의 id는 유저 이메일과 (유저 이메일 + 현재시간)을 해싱한 값을 이어붙여 생성
+            RefreshTokenDto refreshTokenDto =
+                    RefreshTokenDto.builder()
+                            .id(hashcodeProvider.generateHashcode(authentication.getName(), authentication.getName() + new Date()))
+                            .token(tokens.get("refreshToken"))
+                            .userEmail(authentication.getName())
+                            .userAgent(request.getHeader("User-Agent"))
+                            .userIp(securityUtil.getIp(request))
+                            .build();
+
+            // redis 저장소에 refresh token 저장
+            refreshTokenService.save(refreshTokenDto);
+
+            tokenResponse = TokenResponse.builder()
+                    .accessToken(tokens.get("accessToken"))
+                    .refreshTokenKey(refreshTokenDto.getId())
+                    .signaturePublicKey(tokens.get("publicKey"))
+                    .build();
+        }
+        catch (BadCredentialsException ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INVALID_EMAIL_OR_PASSWORD,
+                            HttpStatus.UNAUTHORIZED,
+                            null);
+        }
+        catch (Exception ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                            ex.getMessage());
+        }
+
+        return tokenResponse;
+    }
+
+    public TokenResponse refreshTokens(String refreshTokenKey, HttpServletRequest request) {
+        RefreshTokenDto refreshToken = refreshTokenService.findById(refreshTokenKey).orElseThrow(
+                () -> ApiErrorException.createException(
+                        ApiErrorEnums.RESOURCE_NOT_FOUND,
+                        HttpStatus.NOT_FOUND,
+                        null
+                )
+        );
+
+        Claims claims = getClaims(refreshToken.getToken());
+
+        // refresh token 에 저장된 user agent 정보와 ip 정보가 일치하는지 확인
+        if (refreshToken.getUserAgent().equals(request.getHeader("User-Agent"))
+                && refreshToken.getUserIp().equals(securityUtil.getIp(request))) {
+            MemberDetails memberDetails = (MemberDetails) userDetailsService.loadUserByUsername(
+                    claims.get("email", String.class)
+            );
+
+            // access token, refresh token 발급
+            Map<String, String> tokens = generateTokens(memberDetails);
+
+            // refresh token 의 id는 유저 이메일과 (유저 이메일 + 현재시간)을 해싱한 값을 이어붙여 생성
+            RefreshTokenDto refreshTokenDto =
+                    RefreshTokenDto.builder()
+                            .id(hashcodeProvider.generateHashcode(memberDetails.getEmail(), memberDetails.getEmail() + new Date()))
+                            .token(tokens.get("refreshToken"))
+                            .userEmail(memberDetails.getEmail())
+                            .userAgent(request.getHeader("User-Agent"))
+                            .userIp(securityUtil.getIp(request))
+                            .build();
+
+            // redis 저장소에 refresh token 저장
+            refreshTokenService.save(refreshTokenDto);
+
+            return TokenResponse.builder()
+                    .accessToken(tokens.get("accessToken"))
+                    .refreshTokenKey(refreshTokenDto.getId())
+                    .signaturePublicKey(tokens.get("publicKey"))
+                    .build();
+        }
+        else {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                            "use refresh token from different ip/user-agent");
+        }
+    }
+
+    public void authenticate(String jwtToken) {
+        Claims claims = getClaims(jwtToken);
+
+        MemberDetails memberDetails = (MemberDetails) userDetailsService.loadUserByUsername(claims.get("email", String.class));
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(
+                        memberDetails,
+                        null,
+                        memberDetails.getAuthorities()));
+    }
+
+    private Map<String, String> generateTokens(MemberDetails memberDetails) {
         Map<String, String> tokens = new HashMap<>();
         Claims claims = Jwts.claims().setSubject(memberDetails.getEmail());
         claims.put("id", memberDetails.getId());
@@ -32,9 +170,9 @@ public class JwtTokenProvider {
         claims.put("roles", memberDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
-        Date now = new Date();
 
         // Refresh Token 생성
+        Date now = new Date();
         String refreshToken = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -57,7 +195,7 @@ public class JwtTokenProvider {
         return tokens;
     }
 
-    public Authentication getAuthentication(String jwtToken) {
+    private Claims getClaims(String jwtToken) {
         Claims claims = null;
         try {
             claims = Jwts
@@ -91,23 +229,6 @@ public class JwtTokenProvider {
                             HttpStatus.INTERNAL_SERVER_ERROR,
                             ex.getMessage());
         }
-
-        Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) claims.get("roles", List.class).stream()
-                .map(role -> new SimpleGrantedAuthority((String) role))
-                .collect(Collectors.toSet());
-
-        MemberDetails memberDetails = MemberDetails.builder()
-                .id(UUID.fromString(claims.get("id", String.class)))
-                .nickname(claims.get("nickname", String.class))
-                .email(claims.get("email", String.class))
-                .authorities(authorities)
-                .build();
-
-        return new UsernamePasswordAuthenticationToken(
-                memberDetails,
-                null,
-                memberDetails.getAuthorities()
-        );
+        return claims;
     }
-
 }

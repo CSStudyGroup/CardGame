@@ -6,7 +6,10 @@ import com.csStudy.CardGame.domain.member.dto.MemberDto;
 import com.csStudy.CardGame.domain.member.dto.RegisterRequestForm;
 import com.csStudy.CardGame.domain.member.mapper.MemberMapper;
 import com.csStudy.CardGame.domain.member.repository.MemberRepository;
+import com.csStudy.CardGame.exception.ApiErrorEnums;
+import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,4 +51,12 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByEmailOrNickname(email, nickname);
     }
 
+    @Override
+    public MemberDto findMemberById(UUID memberId) {
+        return memberMapper.toDto(memberRepository.findById(memberId).orElseThrow(() -> ApiErrorException.createException(
+                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                HttpStatus.NOT_FOUND,
+                null
+        )));
+    }
 }
