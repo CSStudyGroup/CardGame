@@ -28,7 +28,7 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userEmail) {
-        return memberRepository.findByEmail(userEmail)
+        return memberRepository.findByEmailWithRole(userEmail)
                 .map((member) -> MemberDetails.builder()
                         .id(member.getId())
                         .nickname(member.getNickname())

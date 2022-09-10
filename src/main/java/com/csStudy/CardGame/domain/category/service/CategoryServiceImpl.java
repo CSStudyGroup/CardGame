@@ -1,17 +1,19 @@
 package com.csStudy.CardGame.domain.category.service;
 
-import com.csStudy.CardGame.domain.card.entity.Card;
 import com.csStudy.CardGame.domain.category.dto.NewCategory;
 import com.csStudy.CardGame.domain.category.entity.Category;
-import com.csStudy.CardGame.domain.category.dto.CategoryDetail;
+import com.csStudy.CardGame.domain.category.dto.DetailCategory;
 import com.csStudy.CardGame.domain.category.dto.SimpleCategory;
 import com.csStudy.CardGame.domain.card.mapper.CardMapper;
 import com.csStudy.CardGame.domain.category.mapper.CategoryMapper;
 import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
 import com.csStudy.CardGame.domain.member.entity.Member;
 import com.csStudy.CardGame.domain.member.repository.MemberRepository;
+import com.csStudy.CardGame.exception.ApiErrorEnums;
+import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -48,9 +50,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<CategoryDetail> getAllCategoriesDetail() {
+    public List<DetailCategory> getAllCategoriesDetail() {
         return categoryRepository.findDetailAll().stream()
-                .map((category) -> CategoryDetail.builder()
+                .map((category) -> DetailCategory.builder()
                             .id(category.getId())
                             .name(category.getName())
                             .cardCount(category.getCardCount())
@@ -71,9 +73,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<CategoryDetail> getSelectedCategoriesDetail(Collection<Long> categoryIdSet) {
+    public List<DetailCategory> getSelectedCategoriesDetail(Collection<Long> categoryIdSet) {
         return categoryRepository.findDetailByIdIn(categoryIdSet).stream()
-                .map((category) -> CategoryDetail.builder()
+                .map((category) -> DetailCategory.builder()
                             .id(category.getId())
                             .name(category.getName())
                             .cardCount(category.getCardCount())
@@ -93,9 +95,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDetail getCategoryDetailById(Long id) {
+    public DetailCategory getCategoryDetailById(Long id) {
         Category target = categoryRepository.findDetailOne(id).orElse(null);
-        return target == null ? null : CategoryDetail.builder()
+        return target == null ? null : DetailCategory.builder()
                 .id(target.getId())
                 .name(target.getName())
                 .cardCount(target.getCardCount())
@@ -139,7 +141,11 @@ public class CategoryServiceImpl implements CategoryService {
                         .getContext()
                         .getAuthentication()
                         .getName()
-        ).orElse(null);
+        ).orElseThrow(() -> ApiErrorException.createException(
+                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                HttpStatus.UNAUTHORIZED,
+                null
+        ));
         categoryRepository.saveAll(insertedCategoryList.stream()
                 .map((dto) -> {
                     Category newCategory = categoryMapper.toEntity(dto);

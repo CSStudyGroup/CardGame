@@ -1,19 +1,21 @@
 package com.csStudy.CardGame.domain.card.service;
 
-import com.csStudy.CardGame.domain.card.dto.NewCard;
+import com.csStudy.CardGame.domain.card.dto.CardForm;
 import com.csStudy.CardGame.domain.card.entity.Card;
 import com.csStudy.CardGame.domain.category.entity.Category;
-import com.csStudy.CardGame.domain.card.dto.DetailCard;
+import com.csStudy.CardGame.domain.card.dto.CardDto;
 import com.csStudy.CardGame.domain.card.mapper.CardMapper;
 import com.csStudy.CardGame.domain.card.repository.CardRepository;
 import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
+import com.csStudy.CardGame.exception.ApiErrorEnums;
+import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,20 +36,22 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public List<DetailCard> getAllCards() {
+    public List<CardDto> getAllCards() {
         return cardRepository.findAll().stream()
                 .map(cardMapper::toDetailCard)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<DetailCard> findCardById(Long id) {
-        return cardRepository.findById(id).map(cardMapper::toDetailCard);
+    public CardDto findCardById(Long id) {
+        return cardMapper.toDetailCard(cardRepository.findById(id).orElseThrow(() ->
+                ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null)
+        ));
     }
 
     @Override
     @Transactional
-    public List<DetailCard> findCardsByCategories(Collection<Long> categoryIdList) {
+    public List<CardDto> findCardsByCategories(Collection<Long> categoryIdList) {
         return cardRepository.findByCategory_IdIn(categoryIdList).stream()
                 .map(cardMapper::toDetailCard)
                 .collect(Collectors.toList());
@@ -55,15 +59,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public List<DetailCard> findCardsByCategoryName(String keyword) {
-        return cardRepository.findByCategory_NameContaining(keyword).stream()
-                .map(cardMapper::toDetailCard)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public List<DetailCard> findCardsByQuestion(String keyword) {
+    public List<CardDto> findCardsByQuestion(String keyword) {
         return cardRepository.findByQuestionContaining(keyword).stream()
                 .map(cardMapper::toDetailCard)
                 .collect(Collectors.toList());
@@ -71,42 +67,43 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public List<DetailCard> findCardsByTags(String keyword) {
-        return cardRepository.findByTagsContaining(keyword).stream()
-                .map(cardMapper::toDetailCard)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public DetailCard addCard(NewCard newCard) {
+    public CardDto addCard(CardForm cardForm) {
         // 추가할 카드의 카테고리(Category)와 저자(Member) 조회
-        Category category = categoryRepository.findById(newCard.getCategoryId()).orElse(null);
-        Card insertedCard = cardMapper.toEntity(newCard);
+        Category category = categoryRepository.findById(cardForm.getCategoryId()).orElseThrow(() ->
+                ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null)
+        );
+        Card insertedCard = cardMapper.toEntity(cardForm);
+        System.out.println(category.getCardCount());
         insertedCard.changeCategory(category);
-
+        System.out.println(category.getCardCount());
         return cardMapper.toDetailCard(cardRepository.save(insertedCard));
     }
 
     @Override
     @Transactional
-    public void editCard(DetailCard detailCard) {
-        cardRepository.findById(detailCard.getId())
-                .ifPresent((target) -> {
-                    target.changeQuestion(detailCard.getQuestion());
-                    target.changeAnswer(detailCard.getAnswer());
-                    target.changeTags(detailCard.getTags());
-                    if (!target.getCategory().getId().equals(detailCard.getCid())) {
-                        categoryRepository.findById(detailCard.getCid())
-                                .ifPresent(target::changeCategory);
-                    }
-                });
+    public void editCard(CardDto cardDto) {
+        cardRepository.findById(cardDto.getId())
+                .ifPresentOrElse(
+                        (target) -> {
+                            target.changeQuestion(cardDto.getQuestion());
+                            target.changeAnswer(cardDto.getAnswer());
+                            if (!target.getCategory().getId().equals(cardDto.getCategoryId())) {
+                                categoryRepository.findById(cardDto.getCategoryId())
+                                        .ifPresent(target::changeCategory);
+                            }},
+                        () -> {
+                            throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+                        });
     }
 
     @Override
     @Transactional
     public void deleteCard(Long cardId) {
         cardRepository.findById(cardId)
-                .ifPresent(cardRepository::delete);
+                .ifPresentOrElse(
+                        cardRepository::delete,
+                        () -> {
+                            throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+                        });
     }
 }

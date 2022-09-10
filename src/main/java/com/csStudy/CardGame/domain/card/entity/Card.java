@@ -2,9 +2,11 @@ package com.csStudy.CardGame.domain.card.entity;
 
 
 import com.csStudy.CardGame.domain.category.entity.Category;
+import com.csStudy.CardGame.domain.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Cacheable
@@ -23,8 +25,11 @@ public class Card {
     @Column(name = "answer", nullable = false, columnDefinition = "TEXT")
     private String answer;
 
-    @Column(name = "tags")
-    private String tags;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "owner_id"
+    )
+    private Member owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -38,7 +43,6 @@ public class Card {
         this.id = id;
         this.question = question;
         this.answer = answer;
-        this.tags = tags;
     }
 
     public void changeQuestion(String question) {
@@ -47,10 +51,6 @@ public class Card {
 
     public void changeAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public void changeTags(String tags) {
-        this.tags = tags;
     }
 
     public void changeCategory(Category category) {

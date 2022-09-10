@@ -15,6 +15,5 @@ public class MemberDto {
     private UUID id;
     private String email;
     private String nickname;
-    private String password;
     Set<Role> roles;
 }
