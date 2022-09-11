@@ -1,12 +1,17 @@
 package com.csStudy.CardGame.domain.card.controller;
 
 import com.csStudy.CardGame.domain.card.dto.CardDto;
-import com.csStudy.CardGame.domain.card.dto.CardForm;
+import com.csStudy.CardGame.domain.card.dto.NewCardForm;
 import com.csStudy.CardGame.domain.card.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 /* 카드 관련 API */
 @RestController
@@ -22,9 +27,14 @@ public class CardController {
     // 카드 추가
     @PostMapping("/cards")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<?> addCard(@RequestBody CardForm cardForm){
-        CardDto addedCard = cardService.addCard(cardForm);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> addCard(@RequestBody NewCardForm newCardForm){
+        CardDto addedCard = cardService.addCard(newCardForm);
+        URI location = ServletUriComponentsBuilder
+                .fromUriString("/cards")
+                .path("/{id}")
+                .buildAndExpand(addedCard.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(null);
     }
 
     // 카드 수정
@@ -41,4 +51,14 @@ public class CardController {
         cardService.deleteCard(id);
     }
 
+    // 카드 조회
+    @GetMapping("/cards")
+    public ResponseEntity<List<CardDto>> getCards(
+            @RequestParam Long cid,
+            Pageable pageable
+    ) {
+        return ResponseEntity
+                .ok()
+                .body(cardService.findCardsByCategory(cid, pageable));
+    }
 }

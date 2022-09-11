@@ -10,22 +10,24 @@ import org.springframework.http.HttpStatus;
 @Setter
 public class ApiErrorException extends RuntimeException {
     private HttpStatus status;
-    private String     errorName   ;
-    private int        errorCode   ;
-    private String     errorMessage;
+    private String errorName;
+    private int errorCode;
+    private String errorMessage;
+    private String errorReason;
 
     // constructors
-    public ApiErrorException(ApiError error, HttpStatus status){
+    private ApiErrorException(ApiError error, HttpStatus status, String errorReason){
         this.status = status;
         this.errorCode = error.getErrorCode();
         this.errorName = error.getErrorName();
         this.errorMessage = error.getErrorMessage();
+        this.errorReason = errorReason;
     }
 
     // raise utility functions
-    public static ApiErrorException createException(ApiError error, HttpStatus status, String logMessage) {
+    public static ApiErrorException createException(ApiError errorType, HttpStatus httpStatus, String errorReason, String logMessage) {
         if (logMessage != null)
             log.info(logMessage);
-        return new ApiErrorException(error, status);
+        return new ApiErrorException(errorType, httpStatus, errorReason);
     }
 }

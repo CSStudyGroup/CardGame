@@ -1,21 +1,17 @@
 package com.csStudy.CardGame.security;
-
-import antlr.Token;
 import com.csStudy.CardGame.domain.member.dto.MemberDetails;
 import com.csStudy.CardGame.domain.member.dto.TokenResponse;
 import com.csStudy.CardGame.domain.refreshtoken.dto.RefreshTokenDto;
 import com.csStudy.CardGame.domain.refreshtoken.service.RefreshTokenService;
 import com.csStudy.CardGame.exception.ApiErrorEnums;
 import com.csStudy.CardGame.exception.ApiErrorException;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,45 +29,34 @@ public class JwtTokenProvider {
     private static final long REFRESH_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L;
     private final UserDetailsService userDetailsService;
     private final RefreshTokenService refreshTokenService;
-    private final AuthenticationManager authenticationManager;
     private final HashcodeProvider hashcodeProvider;
     private final SecurityUtil securityUtil;
 
     public JwtTokenProvider(
             UserDetailsService userDetailsService,
             RefreshTokenService refreshTokenService,
-            AuthenticationManager authenticationManager,
             HashcodeProvider hashcodeProvider,
             SecurityUtil securityUtil
     ) {
         this.userDetailsService = userDetailsService;
         this.refreshTokenService = refreshTokenService;
-        this.authenticationManager = authenticationManager;
         this.hashcodeProvider = hashcodeProvider;
         this.securityUtil = securityUtil;
     }
 
-    public TokenResponse getTokensByUsernamePassword(String username, String password, HttpServletRequest request) {
+    public TokenResponse getTokenSet(MemberDetails memberDetails, HttpServletRequest request) {
         TokenResponse tokenResponse = null;
 
         try {
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            password,
-                            null
-                    );
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
             // access token, refresh token 발급
-            Map<String, String> tokens = generateTokens((MemberDetails) authentication.getPrincipal());
+            Map<String, String> tokens = generateTokens(memberDetails);
 
             // refresh token 의 id는 유저 이메일과 (유저 이메일 + 현재시간)을 해싱한 값을 이어붙여 생성
             RefreshTokenDto refreshTokenDto =
                     RefreshTokenDto.builder()
-                            .id(hashcodeProvider.generateHashcode(authentication.getName(), authentication.getName() + new Date()))
+                            .id(hashcodeProvider.generateHashcode(memberDetails.getEmail(), memberDetails.getEmail() + new Date()))
                             .token(tokens.get("refreshToken"))
-                            .userEmail(authentication.getName())
+                            .userEmail(memberDetails.getEmail())
                             .userAgent(request.getHeader("User-Agent"))
                             .userIp(securityUtil.getIp(request))
                             .build();
@@ -89,12 +74,14 @@ public class JwtTokenProvider {
             throw ApiErrorException
                     .createException(ApiErrorEnums.INVALID_EMAIL_OR_PASSWORD,
                             HttpStatus.UNAUTHORIZED,
+                            null,
                             null);
         }
         catch (Exception ex) {
             throw ApiErrorException
                     .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
                             HttpStatus.INTERNAL_SERVER_ERROR,
+                            null,
                             ex.getMessage());
         }
 
@@ -106,6 +93,7 @@ public class JwtTokenProvider {
                 () -> ApiErrorException.createException(
                         ApiErrorEnums.RESOURCE_NOT_FOUND,
                         HttpStatus.NOT_FOUND,
+                        null,
                         null
                 )
         );
@@ -145,6 +133,7 @@ public class JwtTokenProvider {
             throw ApiErrorException
                     .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
                             HttpStatus.INTERNAL_SERVER_ERROR,
+                            null,
                             "use refresh token from different ip/user-agent");
         }
     }
@@ -209,24 +198,28 @@ public class JwtTokenProvider {
             throw ApiErrorException
                     .createException(ApiErrorEnums.EXPIRED_TOKEN,
                             HttpStatus.UNAUTHORIZED,
+                            null,
                             "access token expired");
         }
         catch (SignatureException ex) {
             throw ApiErrorException
                     .createException(ApiErrorEnums.INVALID_TOKEN,
                             HttpStatus.UNAUTHORIZED,
+                            null,
                             "invalid signature of access token");
         }
         catch (MalformedJwtException ex) {
             throw ApiErrorException
                     .createException(ApiErrorEnums.INVALID_TOKEN,
                             HttpStatus.UNAUTHORIZED,
+                            null,
                             "invalid format of access token");
         }
         catch (Exception ex) {
             throw ApiErrorException
                     .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
                             HttpStatus.INTERNAL_SERVER_ERROR,
+                            null,
                             ex.getMessage());
         }
         return claims;

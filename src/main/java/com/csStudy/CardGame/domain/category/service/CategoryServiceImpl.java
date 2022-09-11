@@ -1,9 +1,9 @@
 package com.csStudy.CardGame.domain.category.service;
 
-import com.csStudy.CardGame.domain.category.dto.NewCategory;
+import com.csStudy.CardGame.domain.category.dto.NewCategoryForm;
 import com.csStudy.CardGame.domain.category.entity.Category;
-import com.csStudy.CardGame.domain.category.dto.DetailCategory;
-import com.csStudy.CardGame.domain.category.dto.SimpleCategory;
+import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithOwnerInfo;
+import com.csStudy.CardGame.domain.category.dto.CategoryDto;
 import com.csStudy.CardGame.domain.card.mapper.CardMapper;
 import com.csStudy.CardGame.domain.category.mapper.CategoryMapper;
 import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
@@ -42,76 +42,69 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<SimpleCategory> getAllCategories() {
+    public List<CategoryDto> getAllCategories() {
         return categoryRepository.findAll().stream()
-                .map(categoryMapper::toSimpleCategory)
+                .map(categoryMapper::toCategoryDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<DetailCategory> getAllCategoriesDetail() {
+    public List<CategoryDtoWithOwnerInfo> getAllCategoriesDetail() {
         return categoryRepository.findDetailAll().stream()
-                .map((category) -> DetailCategory.builder()
-                            .id(category.getId())
-                            .name(category.getName())
-                            .cardCount(category.getCardCount())
-                            .cards(category.getCards().stream()
-                                    .map(cardMapper::toDetailCard)
-                                    .collect(Collectors.toList()))
-                            .build())
+                .map(categoryMapper::toCategoryDtoWithOwnerInfo)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<SimpleCategory> getSelectedCategories(Collection<Long> categoryIdSet) {
+    public List<CategoryDto> getSelectedCategories(Collection<Long> categoryIdSet) {
         return categoryRepository.findByIdIn(categoryIdSet).stream()
-                .map(categoryMapper::toSimpleCategory)
+                .map(categoryMapper::toCategoryDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<DetailCategory> getSelectedCategoriesDetail(Collection<Long> categoryIdSet) {
+    public List<CategoryDtoWithOwnerInfo> getSelectedCategoriesDetail(Collection<Long> categoryIdSet) {
         return categoryRepository.findDetailByIdIn(categoryIdSet).stream()
-                .map((category) -> DetailCategory.builder()
-                            .id(category.getId())
-                            .name(category.getName())
-                            .cardCount(category.getCardCount())
-                            .cards(category.getCards().stream()
-                                    .map(cardMapper::toDetailCard)
-                                    .collect(Collectors.toList()))
-                            .build())
+                .map(categoryMapper::toCategoryDtoWithOwnerInfo)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public SimpleCategory getCategoryById(Long id) {
-        Category target = categoryRepository.findById(id).orElse(null);
-        return target == null ? null : categoryMapper.toSimpleCategory(target);
+    public CategoryDto getCategoryById(Long id) {
+        Category target = categoryRepository.findById(id).orElseThrow(
+                () -> ApiErrorException.createException(
+                        ApiErrorEnums.RESOURCE_NOT_FOUND,
+                        HttpStatus.NOT_FOUND,
+                        null,
+                        null
+                )
+        );
+        return categoryMapper.toCategoryDto(target);
     }
 
     @Override
     @Transactional
-    public DetailCategory getCategoryDetailById(Long id) {
-        Category target = categoryRepository.findDetailOne(id).orElse(null);
-        return target == null ? null : DetailCategory.builder()
-                .id(target.getId())
-                .name(target.getName())
-                .cardCount(target.getCardCount())
-                .cards(target.getCards().stream()
-                        .map(cardMapper::toDetailCard)
-                        .collect(Collectors.toList()))
-                .build();
+    public CategoryDtoWithOwnerInfo getCategoryDetailById(Long id) {
+        Category target = categoryRepository.findDetailOne(id).orElseThrow(
+                () -> ApiErrorException.createException(
+                        ApiErrorEnums.RESOURCE_NOT_FOUND,
+                        HttpStatus.NOT_FOUND,
+                        null,
+                        null
+                )
+        );
+        return categoryMapper.toCategoryDtoWithOwnerInfo(target);
     }
 
     // 카테고리 변경사항 전체반영
     // 예외처리 필요
     @CacheEvict(value = "categoryList", allEntries = true)
     @Transactional
-    public boolean changeCategories(List<NewCategory> insertedList, List<SimpleCategory> updatedList, Set<Long> deletedList) {
+    public boolean changeCategories(List<NewCategoryForm> insertedList, List<CategoryDto> updatedList, Set<Long> deletedList) {
 
         /* 삭제리스트 처리 */
         if (!deletedList.isEmpty()) {
@@ -132,7 +125,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     // 카테고리 여러개 추가
-    private boolean insertCategories(List<NewCategory> insertedCategoryList) {
+    private boolean insertCategories(List<NewCategoryForm> insertedCategoryList) {
         if (insertedCategoryList.isEmpty()) {
             return false;
         }
@@ -142,8 +135,9 @@ public class CategoryServiceImpl implements CategoryService {
                         .getAuthentication()
                         .getName()
         ).orElseThrow(() -> ApiErrorException.createException(
-                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                ApiErrorEnums.INVALID_ACCESS,
                 HttpStatus.UNAUTHORIZED,
+                null,
                 null
         ));
         categoryRepository.saveAll(insertedCategoryList.stream()
@@ -157,19 +151,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     // 카테고리 여러개 수정
-    private boolean updateCategories(List<SimpleCategory> updatedCategoryList) {
+    private boolean updateCategories(List<CategoryDto> updatedCategoryList) {
         // 예외처리 필요
         if (updatedCategoryList.isEmpty()) {
             return false;
         }
         Map<Long, Category> targets = new HashMap<>();
         categoryRepository.findByIdIn(updatedCategoryList.stream()
-                .map(SimpleCategory::getId)
+                .map(CategoryDto::getId)
                 .collect(Collectors.toList()))
                 .forEach((category) -> targets.put(category.getId(), category));
-        for (SimpleCategory simpleCategory : updatedCategoryList) {
-            if (targets.containsKey(simpleCategory.getId())) {
-                targets.get(simpleCategory.getId()).changeName(simpleCategory.getName());
+        for (CategoryDto categoryDto : updatedCategoryList) {
+            if (targets.containsKey(categoryDto.getId())) {
+                targets.get(categoryDto.getId()).changeName(categoryDto.getName());
             }
         }
         return true;

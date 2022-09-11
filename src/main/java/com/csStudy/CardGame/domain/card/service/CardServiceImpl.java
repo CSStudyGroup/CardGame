@@ -1,6 +1,6 @@
 package com.csStudy.CardGame.domain.card.service;
 
-import com.csStudy.CardGame.domain.card.dto.CardForm;
+import com.csStudy.CardGame.domain.card.dto.NewCardForm;
 import com.csStudy.CardGame.domain.card.entity.Card;
 import com.csStudy.CardGame.domain.category.entity.Category;
 import com.csStudy.CardGame.domain.card.dto.CardDto;
@@ -10,11 +10,11 @@ import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
 import com.csStudy.CardGame.exception.ApiErrorEnums;
 import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,14 +45,14 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDto findCardById(Long id) {
         return cardMapper.toDetailCard(cardRepository.findById(id).orElseThrow(() ->
-                ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null)
+                ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null, null)
         ));
     }
 
     @Override
     @Transactional
-    public List<CardDto> findCardsByCategories(Collection<Long> categoryIdList) {
-        return cardRepository.findByCategory_IdIn(categoryIdList).stream()
+    public List<CardDto> findCardsByCategory(Long categoryId, Pageable pageable) {
+        return cardRepository.findByCategory_IdOrderByIdAsc(categoryId, pageable).stream()
                 .map(cardMapper::toDetailCard)
                 .collect(Collectors.toList());
     }
@@ -67,15 +67,17 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public CardDto addCard(CardForm cardForm) {
-        // 추가할 카드의 카테고리(Category)와 저자(Member) 조회
-        Category category = categoryRepository.findById(cardForm.getCategoryId()).orElseThrow(() ->
-                ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null)
+    public CardDto addCard(NewCardForm newCardForm) {
+        // 추가할 카드의 카테고리(Category) 조회
+        Category category = categoryRepository.findById(newCardForm.getCategoryId()).orElseThrow(() ->
+                ApiErrorException.createException(
+                        ApiErrorEnums.RESOURCE_NOT_FOUND,
+                        HttpStatus.NOT_FOUND,
+                        "존재하지 않는 카테고리입니다.",
+                        null)
         );
-        Card insertedCard = cardMapper.toEntity(cardForm);
-        System.out.println(category.getCardCount());
+        Card insertedCard = cardMapper.toEntity(newCardForm);
         insertedCard.changeCategory(category);
-        System.out.println(category.getCardCount());
         return cardMapper.toDetailCard(cardRepository.save(insertedCard));
     }
 
@@ -92,7 +94,7 @@ public class CardServiceImpl implements CardService {
                                         .ifPresent(target::changeCategory);
                             }},
                         () -> {
-                            throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+                            throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null, null);
                         });
     }
 
@@ -103,7 +105,7 @@ public class CardServiceImpl implements CardService {
                 .ifPresentOrElse(
                         cardRepository::delete,
                         () -> {
-                            throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+                            throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null, null);
                         });
     }
 }

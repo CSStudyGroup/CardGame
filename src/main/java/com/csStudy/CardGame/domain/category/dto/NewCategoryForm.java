@@ -4,14 +4,10 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SimpleCategory {
-
-    private Long id;
-
+@Builder
+public class NewCategoryForm {
     private String name;
-
     private int cardCount;
 }

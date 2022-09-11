@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CardForm {
+public class NewCardForm {
 
     private String question;
 

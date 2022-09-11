@@ -56,6 +56,7 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.toDto(memberRepository.findById(memberId).orElseThrow(() -> ApiErrorException.createException(
                 ApiErrorEnums.RESOURCE_NOT_FOUND,
                 HttpStatus.NOT_FOUND,
+                null,
                 null
         )));
     }
