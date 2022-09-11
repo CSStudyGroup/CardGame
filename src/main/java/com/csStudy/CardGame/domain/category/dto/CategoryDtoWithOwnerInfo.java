@@ -1,23 +1,22 @@
 package com.csStudy.CardGame.domain.category.dto;
 
-import com.csStudy.CardGame.domain.card.dto.CardDto;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Getter
-public class DetailCategory {
+public class CategoryDtoWithOwnerInfo {
     private Long id;
 
     private String name;
 
     private int cardCount;
 
-    private Long ownerId;
+    private UUID ownerId;
 
-    private String ownerName;
+    private String ownerNickname;
 
-    private List<CardDto> cards;
+    private String ownerEmail;
 }

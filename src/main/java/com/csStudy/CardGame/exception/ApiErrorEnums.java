@@ -14,6 +14,7 @@ public enum ApiErrorEnums implements ApiError{
     INVALID_EMAIL_OR_PASSWORD(4005, "INVALID_EMAIL_OR_PASSWORD", "등록되지 않은 이메일 또는 잘못된 패스워드입니다."),
     EXPIRED_TOKEN(4006, "EXPIRED_TOKEN", "만료된 토큰입니다."),
     INVALID_TOKEN(4007, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
+    INVALID_ACCESS(4008, "INVALID_ACCESS", "잘못된 접근입니다."),
     INTERNAL_SERVER_ERROR(5000,"INTERNAL_SERVER_ERROR","서버 에러입니다.");
 
     private final int errorCode;

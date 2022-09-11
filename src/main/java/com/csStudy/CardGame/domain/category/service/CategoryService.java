@@ -1,8 +1,8 @@
 package com.csStudy.CardGame.domain.category.service;
 
-import com.csStudy.CardGame.domain.category.dto.DetailCategory;
-import com.csStudy.CardGame.domain.category.dto.NewCategory;
-import com.csStudy.CardGame.domain.category.dto.SimpleCategory;
+import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithOwnerInfo;
+import com.csStudy.CardGame.domain.category.dto.NewCategoryForm;
+import com.csStudy.CardGame.domain.category.dto.CategoryDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,23 +11,23 @@ import java.util.Set;
 public interface CategoryService {
     /* 조회 */
     // 모든 카테고리 조회
-    List<SimpleCategory> getAllCategories();
+    List<CategoryDto> getAllCategories();
 
     // 모든 카테고리 상세 조회
-    List<DetailCategory> getAllCategoriesDetail();
+    List<CategoryDtoWithOwnerInfo> getAllCategoriesDetail();
 
     // 선택된 카테고리 조회
-    List<SimpleCategory> getSelectedCategories(Collection<Long> categoryIdSet);
+    List<CategoryDto> getSelectedCategories(Collection<Long> categoryIdSet);
 
     // 선택된 카테고리 상세 조회
-    List<DetailCategory> getSelectedCategoriesDetail(Collection<Long> categoryIdSet);
+    List<CategoryDtoWithOwnerInfo> getSelectedCategoriesDetail(Collection<Long> categoryIdSet);
 
     // 특정 카테고리 조회
-    SimpleCategory getCategoryById(Long id);
+    CategoryDto getCategoryById(Long id);
 
     // 특정 카테고리 상세조회
-    DetailCategory getCategoryDetailById(Long id);
+    CategoryDtoWithOwnerInfo getCategoryDetailById(Long id);
 
     // 카테고리 변경사항(추가, 수정, 삭제) 반영
-    boolean changeCategories(List<NewCategory> insertedList, List<SimpleCategory> updatedList, Set<Long> deletedList);
+    boolean changeCategories(List<NewCategoryForm> insertedList, List<CategoryDto> updatedList, Set<Long> deletedList);
 }

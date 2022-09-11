@@ -39,25 +39,11 @@ public class Category {
     )
     private Member owner;
 
-    // TODO: 2022-09-10 OneToMany 매핑시 paging 이슈에 대해 알아보기
-    @OneToMany(mappedBy = "category")
-    @Builder.Default
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<Card> cards = new ArrayList<>();
-
     public void changeName(String name) {
         this.name = name;
     }
 
     public void changeOwner(Member owner) {
         this.owner = owner;
-    }
-
-    public void addCard(Card card) {
-        this.cards.add(card);
-    }
-
-    public void removeCard(Card card) {
-        this.cards.remove(card);
     }
 }

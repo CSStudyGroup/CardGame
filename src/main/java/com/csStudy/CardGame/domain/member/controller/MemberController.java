@@ -32,24 +32,51 @@ import java.util.Map;
 @RestController
 public class MemberController {
     private final MemberService memberService;
+    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public MemberController(MemberService memberService,
-                            JwtTokenProvider jwtTokenProvider) {
+    public MemberController(
+            MemberService memberService,
+            AuthenticationManager authenticationManager,
+            JwtTokenProvider jwtTokenProvider
+    ) {
         this.memberService = memberService;
+        this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/authentication")
     public ResponseEntity<TokenResponse> authentication(@RequestBody LoginRequestForm form, HttpServletRequest request) {
+        MemberDetails memberDetails = null;
+
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            form.getUserEmail(),
+                            form.getPassword(),
+                            null
+                    );
+
+            memberDetails = (MemberDetails) authenticationManager.authenticate(authenticationToken).getPrincipal();
+        }
+        catch (BadCredentialsException ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INVALID_EMAIL_OR_PASSWORD,
+                            HttpStatus.UNAUTHORIZED,
+                            null,
+                            null);
+        }
+        catch (Exception ex) {
+            throw ApiErrorException
+                    .createException(ApiErrorEnums.INTERNAL_SERVER_ERROR,
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                            null,
+                            ex.getMessage());
+        }
 
         return ResponseEntity.ok()
-                .body(jwtTokenProvider.getTokensByUsernamePassword(
-                        form.getUserEmail(),
-                        form.getPassword(),
-                        request
-                ));
+                .body(jwtTokenProvider.getTokenSet(memberDetails, request));
     }
 
     @PostMapping("/refresh")

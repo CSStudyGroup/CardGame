@@ -1,6 +1,6 @@
 package com.csStudy.CardGame.domain.card.mapper;
 
-import com.csStudy.CardGame.domain.card.dto.CardForm;
+import com.csStudy.CardGame.domain.card.dto.NewCardForm;
 import com.csStudy.CardGame.domain.card.entity.Card;
 import com.csStudy.CardGame.domain.card.dto.CardDto;
 import org.springframework.stereotype.Component;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 public class CardMapperImpl implements CardMapper{
 
     @Override
-    public Card toEntity(CardForm cardForm) {
+    public Card toEntity(NewCardForm newCardForm) {
         return Card.builder()
-                .question(cardForm.getQuestion())
-                .answer(cardForm.getAnswer())
+                .question(newCardForm.getQuestion())
+                .answer(newCardForm.getAnswer())
                 .build();
     }
 

@@ -1,8 +1,8 @@
 package com.csStudy.CardGame.domain.category.controller;
 
-import com.csStudy.CardGame.domain.category.dto.NewCategory;
-import com.csStudy.CardGame.domain.category.dto.SimpleCategory;
-import com.csStudy.CardGame.domain.category.dto.DetailCategory;
+import com.csStudy.CardGame.domain.category.dto.NewCategoryForm;
+import com.csStudy.CardGame.domain.category.dto.CategoryDto;
+import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithOwnerInfo;
 import com.csStudy.CardGame.domain.category.service.CategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +34,7 @@ public class CategoryController {
 
     // 전체 카테고리 또는 선택된 카테고리 리스트를 반환하는 API
     @GetMapping("/categories")
-    public ResponseEntity<List<SimpleCategory>> getCategories(@RequestParam(required = false) List<Long> selected) {
+    public ResponseEntity<List<CategoryDto>> getCategories(@RequestParam(required = false) List<Long> selected) {
         if (selected == null) {
             return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
         }
@@ -45,13 +45,13 @@ public class CategoryController {
 
     // 특정 카테고리를 반환하는 API
     @GetMapping("/categories/{cid}")
-    public SimpleCategory getCategory(@PathVariable Long cid) {
+    public CategoryDto getCategory(@PathVariable Long cid) {
         return categoryService.getCategoryById(cid);
     }
 
     // 전체 카테고리 또는 선택된 카테고리 상세조회 리스트를 반환하는 API
     @GetMapping("/categories/detail")
-    public List<DetailCategory> getCategoriesDetail(@RequestParam List<Long> selected) {
+    public List<CategoryDtoWithOwnerInfo> getCategoriesDetail(@RequestParam List<Long> selected) {
         if (selected == null) {
             return categoryService.getAllCategoriesDetail();
         }
@@ -62,7 +62,7 @@ public class CategoryController {
 
     // 특정 카테고리 상세 조회 API
     @GetMapping("/categories/detail/{cid}")
-    public DetailCategory getCategoryDetail(@PathVariable Long cid) {
+    public CategoryDtoWithOwnerInfo getCategoryDetail(@PathVariable Long cid) {
         return categoryService.getCategoryDetailById(cid);
     }
 
@@ -74,18 +74,18 @@ public class CategoryController {
         ObjectMapper mapper = new ObjectMapper();
 
         // 추가
-        List<NewCategory> insertedCategoryList = new ArrayList<>();
+        List<NewCategoryForm> insertedCategoryList = new ArrayList<>();
         JSONArray insertList = jObject.getJSONArray("insert");
         for (Object o: insertList) {
-            NewCategory newCategory = mapper.readValue(o.toString(), NewCategory.class);
-            insertedCategoryList.add(newCategory);
+            NewCategoryForm newCategoryForm = mapper.readValue(o.toString(), NewCategoryForm.class);
+            insertedCategoryList.add(newCategoryForm);
         }
 
         // 수정
-        List<SimpleCategory> updatedCategoryList = new ArrayList<>();
+        List<CategoryDto> updatedCategoryList = new ArrayList<>();
         JSONArray updateList = jObject.getJSONArray("update");
         for (Object o: updateList) {
-            SimpleCategory dto = mapper.readValue(o.toString(), SimpleCategory.class);
+            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
             updatedCategoryList.add(dto);
         }
 
@@ -93,7 +93,7 @@ public class CategoryController {
         Set<Long> deletedCategorySet = new HashSet<>();
         JSONArray deleteList = jObject.getJSONArray("delete");
         for (Object o: deleteList) {
-            SimpleCategory dto = mapper.readValue(o.toString(), SimpleCategory.class);
+            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
             deletedCategorySet.add(dto.getId());
         }
 
