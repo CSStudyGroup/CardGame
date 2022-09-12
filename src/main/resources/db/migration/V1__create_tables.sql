@@ -7,14 +7,14 @@ create table card (
 
 CREATE TABLE category (
     id BIGINT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
     owner_id VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE member (
     id VARCHAR(255) PRIMARY KEY,
     email VARCHAR(50) NOT NULL UNIQUE,
-    nickname VARCHAR(20) NOT NULL,
+    nickname VARCHAR(20) NOT NULL UNIQUE,
     password VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 

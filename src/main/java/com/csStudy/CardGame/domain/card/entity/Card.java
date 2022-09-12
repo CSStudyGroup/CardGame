@@ -9,7 +9,9 @@ import javax.persistence.*;
 @Entity
 @Cacheable
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Card {
 
     @Id
@@ -29,13 +31,6 @@ public class Card {
             nullable = false
     )
     private Category category;
-
-    @Builder
-    private Card(Long id, String question, String answer, String tags) {
-        this.id = id;
-        this.question = question;
-        this.answer = answer;
-    }
 
     public void changeQuestion(String question) {
         this.question = question;

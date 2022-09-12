@@ -9,15 +9,7 @@ import org.springframework.stereotype.Component;
 public class CardMapperImpl implements CardMapper{
 
     @Override
-    public Card toEntity(NewCardForm newCardForm) {
-        return Card.builder()
-                .question(newCardForm.getQuestion())
-                .answer(newCardForm.getAnswer())
-                .build();
-    }
-
-    @Override
-    public CardDto toDetailCard(Card card) {
+    public CardDto toCardDto(Card card) {
         if (card == null) {
             return null;
         }

@@ -29,12 +29,16 @@ public class CardController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Void> addCard(@RequestBody NewCardForm newCardForm){
         CardDto addedCard = cardService.addCard(newCardForm);
+
         URI location = ServletUriComponentsBuilder
                 .fromUriString("/cards")
                 .path("/{id}")
                 .buildAndExpand(addedCard.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(null);
+
+        return ResponseEntity
+                .created(location)
+                .build();
     }
 
     // 카드 수정

@@ -30,4 +30,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("select c from Category c")
     List<Category> findDetailAll();
 
+
+    //================
+
+    @Query("select c from Category c inner join c.owner o where c.id = :id")
+    Optional<Category> findByIdWithOwner(@Param("id") Long id);
+
 }

@@ -4,15 +4,15 @@ import com.csStudy.CardGame.domain.category.dto.NewCategoryForm;
 import com.csStudy.CardGame.domain.category.entity.Category;
 import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithOwnerInfo;
 import com.csStudy.CardGame.domain.category.dto.CategoryDto;
-import com.csStudy.CardGame.domain.card.mapper.CardMapper;
 import com.csStudy.CardGame.domain.category.mapper.CategoryMapper;
 import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
+import com.csStudy.CardGame.domain.member.dto.MemberDetails;
 import com.csStudy.CardGame.domain.member.entity.Member;
 import com.csStudy.CardGame.domain.member.repository.MemberRepository;
 import com.csStudy.CardGame.exception.ApiErrorEnums;
 import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,17 +27,16 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
     private final CategoryMapper categoryMapper;
-    private final CardMapper cardMapper;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository,
-                               MemberRepository memberRepository,
-                               CategoryMapper categoryMapper,
-                               CardMapper cardMapper) {
+    public CategoryServiceImpl(
+            CategoryRepository categoryRepository,
+            MemberRepository memberRepository,
+            CategoryMapper categoryMapper
+    ) {
         this.categoryRepository = categoryRepository;
         this.memberRepository = memberRepository;
         this.categoryMapper = categoryMapper;
-        this.cardMapper = cardMapper;
     }
 
     @Override
@@ -100,81 +99,68 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toCategoryDtoWithOwnerInfo(target);
     }
 
-    // 카테고리 변경사항 전체반영
-    // 예외처리 필요
-    @CacheEvict(value = "categoryList", allEntries = true)
+    @Override
+    public CategoryDto addCategory(NewCategoryForm newCategoryForm) {
+        Member owner = memberRepository.findById(
+                ((MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getId()
+        ).orElseThrow(
+                () -> ApiErrorException.createException(
+                        ApiErrorEnums.INVALID_ACCESS,
+                        HttpStatus.UNAUTHORIZED,
+                        null,
+                        "존재하지 않는 Member 로 인증됨"
+                )
+        );
+        try {
+            Category insertedCategory = categoryRepository.save(
+                    Category.builder()
+                            .name(newCategoryForm.getName())
+                            .owner(owner)
+                            .build()
+            );
+
+            return categoryMapper.toCategoryDto(insertedCategory);
+        }
+        catch (DataIntegrityViolationException ex) {
+            throw ApiErrorException.createException(
+                    ApiErrorEnums.RESOURCE_CONFLICT,
+                    HttpStatus.CONFLICT,
+                    null,
+                    null
+            );
+        }
+    }
+
+    @Override
     @Transactional
-    public boolean changeCategories(List<NewCategoryForm> insertedList, List<CategoryDto> updatedList, Set<Long> deletedList) {
+    public void editCategory(CategoryDto categoryDto) {
+        MemberDetails member = (MemberDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-        /* 삭제리스트 처리 */
-        if (!deletedList.isEmpty()) {
-            deleteCategories(deletedList);
+        Category target = categoryRepository
+                .findByIdWithOwner(categoryDto.getId())
+                .orElseThrow(
+                        () -> ApiErrorException.createException(
+                                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                                HttpStatus.NOT_FOUND,
+                                null,
+                                null
+                        )
+                );
+
+        if (!member.getId().equals(target.getOwner().getId())) {
+            throw ApiErrorException.createException(
+                    ApiErrorEnums.INVALID_ACCESS,
+                    HttpStatus.FORBIDDEN,
+                    null,
+                    null
+            );
         }
-
-        /* 수정리스트 처리 */
-        if (!updatedList.isEmpty()) {
-            updateCategories(updatedList);
-        }
-
-        /* 추가리스트 처리 */
-        if (!insertedList.isEmpty()) {
-            insertCategories(insertedList);
-        }
-
-        return true;
+        target.changeName(categoryDto.getName());
+        System.out.println("hello");
     }
 
-    // 카테고리 여러개 추가
-    private boolean insertCategories(List<NewCategoryForm> insertedCategoryList) {
-        if (insertedCategoryList.isEmpty()) {
-            return false;
-        }
-        Member owner = memberRepository.findByEmail(
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName()
-        ).orElseThrow(() -> ApiErrorException.createException(
-                ApiErrorEnums.INVALID_ACCESS,
-                HttpStatus.UNAUTHORIZED,
-                null,
-                null
-        ));
-        categoryRepository.saveAll(insertedCategoryList.stream()
-                .map((dto) -> {
-                    Category newCategory = categoryMapper.toEntity(dto);
-                    newCategory.changeOwner(owner);
-                    return newCategory;
-                })
-                .collect(Collectors.toList()));
-        return true;
-    }
-
-    // 카테고리 여러개 수정
-    private boolean updateCategories(List<CategoryDto> updatedCategoryList) {
-        // 예외처리 필요
-        if (updatedCategoryList.isEmpty()) {
-            return false;
-        }
-        Map<Long, Category> targets = new HashMap<>();
-        categoryRepository.findByIdIn(updatedCategoryList.stream()
-                .map(CategoryDto::getId)
-                .collect(Collectors.toList()))
-                .forEach((category) -> targets.put(category.getId(), category));
-        for (CategoryDto categoryDto : updatedCategoryList) {
-            if (targets.containsKey(categoryDto.getId())) {
-                targets.get(categoryDto.getId()).changeName(categoryDto.getName());
-            }
-        }
-        return true;
-    }
-
-    // 카테고리 여러개 삭제
-    private boolean deleteCategories(Set<Long> deletedCategorySet) {
-        if (deletedCategorySet.isEmpty()) {
-            return false;
-        }
-        categoryRepository.deleteAllByIdInBatch(deletedCategorySet);
-        return true;
-    }
 }

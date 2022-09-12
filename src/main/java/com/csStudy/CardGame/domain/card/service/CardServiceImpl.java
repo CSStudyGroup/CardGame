@@ -10,6 +10,7 @@ import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
 import com.csStudy.CardGame.exception.ApiErrorEnums;
 import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -38,13 +39,13 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public List<CardDto> getAllCards() {
         return cardRepository.findAll().stream()
-                .map(cardMapper::toDetailCard)
+                .map(cardMapper::toCardDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public CardDto findCardById(Long id) {
-        return cardMapper.toDetailCard(cardRepository.findById(id).orElseThrow(() ->
+        return cardMapper.toCardDto(cardRepository.findById(id).orElseThrow(() ->
                 ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null, null)
         ));
     }
@@ -53,7 +54,7 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public List<CardDto> findCardsByCategory(Long categoryId, Pageable pageable) {
         return cardRepository.findByCategory_IdOrderByIdAsc(categoryId, pageable).stream()
-                .map(cardMapper::toDetailCard)
+                .map(cardMapper::toCardDto)
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +62,7 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public List<CardDto> findCardsByQuestion(String keyword) {
         return cardRepository.findByQuestionContaining(keyword).stream()
-                .map(cardMapper::toDetailCard)
+                .map(cardMapper::toCardDto)
                 .collect(Collectors.toList());
     }
 
@@ -76,9 +77,22 @@ public class CardServiceImpl implements CardService {
                         "존재하지 않는 카테고리입니다.",
                         null)
         );
-        Card insertedCard = cardMapper.toEntity(newCardForm);
-        insertedCard.changeCategory(category);
-        return cardMapper.toDetailCard(cardRepository.save(insertedCard));
+
+        try {
+            return cardMapper.toCardDto(cardRepository.save(Card.builder()
+                    .question(newCardForm.getQuestion())
+                    .answer(newCardForm.getAnswer())
+                    .category(category)
+                    .build()));
+        }
+        catch (DataIntegrityViolationException ex) {
+            throw ApiErrorException.createException(
+                    ApiErrorEnums.RESOURCE_CONFLICT,
+                    HttpStatus.CONFLICT,
+                    null,
+                    null
+            );
+        }
     }
 
     @Override

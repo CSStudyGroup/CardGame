@@ -15,6 +15,7 @@ public enum ApiErrorEnums implements ApiError{
     EXPIRED_TOKEN(4006, "EXPIRED_TOKEN", "만료된 토큰입니다."),
     INVALID_TOKEN(4007, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
     INVALID_ACCESS(4008, "INVALID_ACCESS", "잘못된 접근입니다."),
+    RESOURCE_CONFLICT(4009, "RESOURCE_CONFLICT", "중복된 데이터입니다."),
     INTERNAL_SERVER_ERROR(5000,"INTERNAL_SERVER_ERROR","서버 에러입니다.");
 
     private final int errorCode;

@@ -27,8 +27,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    public SecurityConfiguration(UserDetailsService userDetailsService,
-                                 JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfiguration(
+            UserDetailsService userDetailsService,
+            JwtAuthenticationFilter jwtAuthenticationFilter
+    ) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }

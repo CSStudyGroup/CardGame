@@ -9,5 +9,4 @@ import lombok.*;
 @Builder
 public class NewCategoryForm {
     private String name;
-    private int cardCount;
 }
