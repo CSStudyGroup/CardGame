@@ -16,7 +16,6 @@ public class CardDto implements Comparable<CardDto> {
 
     private Long categoryId;
 
-
     @Override
     public int compareTo(CardDto o) {
         if (this.id > o.getId()) {

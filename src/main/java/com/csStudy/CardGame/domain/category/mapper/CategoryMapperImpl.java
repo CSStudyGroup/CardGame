@@ -13,7 +13,6 @@ public class CategoryMapperImpl implements CategoryMapper{
     public Category toEntity(NewCategoryForm newCategoryForm) {
         return Category.builder()
                 .name(newCategoryForm.getName())
-                .cardCount(newCategoryForm.getCardCount())
                 .build();
     }
 

@@ -11,4 +11,5 @@ public class ApiErrorResponse {
     private final int errorCode;
     private final String errorName;
     private final String errorMessage;
+    private final String errorReason;
 }

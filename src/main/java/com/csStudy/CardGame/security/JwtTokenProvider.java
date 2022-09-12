@@ -9,6 +9,7 @@ import com.csStudy.CardGame.exception.ApiErrorException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class JwtTokenProvider {
     private static final KeyPair keypair = Keys.keyPairFor(SignatureAlgorithm.RS256);
     private static final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L;
@@ -139,15 +141,19 @@ public class JwtTokenProvider {
     }
 
     public void authenticate(String jwtToken) {
-        Claims claims = getClaims(jwtToken);
+        try {
+            Claims claims = getClaims(jwtToken);
+            MemberDetails memberDetails = (MemberDetails) userDetailsService.loadUserByUsername(claims.get("email", String.class));
 
-        MemberDetails memberDetails = (MemberDetails) userDetailsService.loadUserByUsername(claims.get("email", String.class));
-
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(
-                        memberDetails,
-                        null,
-                        memberDetails.getAuthorities()));
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(
+                            memberDetails,
+                            null,
+                            memberDetails.getAuthorities()));
+        }
+        catch (Exception ex) {
+            log.debug("인증 실패");
+        }
     }
 
     private Map<String, String> generateTokens(MemberDetails memberDetails) {
@@ -194,7 +200,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(jwtToken)
                     .getBody();
         }
-        catch (ExpiredJwtException ex) { // refresh token 만료시
+        catch (ExpiredJwtException ex) {
             throw ApiErrorException
                     .createException(ApiErrorEnums.EXPIRED_TOKEN,
                             HttpStatus.UNAUTHORIZED,

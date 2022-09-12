@@ -26,11 +26,12 @@ public class Category {
     @SequenceGenerator(name = "category_seq", sequenceName = "category_sequence")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     // TODO: 2022-09-10 조회성 API 호출시에만 가져오도록 해야함
     @Formula("(select count(*) from card c where c.category_id = id)")
+    @Builder.Default
     private Integer cardCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,9 +42,5 @@ public class Category {
 
     public void changeName(String name) {
         this.name = name;
-    }
-
-    public void changeOwner(Member owner) {
-        this.owner = owner;
     }
 }

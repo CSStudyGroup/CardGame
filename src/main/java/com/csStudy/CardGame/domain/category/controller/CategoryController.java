@@ -4,21 +4,15 @@ import com.csStudy.CardGame.domain.category.dto.NewCategoryForm;
 import com.csStudy.CardGame.domain.category.dto.CategoryDto;
 import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithOwnerInfo;
 import com.csStudy.CardGame.domain.category.service.CategoryService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.net.URI;
 import java.util.List;
-import java.util.Set;
-
 @RestController
 public class CategoryController {
 
@@ -66,38 +60,29 @@ public class CategoryController {
         return categoryService.getCategoryDetailById(cid);
     }
 
-    // 카테고리 변경사항 반영 API
+    //======================================
+
     @PostMapping("/categories")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public boolean changeCategories(@RequestBody String jsonList) throws JsonProcessingException {
-        JSONObject jObject = new JSONObject(jsonList);
-        ObjectMapper mapper = new ObjectMapper();
+    public ResponseEntity<Void> addCategory(@RequestBody NewCategoryForm newCategoryForm) {
+        CategoryDto addedCategory = categoryService.addCategory(newCategoryForm);
 
-        // 추가
-        List<NewCategoryForm> insertedCategoryList = new ArrayList<>();
-        JSONArray insertList = jObject.getJSONArray("insert");
-        for (Object o: insertList) {
-            NewCategoryForm newCategoryForm = mapper.readValue(o.toString(), NewCategoryForm.class);
-            insertedCategoryList.add(newCategoryForm);
-        }
+        URI location = ServletUriComponentsBuilder
+                .fromUriString("/categories")
+                .path("/{id}")
+                .buildAndExpand(addedCategory.getId())
+                .toUri();
 
-        // 수정
-        List<CategoryDto> updatedCategoryList = new ArrayList<>();
-        JSONArray updateList = jObject.getJSONArray("update");
-        for (Object o: updateList) {
-            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
-            updatedCategoryList.add(dto);
-        }
+        return ResponseEntity
+                .created(location)
+                .build();
+    }
 
-        // 삭제
-        Set<Long> deletedCategorySet = new HashSet<>();
-        JSONArray deleteList = jObject.getJSONArray("delete");
-        for (Object o: deleteList) {
-            CategoryDto dto = mapper.readValue(o.toString(), CategoryDto.class);
-            deletedCategorySet.add(dto.getId());
-        }
-
-        return categoryService.changeCategories(insertedCategoryList, updatedCategoryList, deletedCategorySet);
+    @PutMapping("/categories")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<Void> editCategory(@RequestBody CategoryDto categoryDto) {
+        categoryService.editCategory(categoryDto);
+        return ResponseEntity.ok().build();
     }
 
 }

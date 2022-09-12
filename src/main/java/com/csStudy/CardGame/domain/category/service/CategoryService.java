@@ -6,7 +6,6 @@ import com.csStudy.CardGame.domain.category.dto.CategoryDto;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public interface CategoryService {
     /* 조회 */
@@ -28,6 +27,11 @@ public interface CategoryService {
     // 특정 카테고리 상세조회
     CategoryDtoWithOwnerInfo getCategoryDetailById(Long id);
 
-    // 카테고리 변경사항(추가, 수정, 삭제) 반영
-    boolean changeCategories(List<NewCategoryForm> insertedList, List<CategoryDto> updatedList, Set<Long> deletedList);
+    //==================
+
+    // 카테고리 추가
+    CategoryDto addCategory(NewCategoryForm newCategoryForm);
+
+    // 카테고리 수정
+    void editCategory(CategoryDto categoryDto);
 }

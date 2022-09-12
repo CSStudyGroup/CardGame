@@ -6,8 +6,7 @@ import com.csStudy.CardGame.domain.card.dto.CardDto;
 
 
 public interface CardMapper {
-    Card toEntity(NewCardForm newCardForm);
 
-    CardDto toDetailCard(Card card);
+    CardDto toCardDto(Card card);
 
 }

@@ -2,9 +2,11 @@ package com.csStudy.CardGame.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -30,6 +32,61 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(response, exception.getStatus());
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiErrorResponse> integrityExceptionHandler(RuntimeException ex) {
+        ApiErrorException defaultException = ApiErrorException.createException(
+                ApiErrorEnums.RESOURCE_CONFLICT,
+                HttpStatus.CONFLICT,
+                null,
+                ex.getMessage()
+        );
+
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .errorCode(defaultException.getErrorCode())
+                .errorName(defaultException.getErrorName())
+                .errorMessage(defaultException.getErrorMessage())
+                .build();
+
+        return new ResponseEntity<>(response, defaultException.getStatus());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> accessDeniedExceptionHandler(RuntimeException ex) {
+        ApiErrorException defaultException = ApiErrorException.createException(
+                ApiErrorEnums.INVALID_ACCESS,
+                HttpStatus.UNAUTHORIZED,
+                null,
+                ex.getMessage()
+        );
+
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .errorCode(defaultException.getErrorCode())
+                .errorName(defaultException.getErrorName())
+                .errorMessage(defaultException.getErrorMessage())
+                .build();
+
+        return new ResponseEntity<>(response, defaultException.getStatus());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> extraExceptionHandler(RuntimeException ex) {
+        ApiErrorException defaultException = ApiErrorException.createException(
+                ApiErrorEnums.INTERNAL_SERVER_ERROR,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                null,
+                ex.getMessage()
+        );
+
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .errorCode(defaultException.getErrorCode())
+                .errorName(defaultException.getErrorName())
+                .errorMessage(defaultException.getErrorMessage())
+                .build();
+
+        return new ResponseEntity<>(response, defaultException.getStatus());
+    }
+
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
             HttpMediaTypeNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
