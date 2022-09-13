@@ -2,10 +2,11 @@ package com.csStudy.CardGame.domain.category.controller;
 
 import com.csStudy.CardGame.domain.category.dto.NewCategoryForm;
 import com.csStudy.CardGame.domain.category.dto.CategoryDto;
-import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithOwnerInfo;
+import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithDetail;
 import com.csStudy.CardGame.domain.category.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,44 +23,6 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
-
-
-    /* 카테고리 관련 API */
-
-    // 전체 카테고리 또는 선택된 카테고리 리스트를 반환하는 API
-    @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDto>> getCategories(@RequestParam(required = false) List<Long> selected) {
-        if (selected == null) {
-            return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(categoryService.getSelectedCategories(selected), HttpStatus.OK);
-        }
-    }
-
-    // 특정 카테고리를 반환하는 API
-    @GetMapping("/categories/{cid}")
-    public CategoryDto getCategory(@PathVariable Long cid) {
-        return categoryService.getCategoryById(cid);
-    }
-
-    // 전체 카테고리 또는 선택된 카테고리 상세조회 리스트를 반환하는 API
-    @GetMapping("/categories/detail")
-    public List<CategoryDtoWithOwnerInfo> getCategoriesDetail(@RequestParam List<Long> selected) {
-        if (selected == null) {
-            return categoryService.getAllCategoriesDetail();
-        }
-        else {
-            return categoryService.getSelectedCategoriesDetail(selected);
-        }
-    }
-
-    // 특정 카테고리 상세 조회 API
-    @GetMapping("/categories/detail/{cid}")
-    public CategoryDtoWithOwnerInfo getCategoryDetail(@PathVariable Long cid) {
-        return categoryService.getCategoryDetailById(cid);
-    }
-
     //======================================
 
     @PostMapping("/categories")
@@ -85,4 +48,45 @@ public class CategoryController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/categories/{categoryId}")
+    public ResponseEntity<CategoryDto> getCategory(@PathVariable Long categoryId) {
+        return ResponseEntity
+                .ok()
+                .body(categoryService.getCategoryById(categoryId));
+    }
+
+    @GetMapping("/categories/detail/{categoryId}")
+    public ResponseEntity<CategoryDtoWithDetail> getCategoryWithDetail(@PathVariable Long categoryId) {
+        return ResponseEntity
+                .ok()
+                .body(categoryService.getCategoryWithDetail(categoryId));
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryDto>> getCategories(
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(page = 0, size = 50) Pageable pageable
+    ) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        (keyword == null) ?
+                                categoryService.getAllCategories(pageable)
+                                : categoryService.getCategories(keyword, pageable)
+                );
+    }
+
+    @GetMapping("/categories/detail")
+    public ResponseEntity<List<CategoryDtoWithDetail>> getCategoriesWithDetail(
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(page = 0, size = 50) Pageable pageable
+    ) {
+        return ResponseEntity
+                .ok()
+                .body(
+                        (keyword == null) ?
+                                categoryService.getAllCategoriesWithDetail(pageable)
+                                : categoryService.getCategoriesWithDetail(keyword, pageable)
+                );
+    }
 }
