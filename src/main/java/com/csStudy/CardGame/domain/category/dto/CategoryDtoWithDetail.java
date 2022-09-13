@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Builder
 @Getter
-public class CategoryDtoWithOwnerInfo {
+public class CategoryDtoWithDetail {
     private Long id;
 
     private String name;

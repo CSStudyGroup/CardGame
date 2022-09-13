@@ -1,6 +1,6 @@
 package com.csStudy.CardGame.domain.category.mapper;
 
-import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithOwnerInfo;
+import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithDetail;
 import com.csStudy.CardGame.domain.category.dto.NewCategoryForm;
 import com.csStudy.CardGame.domain.category.entity.Category;
 import com.csStudy.CardGame.domain.category.dto.CategoryDto;
@@ -31,8 +31,8 @@ public class CategoryMapperImpl implements CategoryMapper{
     }
 
     @Override
-    public CategoryDtoWithOwnerInfo toCategoryDtoWithOwnerInfo(Category category) {
-        return CategoryDtoWithOwnerInfo.builder()
+    public CategoryDtoWithDetail toCategoryDtoWithDetail(Category category) {
+        return CategoryDtoWithDetail.builder()
                 .id(category.getId())
                 .name(category.getName())
                 .cardCount(category.getCardCount())

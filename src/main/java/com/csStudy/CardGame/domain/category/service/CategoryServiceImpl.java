@@ -2,7 +2,7 @@ package com.csStudy.CardGame.domain.category.service;
 
 import com.csStudy.CardGame.domain.category.dto.NewCategoryForm;
 import com.csStudy.CardGame.domain.category.entity.Category;
-import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithOwnerInfo;
+import com.csStudy.CardGame.domain.category.dto.CategoryDtoWithDetail;
 import com.csStudy.CardGame.domain.category.dto.CategoryDto;
 import com.csStudy.CardGame.domain.category.mapper.CategoryMapper;
 import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
@@ -13,6 +13,7 @@ import com.csStudy.CardGame.exception.ApiErrorEnums;
 import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,14 +50,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<CategoryDtoWithOwnerInfo> getAllCategoriesDetail() {
-        return categoryRepository.findDetailAll().stream()
-                .map(categoryMapper::toCategoryDtoWithOwnerInfo)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
     public List<CategoryDto> getSelectedCategories(Collection<Long> categoryIdSet) {
         return categoryRepository.findByIdIn(categoryIdSet).stream()
                 .map(categoryMapper::toCategoryDto)
@@ -65,9 +58,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<CategoryDtoWithOwnerInfo> getSelectedCategoriesDetail(Collection<Long> categoryIdSet) {
+    public List<CategoryDtoWithDetail> getSelectedCategoriesDetail(Collection<Long> categoryIdSet) {
         return categoryRepository.findDetailByIdIn(categoryIdSet).stream()
-                .map(categoryMapper::toCategoryDtoWithOwnerInfo)
+                .map(categoryMapper::toCategoryDtoWithDetail)
                 .collect(Collectors.toList());
     }
 
@@ -87,7 +80,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDtoWithOwnerInfo getCategoryDetailById(Long id) {
+    public CategoryDtoWithDetail getCategoryDetailById(Long id) {
         Category target = categoryRepository.findDetailOne(id).orElseThrow(
                 () -> ApiErrorException.createException(
                         ApiErrorEnums.RESOURCE_NOT_FOUND,
@@ -96,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
                         null
                 )
         );
-        return categoryMapper.toCategoryDtoWithOwnerInfo(target);
+        return categoryMapper.toCategoryDtoWithDetail(target);
     }
 
     @Override
@@ -141,7 +134,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .getPrincipal();
 
         Category target = categoryRepository
-                .findByIdWithOwner(categoryDto.getId())
+                .findByIdWithDetail(categoryDto.getId())
                 .orElseThrow(
                         () -> ApiErrorException.createException(
                                 ApiErrorEnums.RESOURCE_NOT_FOUND,
@@ -163,4 +156,55 @@ public class CategoryServiceImpl implements CategoryService {
         System.out.println("hello");
     }
 
+    @Override
+    public CategoryDtoWithDetail getCategoryWithDetail(Long categoryId) {
+        return categoryMapper.toCategoryDtoWithDetail(
+                categoryRepository.findByIdWithDetail(categoryId).orElseThrow(
+                        () -> ApiErrorException.createException(
+                                    ApiErrorEnums.RESOURCE_NOT_FOUND,
+                                    HttpStatus.NOT_FOUND,
+                                    null,
+                                    null
+                        )
+                )
+        );
+    }
+
+    @Override
+    public List<CategoryDto> getAllCategories(Pageable pageable) {
+        return categoryRepository
+                .findAll(pageable)
+                .stream()
+                .map(categoryMapper::toCategoryDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryDto> getCategories(String keyword, Pageable pageable) {
+        return categoryRepository
+                .findByNameContainingIgnoreCase(keyword, pageable)
+                .stream()
+                .map(categoryMapper::toCategoryDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<CategoryDtoWithDetail> getAllCategoriesWithDetail(Pageable pageable) {
+        return categoryRepository
+                .findAllWithDetail(pageable)
+                .stream()
+                .map(categoryMapper::toCategoryDtoWithDetail)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<CategoryDtoWithDetail> getCategoriesWithDetail(String keyword, Pageable pageable) {
+        return categoryRepository
+                .findByNameContainingIgnoreCaseWithDetail(keyword, pageable)
+                .stream()
+                .map(categoryMapper::toCategoryDtoWithDetail)
+                .collect(Collectors.toList());
+    }
 }
