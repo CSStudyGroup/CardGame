@@ -23,7 +23,6 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
-    //======================================
 
     @PostMapping("/categories")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -52,7 +51,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> getCategory(@PathVariable Long categoryId) {
         return ResponseEntity
                 .ok()
-                .body(categoryService.getCategoryById(categoryId));
+                .body(categoryService.getCategory(categoryId));
     }
 
     @GetMapping("/categories/detail/{categoryId}")
@@ -88,5 +87,15 @@ public class CategoryController {
                                 categoryService.getAllCategoriesWithDetail(pageable)
                                 : categoryService.getCategoriesWithDetail(keyword, pageable)
                 );
+    }
+
+    @DeleteMapping("/categories/{categoryId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
+
+        return ResponseEntity
+                .ok()
+                .build();
     }
 }

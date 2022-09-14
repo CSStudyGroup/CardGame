@@ -27,6 +27,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiErrorResponse response = ApiErrorResponse.builder()
                 .errorCode(exception.getErrorCode())
                 .errorName(exception.getErrorName())
+                .errorReason(exception.getErrorReason())
                 .errorMessage(exception.getErrorMessage())
                 .build();
 
