@@ -41,58 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
-    public List<CategoryDto> getAllCategories() {
-        return categoryRepository.findAll().stream()
-                .map(categoryMapper::toCategoryDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public List<CategoryDto> getSelectedCategories(Collection<Long> categoryIdSet) {
-        return categoryRepository.findByIdIn(categoryIdSet).stream()
-                .map(categoryMapper::toCategoryDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public List<CategoryDtoWithDetail> getSelectedCategoriesDetail(Collection<Long> categoryIdSet) {
-        return categoryRepository.findDetailByIdIn(categoryIdSet).stream()
-                .map(categoryMapper::toCategoryDtoWithDetail)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public CategoryDto getCategoryById(Long id) {
-        Category target = categoryRepository.findById(id).orElseThrow(
-                () -> ApiErrorException.createException(
-                        ApiErrorEnums.RESOURCE_NOT_FOUND,
-                        HttpStatus.NOT_FOUND,
-                        null,
-                        null
-                )
-        );
-        return categoryMapper.toCategoryDto(target);
-    }
-
-    @Override
-    @Transactional
-    public CategoryDtoWithDetail getCategoryDetailById(Long id) {
-        Category target = categoryRepository.findDetailOne(id).orElseThrow(
-                () -> ApiErrorException.createException(
-                        ApiErrorEnums.RESOURCE_NOT_FOUND,
-                        HttpStatus.NOT_FOUND,
-                        null,
-                        null
-                )
-        );
-        return categoryMapper.toCategoryDtoWithDetail(target);
-    }
-
-    @Override
     public CategoryDto addCategory(NewCategoryForm newCategoryForm) {
         Member owner = memberRepository.findById(
                 ((MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -153,7 +101,20 @@ public class CategoryServiceImpl implements CategoryService {
             );
         }
         target.changeName(categoryDto.getName());
-        System.out.println("hello");
+    }
+
+    @Override
+    public CategoryDto getCategory(Long categoryId) {
+        return categoryMapper.toCategoryDto(categoryRepository
+                .findById(categoryId)
+                .orElseThrow(
+                        () -> ApiErrorException.createException(
+                                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                                HttpStatus.NOT_FOUND,
+                                null,
+                                null
+                        )
+                ));
     }
 
     @Override
@@ -189,7 +150,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public List<CategoryDtoWithDetail> getAllCategoriesWithDetail(Pageable pageable) {
         return categoryRepository
                 .findAllWithDetail(pageable)
@@ -199,12 +159,51 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public List<CategoryDtoWithDetail> getCategoriesWithDetail(String keyword, Pageable pageable) {
         return categoryRepository
                 .findByNameContainingIgnoreCaseWithDetail(keyword, pageable)
                 .stream()
                 .map(categoryMapper::toCategoryDtoWithDetail)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteCategory(Long categoryId) {
+        MemberDetails member = (MemberDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Category target = categoryRepository
+                .findByIdWithDetail(categoryId)
+                .orElseThrow(
+                        () -> ApiErrorException.createException(
+                                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                                HttpStatus.NOT_FOUND,
+                                null,
+                                null
+                        )
+                );
+
+        if (!member.getId().equals(target.getOwner().getId())) {
+            throw ApiErrorException.createException(
+                    ApiErrorEnums.INVALID_ACCESS,
+                    HttpStatus.FORBIDDEN,
+                    null,
+                    null
+            );
+        }
+
+        if (target.getCardCount() > 0) {
+            throw ApiErrorException.createException(
+                    ApiErrorEnums.REQUEST_DENIED,
+                    HttpStatus.BAD_REQUEST,
+                    "비어있지 않은 카테고리는 삭제할 수 없습니다.",
+                    null
+            );
+        }
+        else {
+            categoryRepository.delete(target);
+        }
     }
 }
