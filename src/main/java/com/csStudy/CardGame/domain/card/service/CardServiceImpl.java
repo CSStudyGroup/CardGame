@@ -1,5 +1,6 @@
 package com.csStudy.CardGame.domain.card.service;
 
+import com.csStudy.CardGame.domain.card.dto.EditCardForm;
 import com.csStudy.CardGame.domain.card.dto.NewCardForm;
 import com.csStudy.CardGame.domain.card.entity.Card;
 import com.csStudy.CardGame.domain.category.entity.Category;
@@ -35,39 +36,8 @@ public class CardServiceImpl implements CardService {
         this.cardMapper = cardMapper;
     }
 
+    // TODO: 2022-09-14 삽입, 수정, 삭제 API 관련 수정사항 처리
     @Override
-    @Transactional
-    public List<CardDto> getAllCards() {
-        return cardRepository.findAll().stream()
-                .map(cardMapper::toCardDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public CardDto findCardById(Long id) {
-        return cardMapper.toCardDto(cardRepository.findById(id).orElseThrow(() ->
-                ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null, null)
-        ));
-    }
-
-    @Override
-    @Transactional
-    public List<CardDto> findCardsByCategory(Long categoryId, Pageable pageable) {
-        return cardRepository.findByCategory_IdOrderByIdAsc(categoryId, pageable).stream()
-                .map(cardMapper::toCardDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public List<CardDto> findCardsByQuestion(String keyword) {
-        return cardRepository.findByQuestionContaining(keyword).stream()
-                .map(cardMapper::toCardDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
     public CardDto addCard(NewCardForm newCardForm) {
         // 추가할 카드의 카테고리(Category) 조회
         Category category = categoryRepository.findById(newCardForm.getCategoryId()).orElseThrow(() ->
@@ -97,19 +67,51 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public void editCard(CardDto cardDto) {
-        cardRepository.findById(cardDto.getId())
+    public void editCard(EditCardForm editCardForm) {
+        cardRepository.findById(editCardForm.getId())
                 .ifPresentOrElse(
                         (target) -> {
-                            target.changeQuestion(cardDto.getQuestion());
-                            target.changeAnswer(cardDto.getAnswer());
-                            if (!target.getCategory().getId().equals(cardDto.getCategoryId())) {
-                                categoryRepository.findById(cardDto.getCategoryId())
+                            target.changeQuestion(editCardForm.getQuestion());
+                            target.changeAnswer(editCardForm.getAnswer());
+                            if (!target.getCategory().getId().equals(editCardForm.getCategoryId())) {
+                                categoryRepository.findById(editCardForm.getCategoryId())
                                         .ifPresent(target::changeCategory);
                             }},
                         () -> {
                             throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null, null);
                         });
+    }
+
+    @Override
+    public CardDto getCard(Long cardId) {
+        return cardMapper.toCardDto(cardRepository
+                .findById(cardId)
+                .orElseThrow(
+                        () -> ApiErrorException.createException(
+                                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                                HttpStatus.NOT_FOUND,
+                                null,
+                                null
+                        )
+                ));
+    }
+
+    @Override
+    public List<CardDto> getCardsByCategory(Long categoryId, Pageable pageable) {
+        return cardRepository
+                .findByCategory_IdOrderByIdAsc(categoryId, pageable)
+                .stream()
+                .map(cardMapper::toCardDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CardDto> getCardsBySearchKeyword(String keyword, Pageable pageable) {
+        return cardRepository
+                .findByQuestionOrAnswerContainingIgnoreCase(keyword, keyword)
+                .stream()
+                .map(cardMapper::toCardDto)
+                .collect(Collectors.toList());
     }
 
     @Override

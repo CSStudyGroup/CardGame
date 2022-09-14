@@ -14,6 +14,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     Page<Card> findByCategory_IdOrderByIdAsc(Long categoryId, Pageable pageable);
 
     // 질문이 특정 keyword 를 포함하는 카드 리스트 검색
-    List<Card> findByQuestionContaining(String keyword);
+    List<Card> findByQuestionOrAnswerContainingIgnoreCase(String questionKeyword, String answerKeyword);
 
 }

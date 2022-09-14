@@ -44,7 +44,9 @@ public class CategoryController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Void> editCategory(@RequestBody CategoryDto categoryDto) {
         categoryService.editCategory(categoryDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
     @GetMapping("/categories/{categoryId}")
