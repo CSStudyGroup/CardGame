@@ -4,13 +4,16 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardDto {
+@Builder
+public class EditCardForm {
+
     private Long id;
 
     private String question;
 
     private String answer;
+
+    private Long categoryId;
 }

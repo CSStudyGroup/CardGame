@@ -18,7 +18,6 @@ public class CardMapperImpl implements CardMapper{
                     .id(card.getId())
                     .question(card.getQuestion())
                     .answer(card.getAnswer())
-                    .categoryId(card.getCategory().getId())
                     .build();
         }
     }

@@ -1,6 +1,7 @@
 package com.csStudy.CardGame.domain.card.controller;
 
 import com.csStudy.CardGame.domain.card.dto.CardDto;
+import com.csStudy.CardGame.domain.card.dto.EditCardForm;
 import com.csStudy.CardGame.domain.card.dto.NewCardForm;
 import com.csStudy.CardGame.domain.card.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,25 +45,43 @@ public class CardController {
     // 카드 수정
     @PutMapping("/cards")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public void editCard(@RequestBody CardDto cardDto){
-        cardService.editCard(cardDto);
+    public ResponseEntity<Void> editCard(@RequestBody EditCardForm editCardForm){
+        cardService.editCard(editCardForm);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
-    // 카드 삭제
-    @DeleteMapping("/cards/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public void deleteCard(@PathVariable Long id) {
-        cardService.deleteCard(id);
+    @GetMapping("/cards/{cardId}")
+    public ResponseEntity<CardDto> getCard(@PathVariable Long cardId) {
+        return ResponseEntity
+                .ok()
+                .body(cardService.getCard(cardId));
     }
 
     // 카드 조회
     @GetMapping("/cards")
     public ResponseEntity<List<CardDto>> getCards(
-            @RequestParam Long cid,
+            @RequestParam("cid") Long categoryId,
+            @RequestParam(required = false) String keyword,
             Pageable pageable
     ) {
         return ResponseEntity
                 .ok()
-                .body(cardService.findCardsByCategory(cid, pageable));
+                .body(
+                        (keyword == null) ?
+                                cardService.getCardsByCategory(categoryId, pageable)
+                                : cardService.getCardsByCategoryWithSearchKeyword(categoryId, keyword, pageable)
+                );
+    }
+
+    // 카드 삭제
+    @DeleteMapping("/cards/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
+        cardService.deleteCard(id);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 }
