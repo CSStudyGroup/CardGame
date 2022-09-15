@@ -19,7 +19,7 @@ public interface CardService {
 
     List<CardDto> getCardsByCategory(Long categoryId, Pageable pageable);
 
-    List<CardDto> getCardsBySearchKeyword(String keyword, Pageable pageable);
+    List<CardDto> getCardsByCategoryWithSearchKeyword(Long categoryId, String keyword, Pageable pageable);
 
     // 카드를 삭제
     void deleteCard(Long cardId);

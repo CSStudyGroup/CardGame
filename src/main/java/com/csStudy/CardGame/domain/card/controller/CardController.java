@@ -62,12 +62,17 @@ public class CardController {
     // 카드 조회
     @GetMapping("/cards")
     public ResponseEntity<List<CardDto>> getCards(
-            @RequestParam String keyword,
+            @RequestParam("cid") Long categoryId,
+            @RequestParam(required = false) String keyword,
             Pageable pageable
     ) {
         return ResponseEntity
                 .ok()
-                .body(cardService.getCardsBySearchKeyword(keyword, pageable));
+                .body(
+                        (keyword == null) ?
+                                cardService.getCardsByCategory(categoryId, pageable)
+                                : cardService.getCardsByCategoryWithSearchKeyword(categoryId, keyword, pageable)
+                );
     }
 
     // 카드 삭제

@@ -8,16 +8,19 @@ import com.csStudy.CardGame.domain.card.dto.CardDto;
 import com.csStudy.CardGame.domain.card.mapper.CardMapper;
 import com.csStudy.CardGame.domain.card.repository.CardRepository;
 import com.csStudy.CardGame.domain.category.repository.CategoryRepository;
+import com.csStudy.CardGame.domain.member.dto.MemberDetails;
 import com.csStudy.CardGame.exception.ApiErrorEnums;
 import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,10 +39,8 @@ public class CardServiceImpl implements CardService {
         this.cardMapper = cardMapper;
     }
 
-    // TODO: 2022-09-14 삽입, 수정, 삭제 API 관련 수정사항 처리
     @Override
     public CardDto addCard(NewCardForm newCardForm) {
-        // 추가할 카드의 카테고리(Category) 조회
         Category category = categoryRepository.findById(newCardForm.getCategoryId()).orElseThrow(() ->
                 ApiErrorException.createException(
                         ApiErrorEnums.RESOURCE_NOT_FOUND,
@@ -68,18 +69,54 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public void editCard(EditCardForm editCardForm) {
-        cardRepository.findById(editCardForm.getId())
-                .ifPresentOrElse(
-                        (target) -> {
-                            target.changeQuestion(editCardForm.getQuestion());
-                            target.changeAnswer(editCardForm.getAnswer());
-                            if (!target.getCategory().getId().equals(editCardForm.getCategoryId())) {
-                                categoryRepository.findById(editCardForm.getCategoryId())
-                                        .ifPresent(target::changeCategory);
-                            }},
-                        () -> {
-                            throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null, null);
-                        });
+        MemberDetails member = (MemberDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Card target = cardRepository
+                .findByIdWithDetail(editCardForm.getId())
+                .orElseThrow(
+                        () -> ApiErrorException.createException(
+                                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                                HttpStatus.NOT_FOUND,
+                                null,
+                                null
+                        )
+                );
+
+        if (!member.getId().equals(target.getCategory().getOwner().getId())) {
+            throw ApiErrorException.createException(
+                    ApiErrorEnums.INVALID_ACCESS,
+                    HttpStatus.FORBIDDEN,
+                    null,
+                    null
+            );
+        }
+
+        target.changeQuestion(editCardForm.getQuestion());
+        target.changeAnswer(editCardForm.getAnswer());
+        if (!target.getCategory().getId().equals(editCardForm.getCategoryId())) {
+            Category targetCategory = categoryRepository
+                    .findByIdWithDetail(editCardForm.getCategoryId())
+                    .orElseThrow(
+                            () -> ApiErrorException.createException(
+                                    ApiErrorEnums.RESOURCE_NOT_FOUND,
+                                    HttpStatus.NOT_FOUND,
+                                    null,
+                                    null
+                            )
+                    );
+            if (!member.getId().equals(targetCategory.getOwner().getId())) {
+                throw ApiErrorException.createException(
+                        ApiErrorEnums.INVALID_ACCESS,
+                        HttpStatus.FORBIDDEN,
+                        null,
+                        null
+                );
+            }
+            target.changeCategory(targetCategory);
+        }
     }
 
     @Override
@@ -106,9 +143,9 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<CardDto> getCardsBySearchKeyword(String keyword, Pageable pageable) {
+    public List<CardDto> getCardsByCategoryWithSearchKeyword(Long categoryId, String keyword, Pageable pageable) {
         return cardRepository
-                .findByQuestionOrAnswerContainingIgnoreCase(keyword, keyword)
+                .findByCategory_IdIsAndQuestionOrAnswerContainingIgnoreCase(categoryId, keyword, keyword)
                 .stream()
                 .map(cardMapper::toCardDto)
                 .collect(Collectors.toList());
@@ -117,11 +154,31 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public void deleteCard(Long cardId) {
-        cardRepository.findById(cardId)
-                .ifPresentOrElse(
-                        cardRepository::delete,
-                        () -> {
-                            throw ApiErrorException.createException(ApiErrorEnums.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, null, null);
-                        });
+        MemberDetails member = (MemberDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Card target = cardRepository
+                .findByIdWithDetail(cardId)
+                .orElseThrow(
+                        () -> ApiErrorException.createException(
+                                ApiErrorEnums.RESOURCE_NOT_FOUND,
+                                HttpStatus.NOT_FOUND,
+                                null,
+                                null
+                        )
+                );
+
+        if (!member.getId().equals(target.getCategory().getOwner().getId())) {
+            throw ApiErrorException.createException(
+                    ApiErrorEnums.INVALID_ACCESS,
+                    HttpStatus.FORBIDDEN,
+                    null,
+                    null
+            );
+        }
+
+        cardRepository.delete(target);
     }
 }
