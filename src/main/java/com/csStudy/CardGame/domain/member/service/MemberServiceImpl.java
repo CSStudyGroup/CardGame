@@ -1,5 +1,7 @@
 package com.csStudy.CardGame.domain.member.service;
 
+import com.csStudy.CardGame.domain.member.dto.EditMemberInfoForm;
+import com.csStudy.CardGame.domain.member.dto.MemberDetails;
 import com.csStudy.CardGame.domain.member.entity.Member;
 import com.csStudy.CardGame.domain.member.entity.Role;
 import com.csStudy.CardGame.domain.member.dto.MemberDto;
@@ -10,6 +12,7 @@ import com.csStudy.CardGame.exception.ApiErrorEnums;
 import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,11 +56,41 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDto findMemberById(UUID memberId) {
-        return memberMapper.toDto(memberRepository.findById(memberId).orElseThrow(() -> ApiErrorException.createException(
-                ApiErrorEnums.RESOURCE_NOT_FOUND,
-                HttpStatus.NOT_FOUND,
-                null,
-                null
-        )));
+        return memberMapper.toDto(memberRepository
+                .findById(memberId)
+                .orElseThrow(() -> ApiErrorException.createException(
+                        ApiErrorEnums.RESOURCE_NOT_FOUND,
+                        HttpStatus.NOT_FOUND,
+                        null,
+                        null
+                )));
+    }
+
+    @Override
+    public void editMemberInfo(EditMemberInfoForm form) {
+        MemberDetails member = (MemberDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        Member target = memberRepository
+                .findById(form.getId())
+                .orElseThrow(() -> ApiErrorException.createException(
+                        ApiErrorEnums.RESOURCE_NOT_FOUND,
+                        HttpStatus.NOT_FOUND,
+                        null,
+                        null
+                ));
+
+        if (!target.getId().equals(member.getId())) {
+            throw ApiErrorException.createException(
+                    ApiErrorEnums.INVALID_ACCESS,
+                    HttpStatus.FORBIDDEN,
+                    null,
+                    null
+            );
+        }
+
+        target.changeNickname(form.getNickname());
     }
 }

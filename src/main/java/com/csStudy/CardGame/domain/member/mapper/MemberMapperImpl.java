@@ -6,17 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MemberMapperImpl implements MemberMapper {
-
-    @Override
-    public Member toEntity(MemberDto memberDto) {
-        return Member.builder()
-                .id(memberDto.getId())
-                .email(memberDto.getEmail())
-                .nickname(memberDto.getNickname())
-                .roles(memberDto.getRoles())
-                .build();
-    }
-
     @Override
     public MemberDto toDto(Member member) {
         return MemberDto.builder()

@@ -2,10 +2,7 @@ package com.csStudy.CardGame.domain.member.service;
 
 import com.csStudy.CardGame.domain.member.dto.MemberDetails;
 import com.csStudy.CardGame.domain.member.repository.MemberRepository;
-import com.csStudy.CardGame.exception.ApiErrorEnums;
-import com.csStudy.CardGame.exception.ApiErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
