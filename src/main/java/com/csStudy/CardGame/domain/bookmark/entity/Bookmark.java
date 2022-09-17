@@ -14,6 +14,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(
+        name = "bookmark",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "member_category",
+                        columnNames = {"member_id", "category_id"}
+                )
+        }
+)
 public class Bookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookmark_seq")
