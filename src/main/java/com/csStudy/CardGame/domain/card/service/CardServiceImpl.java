@@ -48,21 +48,11 @@ public class CardServiceImpl implements CardService {
                         null)
         );
 
-        try {
-            return cardMapper.toCardDto(cardRepository.save(Card.builder()
+        return cardMapper.toCardDto(cardRepository.save(Card.builder()
                     .question(newCardForm.getQuestion())
                     .answer(newCardForm.getAnswer())
                     .category(category)
                     .build()));
-        }
-        catch (DataIntegrityViolationException ex) {
-            throw ApiErrorException.createException(
-                    ApiErrorEnums.RESOURCE_CONFLICT,
-                    HttpStatus.CONFLICT,
-                    null,
-                    null
-            );
-        }
     }
 
     @Override
