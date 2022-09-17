@@ -14,6 +14,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
+
 @RestController
 public class CategoryController {
 
@@ -65,16 +67,30 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public ResponseEntity<List<CategoryDto>> getCategories(
+            @RequestParam(required = false) UUID ownerId,
             @RequestParam(required = false) String keyword,
             @PageableDefault(page = 0, size = 50) Pageable pageable
     ) {
+        List<CategoryDto> result = null;
+        if (ownerId != null) {
+            if (keyword != null) {
+                result = categoryService.getCategories(ownerId, keyword, pageable);
+            }
+            else {
+                result = categoryService.getCategories(ownerId, pageable);
+            }
+        }
+        else {
+            if (keyword != null) {
+                result = categoryService.getCategories(keyword, pageable);
+            }
+            else {
+                result = categoryService.getAllCategories(pageable);
+            }
+        }
         return ResponseEntity
                 .ok()
-                .body(
-                        (keyword == null) ?
-                                categoryService.getAllCategories(pageable)
-                                : categoryService.getCategories(keyword, pageable)
-                );
+                .body(result);
     }
 
     @GetMapping("/categories/detail")
@@ -100,4 +116,5 @@ public class CategoryController {
                 .ok()
                 .build();
     }
+
 }

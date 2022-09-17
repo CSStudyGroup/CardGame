@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 public interface CategoryService {
 
@@ -25,6 +26,10 @@ public interface CategoryService {
 
     // 카테고리 목록 조회
     List<CategoryDto> getCategories(String keyword, Pageable pageable);
+
+    List<CategoryDto> getCategories(UUID memberId, Pageable pageable);
+
+    List<CategoryDto> getCategories(UUID memberId, String keyword, Pageable pageable);
 
     List<CategoryDtoWithDetail> getAllCategoriesWithDetail(Pageable pageable);
 

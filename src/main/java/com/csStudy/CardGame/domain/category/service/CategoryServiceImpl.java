@@ -150,6 +150,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<CategoryDto> getCategories(UUID memberId, Pageable pageable) {
+        return categoryRepository
+                .findByOwner_Id(memberId, pageable)
+                .stream()
+                .map(categoryMapper::toCategoryDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryDto> getCategories(UUID memberId, String keyword, Pageable pageable) {
+        return categoryRepository
+                .findByOwner_IdIsAndNameContainingIgnoreCase(memberId, keyword, pageable)
+                .stream()
+                .map(categoryMapper::toCategoryDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<CategoryDtoWithDetail> getAllCategoriesWithDetail(Pageable pageable) {
         return categoryRepository
                 .findAllWithDetail(pageable)
